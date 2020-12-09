@@ -1,0 +1,303 @@
+.market,.darkPage{
+  width: 640px;
+  :global {
+    .ant-card {
+      border-radius: 10px;
+      margin-bottom: 18px;
+      box-shadow: 4px 4px 40px #E3E6EC;
+      &:hover {
+        box-shadow: 4px 4px 40px #E3E6EC;
+      }
+    }
+    .ant-card-body {
+      overflow-x: hidden;
+    }
+  }
+  .miningTopArea{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .miningName{
+      display: flex;
+      align-items: center;
+      img{
+        width: 26px;
+        height: 26px;
+        margin-right: 5px;
+        display: block;
+      }
+      span{
+        font-size: 16px;
+        color: #11142D;
+        font-weight: bold;
+      }
+    }
+    .countdownArea{
+      display: flex;
+      align-items: center;
+      padding: 10px 13px;
+      border-radius: 10px;
+      background-color: #F9FBFD;
+      color: #FFA715;
+      span{
+        font-size: 12px;
+        margin-left: 8px;
+      }
+    }
+    .statusArea{
+      display: flex;
+      align-items: center;
+      span{
+        font-size: 14px;
+        color: #95A9C9;
+      }
+      .active,.closed{
+        width: 12px;
+        height: 12px;
+        background-color: #83D420;
+        border-radius: 4px;
+        margin-left: 8px;
+      }
+      .closed{
+        background-color: #F45050;
+      }
+    }
+  }
+  .btnList,.btnListDisabled{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 20px;
+    .btnItem{
+      width: 112px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+      border-radius: 10px;
+      font-size: 14px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 20px;
+    }
+  }
+  .btnListDisabled .btnItem{opacity: 0.5}
+}
+
+//dialog
+:global{
+  .ant-modal{
+    top: 50%;
+    padding-bottom: 0;
+    transform: translate(0,-50%);
+  }
+  .ant-modal-content,.ant-modal{
+    width: 360px !important;
+    border-radius: 10px;
+  }
+  .ant-modal-close{
+    top: 20px;
+    right: 20px;
+    .ant-modal-close-x{
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(45,49,77,0.1);
+      color: #11142D;
+    }
+  }
+  .ant-modal-footer{
+    padding: 10px 16px 30px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    .ant-btn{
+      width: 144px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+    }
+  }
+  .ant-modal-footer button + button{margin-left: 25px;}
+}
+.dialogContent{
+  .title{
+    height: 65px;
+    .dialogTitle{font-size: 16px;color: #11142D;margin-bottom: 4px;}
+    .titleDes{font-size: 12px;color: #95A9C9;margin: 0}
+  }
+  .inputArea{
+    .inputDes{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      .des{
+        font-size: 12px;
+        color: #95A9C9;
+        margin: 0;
+        flex-shrink: 0;
+        width: calc(50% - 10px);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+    .inputContent{
+      position: relative;
+      input{
+        width: 100%;
+        border: 1px #E2EBF6 solid;
+        border-radius: 10px;
+        height: 52px;
+        line-height: 52px;
+        font-size: 16px;
+        color: #11142D;
+        font-weight: bold;
+        padding: 0 10px;
+      }
+      .maxBtn{
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translate(0,-50%);
+      }
+    }
+    .numberBtnList{
+      display: flex;
+      align-items: center;
+      .maxBtn{
+        margin-left: 8px;
+      }
+    }
+    .maxBtn{
+      width: 44px;
+      height: 20px;
+      background-color: #F1EFFB;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+      color: #5F74EE;
+      border: none;
+    }
+    .checkedNumberBtn{
+      background-color: #FF754C;
+      color: #fff;
+    }
+  }
+  .detailContent{
+    .detailList{
+      .detailItem{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        .detailTitle{
+          line-height: 1;
+          font-size: 12px;
+          color: #95A9C9;
+          margin-bottom: 0;
+        }
+        .detailValue{
+          line-height: 1;
+          margin-bottom: 0;
+          font-size: 12px;
+          color: #11142D;
+        }
+      }
+    }
+    .detailList:first-child{
+      border-bottom: 1px rgba(149,169,201,0.2) solid;
+      margin-bottom: 20px;
+    }
+  }
+  .increaseText{
+    font-size: 15px;
+    color: #95A9C9;
+    line-height: 1.5;
+  }
+  .linkArea{
+    display: flex;
+    align-items: center;
+    border-bottom: 2px #11142D solid;
+    width: fit-content;
+    padding-bottom: 5px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+    h3{
+      font-size: 16px;
+      color: #11142D;
+      line-height: 1;
+      margin: 0;
+    }
+    img{
+      width: 10px;
+      height: 10px;
+      display: block;
+      margin-left: 5px;
+    }
+  }
+  .exitInfo{
+    background-color: #F9FBFD;
+    border-radius: 10px;
+    padding: 30px 0;
+    display: flex;
+    align-items: center;
+    .infoItem{
+      width: 50%;
+      text-align: center;
+      .infoTitle{
+        font-size: 12px;
+        color: #95A9C9;
+        margin: 0;
+      }
+      .infoValue{
+        font-size: 20px;
+        color: #11142D;
+        margin: 0;
+      }
+    }
+    .infoItem:first-child{
+      border-right: 1px rgba(149,169,201,0.2) solid ;
+    }
+  }
+}
+
+.darkPage{
+  .miningTopArea .miningName span{color: #fff;}
+  .miningTopArea .countdownArea{background-color: #2A2D39;}
+  .btnListDisabled .btnItem{opacity: 0.3}
+  .miningTopArea .statusArea span{color: #808191}
+}
+
+.modalDark{
+  :global{
+    .ant-modal-content{background-color: #242731;}
+    .ant-modal-close .ant-modal-close-x{background-color: #1F2128;color: #fff;}
+  }
+  .dialogContent .title .dialogTitle,.dialogContent .linkArea h3,.dialogContent .exitInfo .infoItem .infoValue{
+    color: #fff;
+  }
+  .dialogContent .linkArea{border-color: #fff;}
+  .dialogContent .inputArea .inputDes .des,.dialogContent .title .titleDes,.dialogContent .increaseText,.dialogContent .exitInfo .infoItem .infoTitle {color: #808191;}
+  .dialogContent .inputArea  .inputContent  input{background-color: transparent;color: #fff;border-color: rgba(149,169,201,0.1)}
+  .dialogContent .inputArea  .inputContent .maxBtn{background-color: #2A2D39;color: #808191;}
+  .dialogContent .exitInfo{background-color: #2A2D39;}
+  .dialogContent .exitInfo .infoItem:first-child{border-color: rgba(149,169,201,0.1)}
+}

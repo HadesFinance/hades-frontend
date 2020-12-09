@@ -1,0 +1,141 @@
+@import '~themes/vars.less';
+
+.sider {
+  z-index: 10;
+  :global {
+    .ant-layout-sider-children {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+}
+
+.brand {
+  z-index: 1;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px rgba(149,169,201,0.2) solid;
+  border-right: 1px rgba(149,169,201,0.2) solid;
+  padding: 0 16px;
+  .logo {
+    img {
+      height: 24px;
+    }
+  }
+}
+
+.menuContainer {
+  height: ~'calc(100vh - 80px)';
+  overflow-x: hidden;
+  flex: 1;
+  padding: 20px 16px 0;
+  border-right: 1px rgba(149,169,201,0.2) solid;
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  :global {
+    .ant-menu-inline {
+      border-right: none;
+    }
+  }
+}
+
+:global{
+  .ant-menu-vertical > .ant-menu-item, .ant-menu-vertical-left > .ant-menu-item, .ant-menu-vertical-right > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-left > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-right > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title{
+    height: 56px;
+    line-height: 56px;
+    margin:0;
+    padding: 0 16px !important;
+    width: 100% !important;
+    border-radius: 12px;
+  }
+  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
+    background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+  }
+  .ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after{
+    border: none;
+  }
+  .ant-menu-item a{
+    display: flex;
+    span{
+      font-size: 14px;color: #808191;
+    }
+  }
+  .ant-menu-item-selected a span, .ant-menu-item-selected a span:hover{color: #fff;}
+  .ant-menu-item a:hover{color: #5D7AD3}
+}
+.menuIcon{margin-right: 8px;}
+
+.switchTheme{
+  .sun{opacity: 1}
+  .moon{opacity: 0.2}
+}
+.switchTheme,.switchDarkTheme {
+  width: 100%;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition: all 0.3s;
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 12px;
+  }
+
+  :global {
+    .anticon {
+      min-width: 14px;
+      margin-right: 4px;
+      font-size: 14px;
+    }
+    .ant-switch{
+      margin: 0 8px;
+      background-color: #EAEEF4;
+    }
+    .ant-switch-checked:focus{box-shadow: unset}
+  }
+}
+.switchDarkTheme{
+  .sun{opacity: 0.2}
+  .moon{opacity: 1}
+  :global{
+    .ant-switch{
+      background-color: #32343d;
+    }
+    .ant-switch-handle::before{background-color: #808191}
+  }
+}
+
+@keyframes fadeLeftIn {
+  0% {
+    transform: translateX(5px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+//theme
+:global{
+  .ant-layout-sider-dark,.ant-menu.ant-menu-dark, .ant-menu-dark .ant-menu-sub, .ant-menu.ant-menu-dark .ant-menu-sub{
+    background-color: #1f2128;
+  }
+}

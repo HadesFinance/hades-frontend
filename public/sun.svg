@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="19.6" height="19.6" viewBox="0 0 19.6 19.6">
+  <g id="编组_2" data-name="编组 2" transform="translate(0.8 0.8)">
+    <g id="椭圆形" transform="translate(3 3)" fill="none" stroke="#808191" stroke-miterlimit="10" stroke-width="1.6">
+      <circle cx="6" cy="6" r="6" stroke="none"/>
+      <circle cx="6" cy="6" r="5.2" fill="none"/>
+    </g>
+    <path id="路径_9" data-name="路径 9" d="M.5,0V1" transform="translate(8.5)" fill="none" stroke="#808191" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.6"/>
+    <path id="路径_9-2" data-name="路径 9" d="M.5,0V1" transform="translate(15.01 2.282) rotate(45)" fill="none" stroke="#808191" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.6"/>
+    <path id="路径_9-3" data-name="路径 9" d="M.5,0V1" transform="translate(18 8.5) rotate(90)" fill="none" stroke="#808191" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.6"/>
+    <path id="路径_9-4" data-name="路径 9" d="M.5,0V1" transform="translate(15.718 15.01) rotate(135)" fill="none" stroke="#808191" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.6"/>
+    <path id="路径_9-5" data-name="路径 9" d="M.5,0V1" transform="translate(9.5 18) rotate(180)" fill="none" stroke="#808191" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.6"/>
+    <path id="路径_9-6" data-name="路径 9" d="M.5,0V1" transform="translate(2.99 15.718) rotate(-135)" fill="none" stroke="#808191" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.6"/>
+    <path id="路径_9-7" data-name="路径 9" d="M.5,0V1" transform="translate(0 9.5) rotate(-90)" fill="none" stroke="#808191" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.6"/>
+    <path id="路径_9-8" data-name="路径 9" d="M.5,0V1" transform="translate(2.282 2.99) rotate(-45)" fill="none" stroke="#808191" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.6"/>
+  </g>
+</svg>
