@@ -1,0 +1,223 @@
+.account,.darkPage{
+  position: relative;
+  width: 800px;
+  height: 100%;
+  :global {
+    .ant-card {
+      border-radius: 10px;
+      margin-bottom: 18px;
+      box-shadow: 4px 4px 40px #E3E6EC;
+      &:hover {
+        box-shadow: 4px 4px 40px #E3E6EC;
+      }
+    }
+    .ant-card-body {
+      overflow-x: hidden;
+    }
+    .ant-table-thead > tr > th{
+      background-color: unset;
+      font-size: 12px !important;
+      color: #95A9C9 !important;
+      font-weight: normal;
+      width: 20%;
+    }
+    .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td{
+      padding: 12px;
+      border: none;
+      font-size: 14px;
+      color: #11142D;
+      width: 20%;
+    }
+    .ant-table-tbody > tr:first-child > td{padding-top: 25px;word-break: break-all}
+    .ant-table-tbody > tr:last-child > td{padding-bottom: 25px;}
+    .ant-table{
+      background-color: transparent;
+      .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+        background: transparent;
+      }
+    }
+  }
+  .notConnected{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    .notConnectedTip{
+      font-size: 18px;
+      color: #95A9C9;
+      line-height: 1;
+      margin: 30px 0 20px;
+    }
+    .connectedBtn{
+      width: 204px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+      font-size: 14px;
+      color: #fff;
+      margin: 0 auto;
+      cursor: pointer;
+    }
+  }
+}
+
+.nameArea{
+  display: flex;
+  align-items: center;
+  img{
+    width: 32px;
+    height: 32px;
+    display: block;
+    margin-right: 10px;
+  }
+}
+.btnList{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .btnItem{
+    width: 72px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+    border-radius: 10px;
+    font-size: 12px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .btnItem:first-child{
+    margin-right: 20px;
+  }
+}
+
+
+//dialog
+:global{
+  .ant-modal{
+    top: 50%;
+    padding-bottom: 0;
+    transform: translate(0,-50%);
+  }
+  .ant-modal-content,.ant-modal{
+    width: 360px !important;
+    border-radius: 10px;
+  }
+  .ant-modal-close{
+    top: 20px;
+    right: 20px;
+    .ant-modal-close-x{
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(45,49,77,0.1);
+      color: #11142D;
+    }
+  }
+  .ant-modal-footer{
+    padding: 10px 16px 30px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    .ant-btn{
+      width: 144px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+    }
+  }
+  .ant-modal-footer button + button{margin-left: 25px;}
+}
+.dialogContent{
+  .title{
+    height: 65px;
+    .dialogTitle{font-size: 16px;color: #11142D;margin-bottom: 4px;}
+    .titleDes{font-size: 12px;color: #95A9C9;margin: 0}
+  }
+  .inputArea{
+    .inputDes{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      .des{
+        font-size: 12px;
+        color: #95A9C9;
+        margin: 0;
+      }
+    }
+    .inputContent{
+      position: relative;
+      input{
+        width: 100%;
+        border: 1px #E2EBF6 solid;
+        border-radius: 10px;
+        height: 52px;
+        line-height: 52px;
+        font-size: 16px;
+        color: #11142D;
+        font-weight: bold;
+        padding: 0 10px;
+      }
+      .maxBtn{
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translate(0,-50%);
+        width: 44px;
+        height: 20px;
+        background-color: #F1EFFB;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 12px;
+        color: #5F74EE;
+        border: none;
+      }
+      .checkedNumberBtn{
+        background-color: #FF754C !important;
+        color: #fff !important;
+      }
+    }
+  }
+}
+
+.darkPage{
+  :global{
+    .ant-table-thead > tr > th{color: #808191 !important; border-color: rgba(149,169,201,0.1);}
+    .ant-table-tbody > tr > td, .account___TB_Tx .ant-table tfoot > tr > th, .account___TB_Tx .ant-table tfoot > tr > td{
+      color: #fff;
+    }
+  }
+}
+.modalDark{
+  :global{
+    .ant-modal-content{background-color: #242731;}
+    .ant-modal-close .ant-modal-close-x{background-color: #1F2128;color: #fff;}
+  }
+  .dialogContent .title .dialogTitle{
+    color: #fff;
+  }
+  .dialogContent .inputArea .inputDes .des,.dialogContent .title .titleDes {color: #808191;}
+  .dialogContent .inputArea  .inputContent  input{background-color: transparent;color: #fff;border-color: rgba(149,169,201,0.1)}
+  .dialogContent .inputArea  .inputContent .maxBtn{background-color: #2A2D39;color: #808191;}
+}

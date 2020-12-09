@@ -1,0 +1,73 @@
+.dashboard,.darkPage {
+  position: relative;
+  width:800px;
+  :global {
+    .ant-card {
+      border-radius: 10px;
+      margin-bottom: 18px;
+      box-shadow: 4px 4px 40px #E3E6EC;
+      &:hover {
+        box-shadow: 4px 4px 40px #E3E6EC;
+      }
+    }
+    .ant-card-body {
+      overflow-x: hidden;
+    }
+  }
+
+  .weather {
+    &:hover {
+      box-shadow: 4px 4px 40px rgba(143, 201, 251, 0.6);
+    }
+  }
+
+  .quote {
+    &:hover {
+      box-shadow: 4px 4px 40px rgba(246, 152, 153, 0.6);
+    }
+  }
+}
+
+.topLeft{
+  padding: 30px 25px;
+}
+.topRight{
+  padding: 20px 22px;
+  .cardTitle{font-weight: bold;font-size: 16px;color: #11142D;margin-bottom: 3px;}
+}
+.topLeftBottom{
+  padding: 35px 25px;
+  background-image: linear-gradient(to bottom,#f8f9fc,#fff);
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.coinArea{
+  padding: 20px 22px;
+  .coinTitle{
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px rgba(149,169,201,0.2) solid;
+    margin-bottom: 20px;
+    img{
+      width: 32px;
+      height: 32px;
+      display: block;
+      margin-right: 10px;
+    }
+    span{
+      font-size: 18px;
+      color: #11142D;
+      font-weight: bold;
+    }
+  }
+}
+
+//dark theme
+.darkPage{
+  .topLeftBottom{
+    background-image: linear-gradient(to bottom,#22252d,#242731) !important;
+  }
+  .topRight .cardTitle,.coinArea .coinTitle span{color: #fff;}
+  .coinArea .coinTitle{border-bottom: 1px rgba(149, 169, 201, 0.1) solid;}
+}
