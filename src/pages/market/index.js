@@ -294,16 +294,16 @@ class Market extends PureComponent {
             </div>
             <div className={styles.progressArea}>
               <Progress percent={(item.totalCashLiteral / item.totalSupplyLiteral) * 100} showInfo={false} strokeColor='#83D420' trailColor={theme === 'dark' ? '#30333D' : '#E2EBF6'} />
-              <p className={styles.progressText}>Avaiable：{item.totalCashLiteral.toPrecision(4)} {item.underlyingSymbol}</p>
+              <p className={styles.progressText}>Avaiable：{item.totalCashLiteral.toFixed(4)} {item.underlyingSymbol}</p>
             </div>
             <div className={styles.borrowSupply}>
               <div className={styles.item}>
                 <p className={styles.title}>Borrow Rate</p>
-                <p className={styles.number}>{(item.borrowRatePerYear * 100).toPrecision(2)}%</p>
+                <p className={styles.number}>{(item.borrowRatePerYear * 100).toFixed(4)}%</p>
               </div>
               <div className={styles.item}>
                 <p className={styles.title}>Supply Rate</p>
-                <p className={styles.number}>{(item.supplyRatePerYear * 100).toPrecision(2)}%</p>
+                <p className={styles.number}>{(item.supplyRatePerYear * 100).toFixed(4)}%</p>
               </div>
             </div>
             <div className={styles.btnList}>
@@ -343,8 +343,8 @@ class Market extends PureComponent {
               </div>
               <div className={styles.inputArea}>
                 <div className={styles.inputDes}>
-                  <p className={styles.des}>Total:{Number(this.state.supplyBalanceInfo.tokenBalanceLiteral).toPrecision(4)}</p>
-                  <p className={styles.des}>Exchange Rate:{Number(selectedMarketItem.exchangeRateLiteral).toPrecision(4)}</p>
+                  <p className={styles.des}>Total:{Number(this.state.supplyBalanceInfo.tokenBalanceLiteral).toFixed(4)}</p>
+                  <p className={styles.des}>Exchange Rate:{Number(selectedMarketItem.exchangeRateLiteral).toFixed(4)}</p>
                 </div>
                 <div className={styles.inputContent}>
                   <Form
@@ -384,7 +384,7 @@ class Market extends PureComponent {
             </div>
             <div className={styles.inputArea}>
               <div className={styles.inputDes}>
-                <p className={styles.des}>Limit:{Number(this.state.borrowLimit).toPrecision(4)}</p>
+                <p className={styles.des}>Limit:{Number(this.state.borrowLimit).toFixed(4)}</p>
                 <div className={styles.numberBtnList}>
                   <Button className={[styles.maxBtn,this.state.checkedNumber[0] ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,0.5,1)}>50%</Button>
                   <Button className={[styles.maxBtn,this.state.checkedNumber[1] ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,1,0.75,1)}>75%</Button>

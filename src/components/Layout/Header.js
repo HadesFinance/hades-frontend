@@ -134,7 +134,7 @@ class Header extends PureComponent {
         </div>
         <div className={styles.priceArea}>
           <p className={styles.priceDes}>{accountLiquidity.shortfall ===0 ? 'Account Liquidity' : 'Shortfall'}</p>
-          <h3 className={accountLiquidity.shortfall ===0 ? styles.greenPrice : styles.redPrice}>{accountLiquidity.shortfall ===0 ? '$'+accountLiquidity.liquidityLiteral.toPrecision(4) : '-$'+accountLiquidity.shortfallLiteral.toPrecision(4)}</h3>
+          <h3 className={accountLiquidity.shortfall ===0 ? styles.greenPrice : styles.redPrice}>{accountLiquidity.shortfall ===0 ? '$'+accountLiquidity.liquidityLiteral.toFixed(4) : '-$'+accountLiquidity.shortfallLiteral.toFixed(4)}</h3>
         </div>
         <div className={styles.transactionsArea}>
           <p className={styles.transactionsDes}>Your unfinished transactions</p>
@@ -164,7 +164,7 @@ class Header extends PureComponent {
       >
         <div className={styles.toolBar}>
           {priceList.map((item,index) =>
-            <p className={styles.toolBarItem} key={index}><img src={item.anchorSymbol === 'ETH' ? ethereum : bitcoinIcon}/><span>1 {item.anchorSymbol} = ${item.underlyingPriceLiteral}</span> </p>
+            <p className={styles.toolBarItem} key={index}><img src={item.anchorSymbol === 'ETH' ? ethereum : bitcoinIcon}/><span>1 {item.anchorSymbol} = ${item.underlyingPriceLiteral.toFixed(4)}</span> </p>
           )}
         </div>
         {wrongNetwork ?

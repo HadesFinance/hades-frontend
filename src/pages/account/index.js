@@ -264,7 +264,7 @@ class Account extends PureComponent {
       render: (_, { tokenBalanceLiteral}) => {
         return (
           <div className={styles.nameArea}>
-            <span>{tokenBalanceLiteral.toPrecision(4)}</span>
+            <span>{tokenBalanceLiteral.toFixed(4)}</span>
           </div>
         );
       },
@@ -275,7 +275,7 @@ class Account extends PureComponent {
       render: (_, { collateralBalanceLiteral}) => {
         return (
           <div className={styles.nameArea}>
-            <span>{collateralBalanceLiteral.toPrecision(4)}</span>
+            <span>{collateralBalanceLiteral.toFixed(4)}</span>
           </div>
         );
       },
@@ -285,7 +285,7 @@ class Account extends PureComponent {
       render: (_, { borrowBalanceLiteral}) => {
         return (
           <div className={styles.nameArea}>
-            <span>{borrowBalanceLiteral.toPrecision(4)}</span>
+            <span>{borrowBalanceLiteral.toFixed(4)}</span>
           </div>
         );
       },
@@ -328,7 +328,7 @@ class Account extends PureComponent {
               bodyStyle={{
                 padding: '30px 25px',
               }}>
-              <NumberCard title='Balance' number={account.hds.balanceLiteral} lg={24} unit='HDS' position='right' effective={true} big={true} decimals={5} theme={theme}/>
+              <NumberCard title='Balance' number={account.hds.balanceLiteral} lg={24} unit='HDS' position='right'  big={true} decimals={4} theme={theme}/>
             </Card>
             <Card
               bordered={false}
@@ -373,11 +373,11 @@ class Account extends PureComponent {
             <div className={styles.dialogContent}>
               <div className={styles.title}>
                 <h3 className={styles.dialogTitle}>Repay {selectedPoolItem.underlyingSymbol}</h3>
-                <p className={styles.titleDes}>Total Debts:{selectedPoolItem.borrowBalanceLiteral.toPrecision(4)}</p>
+                <p className={styles.titleDes}>Total Debts:{selectedPoolItem.borrowBalanceLiteral.toFixed(4)}</p>
               </div>
               <div className={styles.inputArea}>
                 <div className={styles.inputDes}>
-                  <p className={styles.des}>Total Balance：{selectedPoolItem.tokenBalanceLiteral.toPrecision(4)}</p>
+                  <p className={styles.des}>Total Balance：{selectedPoolItem.tokenBalanceLiteral.toFixed(4)}</p>
                 </div>
                 <div className={styles.inputContent}>
                   <Form
@@ -418,7 +418,7 @@ class Account extends PureComponent {
               </div>
               <div className={styles.inputArea}>
                 <div className={styles.inputDes}>
-                  <p className={styles.des}>Allowed Amount:{selectedPoolItem.hTokenBalanceLiteral.toPrecision(4)}</p>
+                  <p className={styles.des}>Allowed Amount:{selectedPoolItem.hTokenBalanceLiteral.toFixed(4)}</p>
                   {/*<p className={styles.des}>Exchange Rate:1.1</p>*/}
                 </div>
                 <div className={styles.inputContent}>

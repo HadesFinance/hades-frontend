@@ -20,7 +20,7 @@ class NumberCard extends PureComponent {
               useEasing
               useGrouping
               separator=","
-              decimals={decimals ? decimals : 0}
+              decimals={decimals ? decimals : 4}
               {...(countUp || {})}
             />
           }

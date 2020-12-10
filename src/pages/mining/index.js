@@ -315,7 +315,7 @@ class Mining extends PureComponent {
                   <div className={styles.closed}></div>
                 </div> : ''}
             </div>
-            <TableInfo total_power={item.totalPowerNormalizedLiteral.toPrecision(4)} my_power={mining.my[index] ? mining.my[index].powerNormalizedLiteral.toPrecision(4)+'('+mining.my[index].powerRatio.toPrecision(4)+'%)' : '-'} start_block={Number(item.startBlock).toPrecision(4)} apy={(item.apy *100).toPrecision(2)} claimed={mining.my[index] ? mining.my[index].claimedLiteral.toPrecision(4) : '-'} unclaimed={mining.my[index] ? mining.my[index].unclaimedLiteral.toPrecision(4) : '-'} theme={theme} />
+            <TableInfo total_power={item.totalPowerNormalizedLiteral.toFixed(4)} my_power={mining.my[index] ? mining.my[index].powerNormalizedLiteral.toFixed(4)+'('+(mining.my[index].powerRatio * 100).toFixed(4)+'%)' : '-'} start_block={Number(item.startBlock).toFixed(4)} apy={(item.apy *100).toFixed(2)} claimed={mining.my[index] ? mining.my[index].claimedLiteral.toFixed(4) : '-'} unclaimed={mining.my[index] ? mining.my[index].unclaimedLiteral.toFixed(4) : '-'} theme={theme} />
             <div className={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? styles.btnList : styles.btnListDisabled}>
               <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.showModal.bind(this,item) : null}>IncreasePower</p>
               <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.claimFun.bind(this,item) : null}>Claim</p>
@@ -412,11 +412,11 @@ class Mining extends PureComponent {
             <div className={styles.exitInfo}>
               <div className={styles.infoItem}>
                 <p className={styles.infoTitle}>LP Token</p>
-                <p className={styles.infoValue}>{this.state.power}</p>
+                <p className={styles.infoValue}>{Number(this.state.power).toFixed(4)}</p>
               </div>
               <div className={styles.infoItem}>
                 <p className={styles.infoTitle}>Rewards</p>
-                <p className={styles.infoValue}>{this.state.rewards}</p>
+                <p className={styles.infoValue}>{Number(this.state.rewards).toFixed(4)}</p>
               </div>
             </div>
           </div>
