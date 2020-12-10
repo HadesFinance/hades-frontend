@@ -196,7 +196,7 @@ class Mining extends PureComponent {
     }
   };
 
-  handleCancel = (e) => {
+  handleIncreaseCancel = (e) => {
     this.setState({
       claimVisible: false,
       checkMax: false,
@@ -349,7 +349,7 @@ class Mining extends PureComponent {
           cancelText='Approve'
           okText='Lock'
           onOk={this.handleIncreaseOk}
-          onCancel={this.handleCancel}
+          onCancel={this.handleIncreaseCancel}
           className={theme === 'dark' ? styles.modalDark : ''}
           footer={[
             <Button key="approve" type="primary"  onClick={this.handleIncreaseApprove}>
