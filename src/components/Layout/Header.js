@@ -164,7 +164,7 @@ class Header extends PureComponent {
       >
         <div className={styles.toolBar}>
           {priceList.map((item,index) =>
-            <p className={styles.toolBarItem} key={index}><img src={item.anchorSymbol === 'ETH' ? ethereum : bitcoinIcon}/><span>1 {item.anchorSymbol} = ${item.underlyingPriceLiteral.toFixed(4)}</span> </p>
+            <p className={styles.toolBarItem} key={index}><img src={item.anchorSymbol === 'ETH' ? ethereum : bitcoinIcon}/><span>1 {item.anchorSymbol} = ${item.underlyingPriceLiteral.toFixed(2)}</span> </p>
           )}
         </div>
         {wrongNetwork ?

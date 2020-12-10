@@ -12,7 +12,7 @@ class NumberCard extends PureComponent {
         <p className={big ? styles.titleBig : styles.title}>{title}</p>
         <p className={big ? styles.numberBig : styles.number}>
           {position === 'left' && unit !=='' ? <span>{unit}</span> : ''}
-          {effective ? <span>{Number(number).toPrecision(4)}</span> :
+          {effective ? <span>{number}</span> :
             <CountUp
               start={0}
               end={Number(number)}
@@ -20,7 +20,7 @@ class NumberCard extends PureComponent {
               useEasing
               useGrouping
               separator=","
-              decimals={decimals ? decimals : 4}
+              decimals={decimals || decimals ===0 ? decimals : 4}
               {...(countUp || {})}
             />
           }

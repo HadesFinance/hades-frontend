@@ -62,8 +62,8 @@ class Dashboard extends PureComponent {
               <div className={styles.topRight}>
                 <p className={styles.cardTitle}>HDS</p>
                 <Row lg={24}>
-                  <NumberCard title='Circulating' number={overview.hds.circulating} lg={12} unit='' theme={theme}/>
-                  <NumberCard title='Mined' number={overview.hds.mined} lg={12} unit='' theme={theme}/>
+                  <NumberCard title='Circulating' number={overview.hds.circulating} lg={12} unit='' theme={theme} decimals={0}/>
+                  <NumberCard title='Mined' number={overview.hds.mined} lg={12} unit='' theme={theme} decimals={0}/>
                 </Row>
               </div>
             </Card>
@@ -75,7 +75,7 @@ class Dashboard extends PureComponent {
               <div className={styles.topRight}>
                 <p className={styles.cardTitle}>DOL</p>
                 <Row lg={24}>
-                  <NumberCard title='Total Supply' number={overview.dol.totalSupply} lg={24} unit='' theme={theme}/>
+                  <NumberCard title='Total Supply' number={overview.dol.totalSupply} lg={24} unit='' theme={theme} decimals={0}/>
                 </Row>
               </div>
             </Card>

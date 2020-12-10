@@ -281,9 +281,9 @@ class Mining extends PureComponent {
             padding: '20px 25px',
           }}>
           <Row lg={24}>
-            <NumberCard title='Rewards Per Block' number={distributorStats.rewardsPerBlockLiteral} lg={8} unit='' theme={theme}/>
-            <NumberCard title='Mining Started Block' number={distributorStats.mineStartBlock} lg={8} unit='' theme={theme}/>
-            <NumberCard title='Next Halving Block' number={distributorStats.nextHalvingBlock} lg={8} unit='' theme={theme}/>
+            <NumberCard title='Rewards Per Block' number={distributorStats.rewardsPerBlockLiteral} lg={8} unit='' theme={theme} effective={true}/>
+            <NumberCard title='Mining Started Block' number={distributorStats.mineStartBlock} lg={8} unit='' theme={theme} effective={true}/>
+            <NumberCard title='Next Halving Block' number={distributorStats.nextHalvingBlock} lg={8} unit='' theme={theme} effective={true}/>
           </Row>
         </Card>
         {mining.pools.map((item,index) =>
@@ -315,7 +315,7 @@ class Mining extends PureComponent {
                   <div className={styles.closed}></div>
                 </div> : ''}
             </div>
-            <TableInfo total_power={item.totalPowerNormalizedLiteral.toFixed(4)} my_power={mining.my[index] ? mining.my[index].powerNormalizedLiteral.toFixed(4)+'('+(mining.my[index].powerRatio * 100).toFixed(4)+'%)' : '-'} start_block={Number(item.startBlock).toFixed(4)} apy={(item.apy *100).toFixed(2)} claimed={mining.my[index] ? mining.my[index].claimedLiteral.toFixed(4) : '-'} unclaimed={mining.my[index] ? mining.my[index].unclaimedLiteral.toFixed(4) : '-'} theme={theme} />
+            <TableInfo total_power={item.totalPowerNormalizedLiteral.toFixed(4)} my_power={mining.my[index] ? mining.my[index].powerNormalizedLiteral.toFixed(4)+'('+(mining.my[index].powerRatio * 100).toFixed(2)+'%)' : '-'} start_block={item.startBlock} apy={(item.apy *100).toFixed(2)} claimed={mining.my[index] ? mining.my[index].claimedLiteral.toFixed(4) : '-'} unclaimed={mining.my[index] ? mining.my[index].unclaimedLiteral.toFixed(4) : '-'} theme={theme} />
             <div className={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? styles.btnList : styles.btnListDisabled}>
               <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.showModal.bind(this,item) : null}>IncreasePower</p>
               <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.claimFun.bind(this,item) : null}>Claim</p>
