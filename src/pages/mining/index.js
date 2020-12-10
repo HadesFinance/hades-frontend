@@ -69,7 +69,7 @@ class Mining extends PureComponent {
   }
 
   showModal = async (item) => {
-    const account = globals.loginAccount
+    let account = (globals.loginAccount = window.ethereum.selectedAddress);
     console.log('ptype='+item.ptype);
     if(item.ptype ==='1' && account){
       this.setState({
