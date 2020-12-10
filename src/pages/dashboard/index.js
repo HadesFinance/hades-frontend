@@ -92,9 +92,9 @@ class Dashboard extends PureComponent {
               <span>ETH</span>
             </div>
             <Row lg={24}>
-              <NumberCard title='Total Supply' number={overview.markets[0].totalSupplyLiteral ? overview.markets[0].totalSupplyLiteral : 0} lg={8} unit='BTC' position='right' decimals={4} theme={theme} effective={true} />
-              <NumberCard title='Total Borrows' number={overview.markets[0].totalBorrowsLiteral ? overview.markets[0].totalBorrowsLiteral : 0} lg={8} unit='BTC' position='right' decimals={3} theme={theme} effective={true}/>
-              <NumberCard title='Total Reserves' number={overview.markets[0].totalReservesLiteral ? overview.markets[0].totalReservesLiteral : 0} lg={8} unit='BTC' position='right' decimals={4} theme={theme} effective={true}/>
+              <NumberCard title='Total Supply' number={overview.markets[0].totalSupplyLiteral ? overview.markets[0].totalSupplyLiteral : 0} lg={8} unit='ETH' position='right' decimals={4} theme={theme} effective={true} />
+              <NumberCard title='Total Borrows' number={overview.markets[0].totalBorrowsLiteral ? overview.markets[0].totalBorrowsLiteral : 0} lg={8} unit='ETH' position='right' decimals={3} theme={theme} effective={true}/>
+              <NumberCard title='Total Reserves' number={overview.markets[0].totalReservesLiteral ? overview.markets[0].totalReservesLiteral : 0} lg={8} unit='ETH' position='right' decimals={4} theme={theme} effective={true}/>
             </Row>
           </div>
         </Card>
@@ -109,9 +109,9 @@ class Dashboard extends PureComponent {
               <span>DOL</span>
             </div>
             <Row lg={24}>
-              <NumberCard title='Total Supply' number={overview.markets[1].totalSupplyLiteral ? overview.markets[1].totalSupplyLiteral : 0} lg={8} unit='ETH' position='right' decimals={2} theme={theme} effective={true}/>
-              <NumberCard title='Total Borrows' number={overview.markets[1].totalBorrowsLiteral ? overview.markets[1].totalBorrowsLiteral : 0} lg={8} unit='ETH' position='right' decimals={1} theme={theme} effective={true}/>
-              <NumberCard title='Total Reserves' number={overview.markets[1].totalReservesLiteral ? overview.markets[1].totalReservesLiteral : 0} lg={8} unit='ETH' position='right' decimals={3} theme={theme} effective={true}/>
+              <NumberCard title='Total Supply' number={overview.markets[1].totalSupplyLiteral ? overview.markets[1].totalSupplyLiteral : 0} lg={8} unit='DOL' position='right' decimals={2} theme={theme} effective={true}/>
+              <NumberCard title='Total Borrows' number={overview.markets[1].totalBorrowsLiteral ? overview.markets[1].totalBorrowsLiteral : 0} lg={8} unit='DOL' position='right' decimals={1} theme={theme} effective={true}/>
+              <NumberCard title='Total Reserves' number={overview.markets[1].totalReservesLiteral ? overview.markets[1].totalReservesLiteral : 0} lg={8} unit='DOL' position='right' decimals={3} theme={theme} effective={true}/>
             </Row>
           </div>
         </Card>

@@ -34,7 +34,8 @@ class Mining extends PureComponent {
     increaseResults:[],
     lpToken:'',
     power:'',
-    rewards:''
+    rewards:'',
+    lockEnable:false
   };
 
   componentDidMount() {
@@ -76,10 +77,6 @@ class Mining extends PureComponent {
         increaseVisible: true,
       });
     }else if(item.ptype ==='2' && account){
-      this.setState({
-        claimVisible: true,
-        selectedPoolItem: item
-      });
       const network = store.get('network');
       let hades = (globals.hades = new Hades(network))
       await hades.setProvider(window.web3.currentProvider);
@@ -88,6 +85,10 @@ class Mining extends PureComponent {
       if (!lpTokenAddr) {
         return alert('failed to get lp token address')
       }
+      this.setState({
+        claimVisible: true,
+        selectedPoolItem: item
+      });
       let that = this;
       const lpToken = await globals.hades.lpToken(lpTokenAddr);
       const results = await Promise.all([
@@ -148,6 +149,34 @@ class Mining extends PureComponent {
 
 
   handleIncreaseOk = async (e) => {
+    let { increaseResult, lpToken, selectedPoolItem,lockEnable } = this.state;
+    if(lockEnable){
+      let results = increaseResult;
+      let account = globals.loginAccount;
+      let pid = selectedPoolItem.id;
+      const form = this.refs.myForm;
+      const values = form.getFieldsValue(['increaseInput'])
+      let inputAmount = values.increaseInput;
+      const balance = results[0]
+      const decimals = results[1]
+      if(inputAmount !==undefined){
+        const realAmount = await this.literalToReal(inputAmount, decimals)
+        const distributor = results[2]
+
+        await this.launchTransaction(distributor.mintExchangingPool(pid, realAmount).send({ from: account }))
+        this.setState({
+          claimVisible: false,
+          checkMax: false,
+          lockEnable: false
+        })
+        this.getMining()
+      }
+    }else {
+      alert('please approve first')
+    }
+  };
+
+  handleIncreaseApprove = async (e) => {
     let { increaseResult, lpToken, selectedPoolItem } = this.state;
     let results = increaseResult;
     let account = globals.loginAccount;
@@ -160,25 +189,19 @@ class Mining extends PureComponent {
     if(inputAmount !==undefined){
       const realAmount = await this.literalToReal(inputAmount, decimals)
       const distributor = results[2]
-      await lpToken.approve(distributor._address, realAmount).send({ from: account })
-      const isContinue = window.confirm('Continue to mint?')
-      if (!isContinue) return
-
-      await this.launchTransaction(distributor.mintExchangingPool(pid, realAmount).send({ from: account }))
+      await lpToken.approve(distributor._address, realAmount).send({ from: account });
       this.setState({
-        claimVisible: false,
-        checkMax: false
+        lockEnable: true
       })
-      this.getMining()
     }
   };
 
-  handleIncreaseCancel = e => {
+  handleCancel = (e) => {
     this.setState({
       claimVisible: false,
-      checkMax: false
-    });
-  };
+      checkMax: false,
+    })
+  }
 
   showExitModal = (index) => {
     let account = globals.loginAccount;
@@ -326,8 +349,16 @@ class Mining extends PureComponent {
           cancelText='Approve'
           okText='Lock'
           onOk={this.handleIncreaseOk}
-          onCancel={this.handleIncreaseCancel}
+          onCancel={this.handleCancel}
           className={theme === 'dark' ? styles.modalDark : ''}
+          footer={[
+            <Button key="approve" type="primary"  onClick={this.handleIncreaseApprove}>
+              Approve
+            </Button>,
+            <Button key="submit" type="primary"  onClick={this.handleIncreaseOk}>
+              Lock
+            </Button>
+          ]}
         >
           <div className={styles.dialogContent}>
             <div className={styles.title}>

@@ -5,6 +5,22 @@ import Hades from '../../utils/hades';
 import store from 'store'
 import { HADES_CONFIG } from '../../../config';
 
+async function processMarkets() {
+  const markets = await globals.hades.getMarkets()
+  for (const market of markets) {
+    globals.hTokenMap.set(market.underlyingSymbol, market.hToken)
+  }
+  return markets
+}
+
+async function processPools() {
+  const result = await globals.hades.getPools()
+  for (const pool of result.pools) {
+    globals.lpTokenMap.set(pool.id, pool.tokenAddr)
+  }
+  return result
+}
+
 
 export default modelExtend(model, {
   namespace: 'account',
@@ -55,6 +71,8 @@ export default modelExtend(model, {
           type: 'saveAccountLiquidity',
           payload: { accountLiquidity: liquidity }
         });
+        processMarkets();
+        processPools();
       }else {
         yield hades.setProvider(window.web3.currentProvider);
         const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress)
@@ -76,6 +94,8 @@ export default modelExtend(model, {
             payload: { accountLiquidity: liquidity }
           });
         }
+        processMarkets()
+        processPools()
       }
     },
     *queryPrice({ _ }, { call, put }){

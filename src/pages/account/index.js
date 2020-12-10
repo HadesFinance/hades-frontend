@@ -22,7 +22,9 @@ class Account extends PureComponent {
     repayVisible: false,
     redeemVisible: false,
     selectedPoolItem:{},
-    checkMax: false
+    checkMax: false,
+    repayEnable: false,
+    repayResults:[]
   };
 
   componentDidMount() {
@@ -96,24 +98,53 @@ class Account extends PureComponent {
         const realAmount = await that.literalToReal(inputAmount, balanceInfo.underlyingDecimals)
         if (symbol === 'ETH') {
           await that.launchTransaction(hToken.repayBorrow().send({ from: account, value: realAmount }))
+          that.setState({
+            repayVisible: false,
+            checkMax: false,
+            repayEnable: false
+          })
+          that.props.dispatch({
+            type: 'account/login'
+          });
         } else {
-          await dol.approve(address, realAmount).send({ from: account })
-          const isContinue = window.confirm('Continue to repayBorrow?')
-          if (!isContinue) return
-          await that.launchTransaction(hToken.repayBorrow(realAmount).send({ from: account }))
+          await dol.approve(address, realAmount).send({ from: account });
+          that.setState({
+            repayEnable:true,
+            repayResults: results
+          })
         }
-        that.setState({
-          repayVisible: false,
-          checkMax: false
-        })
-        that.props.dispatch({
-          type: 'account/login'
-        });
       }
     }else {
       alert('Please connect the wallet')
     }
   };
+
+  handleRepayDol = async (e) => {
+    const account = globals.loginAccount;
+    let { selectedPoolItem, repayResults,repayEnable } = this.state;
+    if(repayEnable){
+      let results = repayResults;
+      const form = this.refs.myForm;
+      const values = form.getFieldsValue(['repayInput'])
+      let inputAmount = values.repayInput;
+      let that = this;
+      const balanceInfo = results[0]
+      const hToken = results[1]
+      const realAmount = await that.literalToReal(inputAmount, balanceInfo.underlyingDecimals)
+      await that.launchTransaction(hToken.repayBorrow(realAmount).send({ from: account }))
+      that.setState({
+        repayVisible: false,
+        checkMax: false,
+        repayEnable: false
+      })
+      that.props.dispatch({
+        type: 'account/login'
+      });
+    }else {
+      alert('please approve first')
+    }
+  };
+
 
   literalToReal(literal, decimals) {
     const real = Number(literal) * 10 ** Number(decimals)
@@ -135,7 +166,8 @@ class Account extends PureComponent {
   handleCancel = e => {
     this.setState({
       repayVisible: false,
-      checkMax: false
+      checkMax: false,
+      repayEnable: false
     });
   };
 
@@ -322,6 +354,21 @@ class Account extends PureComponent {
             onOk={this.handleOk}
             onCancel={this.handleCancel}
             className={theme === 'dark' ? styles.modalDark : ''}
+            footer={selectedPoolItem.underlyingSymbol !=='ETH' ?
+              [
+                <Button key="approve" type="primary"  onClick={this.handleOk}>
+                  Approve
+                </Button>,
+                <Button key="repay" type="primary"  onClick={this.handleRepayDol}>
+                  Repay
+                </Button>
+              ] :
+              [
+                <Button key="submit" type="primary"  onClick={this.handleOk}>
+                  Repay
+                </Button>
+              ]
+            }
           >
             <div className={styles.dialogContent}>
               <div className={styles.title}>
@@ -355,11 +402,15 @@ class Account extends PureComponent {
           <Modal
             title=""
             visible={this.state.redeemVisible}
-            cancelText='Approve'
             okText='Redeem'
             onOk={this.handleRedeemOk}
             onCancel={this.handleRedeemCancel}
             className={theme === 'dark' ? styles.modalDark : ''}
+            footer={[
+              <Button key="submit" type="primary"  onClick={this.handleRedeemOk}>
+                Redeem
+              </Button>,
+            ]}
           >
             <div className={styles.dialogContent}>
               <div className={styles.title}>

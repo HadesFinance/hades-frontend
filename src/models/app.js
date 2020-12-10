@@ -192,6 +192,7 @@ export default {
       store.set('network',payload.network);
       store.set('isInit',payload.isInit);
       state.routeList = payload.routeList;
+      goDashboard()
     }
   },
 }

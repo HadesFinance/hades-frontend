@@ -25,6 +25,7 @@ class Market extends PureComponent {
     borrowLimit:'',
     borrowResults:[],
     supplyBalanceInfo:{},
+    supplyEnable: false
   };
 
   componentDidMount() {
@@ -79,21 +80,62 @@ class Market extends PureComponent {
 
       let tx
       if (symbol === 'ETH') {
-        tx = hToken.mint().send({ value: value.toString(), from: globals.loginAccount })
+        tx = hToken.mint().send({ value, from: globals.loginAccount })
+        await that.launchTransaction(tx);
+        that.setState({
+          repayVisible: false,
+          checkedNumber: [false, false, false],
+          supplyEnable: false
+        });
+        this.props.dispatch({
+          type: 'market/queryMarket'
+        });
       } else {
-        tx = hToken.mint(inputAmount).send({ from: globals.loginAccount })
-      }
-      await that.launchTransaction(tx);
-      that.setState({
-        repayVisible: false,
-        checkedNumber: [false, false, false]
-      });
-      this.props.dispatch({
-        type: 'market/queryMarket'
-      });
+        const dol = await globals.hades.dol();
+        await dol.approve(address, value).send({ from: globals.loginAccount })
+        this.setState({
+          supplyEnable: true
+        })
     }
+    }
+  };
+
+  handleSupplyDol = async (e) => {
+      let supplyEnable = this.state.supplyEnable;
+      if (supplyEnable){
+        const form = this.formRef.current;
+        let balanceInfo = this.state.supplyBalanceInfo;
+        let symbol = this.state.selectedMarketItem.underlyingSymbol;
+        const address = await globals.hTokenMap.get(symbol);
+        const values = form.getFieldsValue(['supplyInput'])
+        let inputAmount = values.supplyInput;
+        if(inputAmount !==undefined) {
+          const value = await this.literalToReal(inputAmount, balanceInfo.underlyingDecimals);
+          console.log('value=' + value)
+          let that = this;
+          const hToken = await globals.hades.hToken(symbol, address)
+
+          let tx
+          tx = hToken.mint(value).send({ from: globals.loginAccount })
+
+          await that.launchTransaction(tx);
+          that.setState({
+            repayVisible: false,
+            checkedNumber: [false, false, false],
+            supplyEnable: false
+          });
+          this.props.dispatch({
+            type: 'market/queryMarket'
+          });
+        }
+      }else {
+        alert('please approve first')
+      }
+    };
+
+  handleSupplyApprove = async (e) => {
+
   }
-  ;
 
   handleCancel = e => {
     this.setState({
@@ -270,43 +312,59 @@ class Market extends PureComponent {
             </div>
           </Card>
         )}
-        <Modal
-          title=""
-          visible={this.state.repayVisible}
-          cancelText='Approve'
-          okText='Supply'
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          className={theme === 'dark' ? styles.modalDark : ''}
-        >
-          <div className={styles.dialogContent}>
-            <div className={styles.title}>
-              <h3 className={styles.dialogTitle}>Supply {selectedMarketItem.underlyingSymbol}</h3>
-            </div>
-            <div className={styles.inputArea}>
-              <div className={styles.inputDes}>
-                <p className={styles.des}>Total:{Number(this.state.supplyBalanceInfo.tokenBalanceLiteral).toPrecision(4)}</p>
-                <p className={styles.des}>Exchange Rate:{Number(selectedMarketItem.exchangeRateLiteral).toPrecision(4)}</p>
+        {this.state.repayVisible ?
+          <Modal
+            title=""
+            visible={this.state.repayVisible}
+            cancelText='Approve'
+            okText='Supply'
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            className={theme === 'dark' ? styles.modalDark : ''}
+            footer={selectedMarketItem.underlyingSymbol !=='ETH' ?
+              [
+                <Button key="approve" type="primary"  onClick={this.handleOk}>
+                  Approve
+                </Button>,
+                <Button key="supply" type="primary"  onClick={this.handleSupplyDol}>
+                  Supply
+                </Button>
+              ] :
+              [
+                <Button key="submit" type="primary"  onClick={this.handleOk}>
+                  Supply
+                </Button>
+              ]
+            }
+          >
+            <div className={styles.dialogContent}>
+              <div className={styles.title}>
+                <h3 className={styles.dialogTitle}>Supply {selectedMarketItem.underlyingSymbol}</h3>
               </div>
-              <div className={styles.inputContent}>
-                <Form
-                  ref={this.formRef}
-                  initialvalues={{
-                    supplyInput: 0
-                  }}
-                  onFinish={this.handleOk}
-                >
-                  <FormItem name='supplyInput' rule={[
-                    {required: true, message: 'Input supply amount'}
-                  ]}>
-                    <Input placeholder='Input supply amount' type='number'/>
-                  </FormItem>
-                </Form>
-                <Button className={[styles.maxBtn,this.state.checkedNumber[0] ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,1,0)}>MAX</Button>
+              <div className={styles.inputArea}>
+                <div className={styles.inputDes}>
+                  <p className={styles.des}>Total:{Number(this.state.supplyBalanceInfo.tokenBalanceLiteral).toPrecision(4)}</p>
+                  <p className={styles.des}>Exchange Rate:{Number(selectedMarketItem.exchangeRateLiteral).toPrecision(4)}</p>
+                </div>
+                <div className={styles.inputContent}>
+                  <Form
+                    ref={this.formRef}
+                    initialvalues={{
+                      supplyInput: 0
+                    }}
+                    onFinish={this.handleOk}
+                  >
+                    <FormItem name='supplyInput' rule={[
+                      {required: true, message: 'Input supply amount'}
+                    ]}>
+                      <Input placeholder='Input supply amount' type='number'/>
+                    </FormItem>
+                  </Form>
+                  <Button className={[styles.maxBtn,this.state.checkedNumber[0] ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,1,0)}>MAX</Button>
+                </div>
               </div>
             </div>
-          </div>
-        </Modal>
+          </Modal> : ''}
         <Modal
           title=""
           visible={this.state.redeemVisible}

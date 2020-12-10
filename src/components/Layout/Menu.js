@@ -84,6 +84,7 @@ class SiderMenu extends PureComponent {
         theme={theme}
         onOpenChange={this.onOpenChange}
         selectedKeys={selectedKeys}
+        defaultSelectedKeys={['1']}
         onClick={
           isMobile
             ? () => {
