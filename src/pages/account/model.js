@@ -36,7 +36,8 @@ export default modelExtend(model, {
       }else {
         wrongNetwork = false
       }
-      const loginAccount = globals.loginAccount;
+      const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress);
+      console.log('Login Account:', loginAccount);
       if(loginAccount){
         yield put({
           type: 'saveState',

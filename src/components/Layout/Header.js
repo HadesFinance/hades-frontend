@@ -25,6 +25,7 @@ class Header extends PureComponent {
     let that = this;
     if (window.ethereum) {
       window.ethereum.on('accountsChanged', function() {
+        console.log('accountChanged')
         that.props.dispatch({
           type: 'account/login'
         });
@@ -33,7 +34,7 @@ class Header extends PureComponent {
     that.props.dispatch({
       type: 'account/queryPrice'
     });
-    let loginAccount = globals.loginAccount;
+    let loginAccount = (globals.loginAccount = window.ethereum.selectedAddress);
     if(loginAccount){
       that.props.dispatch({
         type: 'account/login'
