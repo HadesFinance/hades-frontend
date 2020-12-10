@@ -19,7 +19,7 @@ function TableInfo({ total_power,my_power,start_block,apy,claimed,unclaimed,them
         </Row>
         <Row lg={24} className={styles.rightRow}>
           <span className={styles.title}>APY</span>
-          <span className={styles.value}>{apy}</span>
+          <span className={styles.value}>{apy}%</span>
         </Row>
         <Row lg={24} className={styles.rightRow}>
           <span className={styles.title}>Claimed</span>

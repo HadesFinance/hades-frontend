@@ -19,6 +19,7 @@ export default modelExtend(model, {
       nextHalvingBlock: "0",
       rewardsPerBlock: "0",
       totalPools: "0",
+      rewardsPerBlockLiteral:0
     }
   },
   effects: {

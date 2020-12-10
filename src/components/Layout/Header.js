@@ -133,7 +133,7 @@ class Header extends PureComponent {
         </div>
         <div className={styles.priceArea}>
           <p className={styles.priceDes}>{accountLiquidity.shortfall ===0 ? 'Account Liquidity' : 'Shortfall'}</p>
-          <h3 className={accountLiquidity.shortfall ===0 ? styles.greenPrice : styles.redPrice}>{accountLiquidity.shortfall ===0 ? '$'+accountLiquidity.liquidityLiteral : '-$'+accountLiquidity.shortfallLiteral}</h3>
+          <h3 className={accountLiquidity.shortfall ===0 ? styles.greenPrice : styles.redPrice}>{accountLiquidity.shortfall ===0 ? '$'+accountLiquidity.liquidityLiteral.toPrecision(4) : '-$'+accountLiquidity.shortfallLiteral.toPrecision(4)}</h3>
         </div>
         <div className={styles.transactionsArea}>
           <p className={styles.transactionsDes}>Your unfinished transactions</p>

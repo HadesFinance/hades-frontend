@@ -258,7 +258,7 @@ class Mining extends PureComponent {
             padding: '20px 25px',
           }}>
           <Row lg={24}>
-            <NumberCard title='Rewards Per Block' number={distributorStats.rewardsPerBlock} lg={8} unit='' theme={theme}/>
+            <NumberCard title='Rewards Per Block' number={distributorStats.rewardsPerBlockLiteral} lg={8} unit='' theme={theme}/>
             <NumberCard title='Mining Started Block' number={distributorStats.mineStartBlock} lg={8} unit='' theme={theme}/>
             <NumberCard title='Next Halving Block' number={distributorStats.nextHalvingBlock} lg={8} unit='' theme={theme}/>
           </Row>
@@ -272,7 +272,7 @@ class Mining extends PureComponent {
             }}>
             <div className={styles.miningTopArea}>
               <div className={styles.miningName}>
-                <img src={lending}/>
+                {item.ptype === '1' ? <img src={lending}/> : <img src={exchange}/>}
                 <span>{item.title}</span>
               </div>
               {/*countdown*/}
@@ -292,7 +292,7 @@ class Mining extends PureComponent {
                   <div className={styles.closed}></div>
                 </div> : ''}
             </div>
-            <TableInfo total_power={item.totalPower} my_power={mining.my[index] ? mining.my[index].powerNormalizedLiteral+'('+mining.my[index].powerRatio+'%)' : '-'} start_block={item.startBlock} apy={item.apy} claimed={mining.my[index] ? mining.my[index].claimedLiteral : '-'} unclaimed={mining.my[index] ? mining.my[index].unclaimedLiteral : '-'} theme={theme} />
+            <TableInfo total_power={item.totalPowerNormalizedLiteral.toPrecision(4)} my_power={mining.my[index] ? mining.my[index].powerNormalizedLiteral.toPrecision(4)+'('+mining.my[index].powerRatio.toPrecision(4)+'%)' : '-'} start_block={Number(item.startBlock).toPrecision(4)} apy={(item.apy *100).toPrecision(2)} claimed={mining.my[index] ? mining.my[index].claimedLiteral.toPrecision(4) : '-'} unclaimed={mining.my[index] ? mining.my[index].unclaimedLiteral.toPrecision(4) : '-'} theme={theme} />
             <div className={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? styles.btnList : styles.btnListDisabled}>
               <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.showModal.bind(this,item) : null}>IncreasePower</p>
               <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.claimFun.bind(this,item) : null}>Claim</p>

@@ -4,7 +4,7 @@ import { connect, withRouter } from 'umi';
 import { Row, Col, Card } from 'antd'
 import { Page, } from 'components'
 import styles from './index.less'
-import bitcoin from '../../../public/bitcoin_L.svg';
+import dol from '../../../public/DOL.svg';
 import ethereum from '../../../public/ethereum_L.svg';
 import {
   NumberCard,
@@ -48,8 +48,8 @@ class Dashboard extends PureComponent {
                 <NumberCard title='TVL' number={overview.totalSupplyAccLiteral}  decimals={0} lg={24} unit='$' position='left' big={true} theme={theme}/>
               </div>
               <Row lg={24} className={styles.topLeftBottom}>
-                <NumberCard title='Total Borrows' number={overview.totalBorrowsAccLiteral}  lg={8} unit='$' position='left' theme={theme}/>
-                <NumberCard title='Total Reserves' number={overview.totalReservesAccLiteral} lg={8} unit='$' position='left' decimals={1} theme={theme}/>
+                <NumberCard title='Total Borrows' number={overview.totalBorrowsAccLiteral}  lg={8} unit='$' position='left' theme={theme} effective={true}/>
+                <NumberCard title='Total Reserves' number={overview.totalReservesAccLiteral} lg={8} unit='$' position='left' decimals={1} theme={theme} effective={true}/>
               </Row>
             </Card>
           </Col>
@@ -88,13 +88,13 @@ class Dashboard extends PureComponent {
           }}>
           <div className={styles.coinArea}>
             <div className={styles.coinTitle}>
-              <img src={bitcoin}/>
-              <span>BTC</span>
+              <img src={ethereum}/>
+              <span>ETH</span>
             </div>
             <Row lg={24}>
-              <NumberCard title='Total Supply' number={overview.markets[0].totalSupplyLiteral ? overview.markets[0].totalSupplyLiteral : 0} lg={8} unit='BTC' position='right' decimals={4} theme={theme}/>
-              <NumberCard title='Total Borrows' number={overview.markets[0].totalBorrowsLiteral ? overview.markets[0].totalBorrowsLiteral : 0} lg={8} unit='BTC' position='right' decimals={3} theme={theme}/>
-              <NumberCard title='Total Reserves' number={overview.markets[0].totalReservesLiteral ? overview.markets[0].totalReservesLiteral : 0} lg={8} unit='BTC' position='right' decimals={4} theme={theme}/>
+              <NumberCard title='Total Supply' number={overview.markets[0].totalSupplyLiteral ? overview.markets[0].totalSupplyLiteral : 0} lg={8} unit='BTC' position='right' decimals={4} theme={theme} effective={true} />
+              <NumberCard title='Total Borrows' number={overview.markets[0].totalBorrowsLiteral ? overview.markets[0].totalBorrowsLiteral : 0} lg={8} unit='BTC' position='right' decimals={3} theme={theme} effective={true}/>
+              <NumberCard title='Total Reserves' number={overview.markets[0].totalReservesLiteral ? overview.markets[0].totalReservesLiteral : 0} lg={8} unit='BTC' position='right' decimals={4} theme={theme} effective={true}/>
             </Row>
           </div>
         </Card>
@@ -105,13 +105,13 @@ class Dashboard extends PureComponent {
           }}>
           <div className={styles.coinArea}>
             <div className={styles.coinTitle}>
-              <img src={ethereum}/>
-              <span>ETH</span>
+              <img src={dol}/>
+              <span>DOL</span>
             </div>
             <Row lg={24}>
-              <NumberCard title='Total Supply' number={overview.markets[1].totalSupplyLiteral ? overview.markets[1].totalSupplyLiteral : 0} lg={8} unit='ETH' position='right' decimals={2} theme={theme}/>
-              <NumberCard title='Total Borrows' number={overview.markets[1].totalBorrowsLiteral ? overview.markets[1].totalBorrowsLiteral : 0} lg={8} unit='ETH' position='right' decimals={1} theme={theme}/>
-              <NumberCard title='Total Reserves' number={overview.markets[1].totalReservesLiteral ? overview.markets[1].totalReservesLiteral : 0} lg={8} unit='ETH' position='right' decimals={3} theme={theme}/>
+              <NumberCard title='Total Supply' number={overview.markets[1].totalSupplyLiteral ? overview.markets[1].totalSupplyLiteral : 0} lg={8} unit='ETH' position='right' decimals={2} theme={theme} effective={true}/>
+              <NumberCard title='Total Borrows' number={overview.markets[1].totalBorrowsLiteral ? overview.markets[1].totalBorrowsLiteral : 0} lg={8} unit='ETH' position='right' decimals={1} theme={theme} effective={true}/>
+              <NumberCard title='Total Reserves' number={overview.markets[1].totalReservesLiteral ? overview.markets[1].totalReservesLiteral : 0} lg={8} unit='ETH' position='right' decimals={3} theme={theme} effective={true}/>
             </Row>
           </div>
         </Card>
