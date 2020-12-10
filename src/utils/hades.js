@@ -1,13 +1,13 @@
-import { ABI_Orchestrator} from '../../abis/Orchestrator';
-import { ABI_DOL} from '../../abis/DOL';
-import {ABI_HDS} from '../../abis/HDS';
-import { ABI_ProtocolReporter} from '../../abis/ProtocolReporter';
-import {ABI_MarketController} from '../../abis/MarketController';
-import {ABI_HDSDistributor} from '../../abis/HDSDistributor';
-import {ABI_HEther} from '../../abis/HEther';
-import {ABI_HErc20} from '../../abis/HErc20';
-import {ABI_EIP20Interface} from '../../abis/EIP20Interface';
-import Web3 from 'web3';
+import { ABI_Orchestrator } from '../../abis/Orchestrator'
+import { ABI_DOL } from '../../abis/DOL'
+import { ABI_HDS } from '../../abis/HDS'
+import { ABI_ProtocolReporter } from '../../abis/ProtocolReporter'
+import { ABI_MarketController } from '../../abis/MarketController'
+import { ABI_HDSDistributor } from '../../abis/HDSDistributor'
+import { ABI_HEther } from '../../abis/HEther'
+import { ABI_HErc20 } from '../../abis/HErc20'
+import { ABI_EIP20Interface } from '../../abis/EIP20Interface'
+import Web3 from 'web3'
 const FIXED_POINT = 1e18
 const PRICE_POINT = 1e8
 const DOL_POINT = 1e8
@@ -277,9 +277,11 @@ class Hades {
       }
       pool.totalPowerNormalizedLiteral = pool.totalPowerNormalized / PRICE_POINT
 
-      const newMined = this._calculateMined(Number(pool.lastBlockNumber), latestBlockNum)
-      const totalMined = newMined * HDS_POINT + Number(pool.accumulatedTokens)
-      pool.rewardIndex = Number(pool.rewardIndex) + (totalMined * FIXED_POINT) / pool.totalPowerCorrect
+      if (pool.totalPowerCorrect > 0) {
+        const newMined = this._calculateMined(Number(pool.lastBlockNumber), latestBlockNum)
+        const totalMined = newMined * HDS_POINT + Number(pool.accumulatedTokens)
+        pool.rewardIndex = Number(pool.rewardIndex) + (totalMined * FIXED_POINT) / pool.totalPowerCorrect
+      }
       pools.push(pool)
     }
     const my = []
@@ -296,7 +298,7 @@ class Hades {
         item.claimedLiteral = Number(item.claimed) / HDS_POINT
         item.powerNormalized = (item.power * pools[i].underlyingPrice) / FIXED_POINT
         item.powerNormalizedLiteral = item.powerNormalized / PRICE_POINT
-        item.powerRatio = item.power / pools[i].totalPowerCorrect
+        item.powerRatio = pools[i].totalPowerCorrect > 0 ? item.power / pools[i].totalPowerCorrect : 0
         my.push(item)
       }
     }
