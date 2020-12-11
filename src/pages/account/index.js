@@ -24,7 +24,8 @@ class Account extends PureComponent {
     selectedPoolItem:{},
     checkMax: false,
     repayEnable: false,
-    repayResults:[]
+    repayResults:[],
+    redeemResults:[]
   };
 
   componentDidMount() {
@@ -183,24 +184,13 @@ class Account extends PureComponent {
     });
   };
 
-  showRedeemModal = (item,e) => {
-    this.setState({
-      redeemVisible: true,
-      selectedPoolItem: item
-    });
-  };
-
-  handleRedeemOk = async (e) => {
+  showRedeemModal = async (item,e) => {
     const account = globals.loginAccount;
-    let { selectedPoolItem } = this.state;
-    const form = this.refs.myForm;
-    const values = form.getFieldsValue(['redeemInput'])
-    let inputAmount = values.redeemInput;
     if(account){
       const network = store.get('network');
       let hades = (globals.hades = new Hades(network))
       await hades.setProvider(window.web3.currentProvider);
-      let symbol = selectedPoolItem.underlyingSymbol;
+      let symbol = item.underlyingSymbol;
       console.log(symbol);
       const address = await globals.hTokenMap.get(symbol);
       console.log(address)
@@ -213,21 +203,36 @@ class Account extends PureComponent {
         globals.hades.getHTokenBalances(address, account),
         globals.hades.hToken(symbol, address),
       ]);
-      const balanceInfo = results[0]
-      const hToken = results[1]
-      if(inputAmount !==undefined){
-        const realAmount = await that.literalToReal(inputAmount, 8)
-        await that.launchTransaction(hToken.redeem(realAmount).send({ from: account }))
-        that.setState({
-          redeemVisible: false,
-          checkMax: false
-        })
-        that.props.dispatch({
-          type: 'account/login'
-        });
-      }
+      that.setState({
+        redeemVisible: true,
+        selectedPoolItem: item,
+        redeemResults: results
+      });
     }else {
       alert('Please connect the wallet')
+    }
+  };
+
+  handleRedeemOk = async (e) => {
+    const account = globals.loginAccount;
+    let { selectedPoolItem,redeemResults } = this.state;
+    let results = redeemResults;
+    const form = this.refs.myForm;
+    const values = form.getFieldsValue(['redeemInput'])
+    let inputAmount = values.redeemInput;
+    const balanceInfo = results[0]
+    const hToken = results[1]
+    let that = this;
+    if(inputAmount !==undefined){
+      const realAmount = await that.literalToReal(inputAmount, 8)
+      await that.launchTransaction(hToken.redeem(realAmount).send({ from: account }))
+      that.setState({
+        redeemVisible: false,
+        checkMax: false
+      })
+      that.props.dispatch({
+        type: 'account/login'
+      });
     }
   };
 
@@ -430,7 +435,7 @@ class Account extends PureComponent {
               </div>
               <div className={styles.inputArea}>
                 <div className={styles.inputDes}>
-                  <p className={styles.des}>Allowed Amount:{selectedPoolItem.hTokenBalanceLiteral.toFixed(4)}</p>
+                  <p className={styles.des}>Allowed Amount:{this.state.redeemResults[0].hTokenBalanceLiteral.toFixed(4)}</p>
                   {/*<p className={styles.des}>Exchange Rate:1.1</p>*/}
                 </div>
                 <div className={styles.inputContent}>
