@@ -13,3 +13,5 @@ export const globals = {
   loginAccount: null,
   pendingTransactions: [],
 }
+
+export const MAX_UINT256 = '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'

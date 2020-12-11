@@ -94,10 +94,6 @@ class Mining extends PureComponent {
       if (!lpTokenAddr) {
         return alert('failed to get lp token address')
       }
-      this.setState({
-        claimVisible: true,
-        selectedPoolItem: item
-      });
       let that = this;
       const lpToken = await globals.hades.lpToken(lpTokenAddr);
       const results = await Promise.all([
@@ -110,6 +106,8 @@ class Mining extends PureComponent {
       const decimals = results[1]
       const balanceLiteral = await that.realToLiteral(balance, decimals)
       that.setState({
+        claimVisible: true,
+        selectedPoolItem: item,
         increaseLimit: balanceLiteral,
         increaseResult: results,
         lpToken: lpToken
