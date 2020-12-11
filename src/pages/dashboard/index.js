@@ -24,9 +24,20 @@ class Dashboard extends PureComponent {
   }
 
   componentDidMount() {
-    this.props.dispatch({
+    let that = this;
+    that.props.dispatch({
       type: 'overview/queryOverview'
     })
+    this.refreshId = setInterval(function() {
+      console.log('refresh overview')
+      that.props.dispatch({
+        type: 'overview/queryOverview'
+      })
+    },15000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.refreshId)
   }
 
   render() {
@@ -45,11 +56,11 @@ class Dashboard extends PureComponent {
                 padding: '0',
               }}>
               <div className={styles.topLeft}>
-                <NumberCard title='TVL' number={overview.totalSupplyAccLiteral}  decimals={4} lg={24} unit='$' position='left' big={true} theme={theme}/>
+                <NumberCard title='TVL' number={overview.totalSupplyAccLiteral}  decimals={0} lg={24} unit='$' position='left' big={true} theme={theme}/>
               </div>
               <Row lg={24} className={styles.topLeftBottom}>
-                <NumberCard title='Total Borrows' number={overview.totalBorrowsAccLiteral}  lg={12} unit='$' position='left' theme={theme} decimals={4} />
-                <NumberCard title='Total Reserves' number={overview.totalReservesAccLiteral} lg={12} unit='$' position='left' decimals={4} theme={theme}/>
+                <NumberCard title='Total Borrows' number={overview.totalBorrowsAccLiteral}  lg={12} unit='$' position='left' theme={theme} decimals={0} />
+                <NumberCard title='Total Reserves' number={overview.totalReservesAccLiteral} lg={12} unit='$' position='left' decimals={0} theme={theme}/>
               </Row>
             </Card>
           </Col>

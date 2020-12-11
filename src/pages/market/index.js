@@ -29,11 +29,21 @@ class Market extends PureComponent {
   };
 
   componentDidMount() {
-    this.props.dispatch({
+    let that = this;
+    that.props.dispatch({
       type: 'market/queryMarket'
     });
+    this.refreshId = setInterval(function() {
+      console.log('refresh market')
+      that.props.dispatch({
+        type: 'market/queryMarket'
+      });
+    },15000)
   }
 
+  componentWillUnmount() {
+    clearInterval(this.refreshId)
+  }
 
   showModal = async (index) => {
     let account = globals.loginAccount;

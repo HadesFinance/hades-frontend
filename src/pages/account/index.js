@@ -42,6 +42,18 @@ class Account extends PureComponent {
         type: 'account/login'
       });
     }
+    that.refreshId = setInterval(function() {
+      if(loginAccount){
+        console.log('refresh account')
+        that.props.dispatch({
+          type: 'account/login'
+        });
+      }
+    },15000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.refreshId)
   }
 
   connectWallet(){

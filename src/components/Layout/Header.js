@@ -40,11 +40,22 @@ class Header extends PureComponent {
         type: 'account/login'
       });
     }
-    that.intervalId = setInterval(that.confirmPendingTransactions, 10000)
+    that.intervalId = setInterval(that.confirmPendingTransactions, 10000);
+    that.refreshId = setInterval(function() {
+      that.props.dispatch({
+        type: 'account/queryPrice'
+      });
+      if(loginAccount){
+        that.props.dispatch({
+          type: 'account/login'
+        });
+      }
+    },15000)
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervalId)
+    clearInterval(this.intervalId);
+    clearInterval(this.refreshId);
   }
 
   connectWallet(){
@@ -55,6 +66,7 @@ class Header extends PureComponent {
       alert('Please install MetaMask to use this dApp!')
     }
   }
+
 
   login = () => {
     this.props.dispatch({
