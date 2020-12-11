@@ -5,7 +5,7 @@ import { Page, } from 'components'
 import styles from './index.less'
 import ethereum from '../../../public/ethereum_L.svg';
 import DOL from '../../../public/DOL.svg'
-import { globals} from '../../utils/constant';
+import { globals, MAX_UINT256} from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store';
 const FormItem = Form.Item;
@@ -25,7 +25,9 @@ class Market extends PureComponent {
     borrowLimit:'',
     borrowResults:[],
     supplyBalanceInfo:{},
-    supplyEnable: false
+    supplyEnable: false,
+    showApprove: false,
+    address: ''
   };
 
   componentDidMount() {
@@ -50,10 +52,6 @@ class Market extends PureComponent {
     let {market} = this.props;
     let selectedMarketItem = market[index];
     if(account){
-      this.setState({
-      repayVisible: true,
-      selectedMarketItem: selectedMarketItem
-    });
       const network = store.get('network');
       let hades = (globals.hades = new Hades(network))
       await hades.setProvider(window.web3.currentProvider);
@@ -63,13 +61,21 @@ class Market extends PureComponent {
         alert('Please get symbol and hToken first!')
         throw new Error('Failed to get hToken address')
       }
+      this.setState({
+        repayVisible: true,
+        selectedMarketItem: selectedMarketItem,
+      })
       let that = this;
-      globals.hades.getHTokenBalances(address, globals.loginAccount).then(function(s) {
-        console.log(s);
-        that.setState({
-          supplyBalanceInfo: s
-        })
-      });
+      const dol = await globals.hades.dol()
+      const allowance = await dol.allowance(account, address).call();
+      const showApprove = BigInt(allowance.toString()) < BigInt(0);
+      const balanceInfo = await globals.hades.getHTokenBalances(address, globals.loginAccount);
+      console.log('showApprove='+showApprove);
+      that.setState({
+        supplyBalanceInfo: balanceInfo,
+        showApprove: showApprove,
+        address: address
+      })
     }else {
       alert('Please connect the wallet')
     }
@@ -77,6 +83,9 @@ class Market extends PureComponent {
 
   handleOk = async (e) => {
     const form = this.formRef.current;
+    const network = store.get('network');
+    let hades = (globals.hades = new Hades(network))
+    await hades.setProvider(window.web3.currentProvider);
     let balanceInfo = this.state.supplyBalanceInfo;
     let symbol = this.state.selectedMarketItem.underlyingSymbol;
     const address = await globals.hTokenMap.get(symbol);
@@ -101,11 +110,20 @@ class Market extends PureComponent {
           type: 'market/queryMarket'
         });
       } else {
-        const dol = await globals.hades.dol();
-        await dol.approve(address, value).send({ from: globals.loginAccount })
-        this.setState({
-          supplyEnable: true
-        })
+        if(this.state.showApprove){
+          const dol = await globals.hades.dol();
+          await dol.approve(address, MAX_UINT256).send({ from: globals.loginAccount })
+          this.setState({
+            supplyEnable: true
+          })
+        }else {
+          let that = this;
+          that.setState({
+            supplyEnable: true
+          },function() {
+            that.handleSupplyDol()
+          })
+        }
     }
     }
   };
@@ -114,6 +132,9 @@ class Market extends PureComponent {
       let supplyEnable = this.state.supplyEnable;
       if (supplyEnable){
         const form = this.formRef.current;
+        const network = store.get('network');
+        let hades = (globals.hades = new Hades(network))
+        await hades.setProvider(window.web3.currentProvider);
         let balanceInfo = this.state.supplyBalanceInfo;
         let symbol = this.state.selectedMarketItem.underlyingSymbol;
         const address = await globals.hTokenMap.get(symbol);
@@ -143,16 +164,29 @@ class Market extends PureComponent {
       }
     };
 
-  handleSupplyApprove = async (e) => {
-
-  }
-
   handleCancel = e => {
     this.setState({
       repayVisible: false,
-      checkedNumber: [false,false,false]
+      checkedNumber: [false,false,false],
+      supplyBalanceInfo:{}
     });
   };
+
+  handleSupplyChange = async (e) => {
+    let inputValue = e.target.value;
+    if(inputValue !==null){
+      let { address, supplyBalanceInfo } = this.state;
+      const account = globals.loginAccount
+      const dol = await globals.hades.dol()
+      const allowance = await dol.allowance(account, address).call();
+      let that = this
+      const value = that.literalToReal(inputValue, supplyBalanceInfo.underlyingDecimals)
+      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      that.setState({
+        showApprove: showApprove
+      })
+    }
+  }
 
   showRedeemModal = async (index) => {
     const account = globals.loginAccount
@@ -220,6 +254,7 @@ class Market extends PureComponent {
   };
 
   literalToReal(literal, decimals) {
+    console.log('literal='+literal)
     const real = Number(literal) * 10 ** Number(decimals)
     return real.toString()
   }
@@ -244,7 +279,7 @@ class Market extends PureComponent {
     });
   };
 
-  checkNumber(index,multiple,type){
+  async checkNumber(index,multiple,type){
     let { checkedNumber, borrowLimit, supplyBalanceInfo } = this.state;
     let isChecked = checkedNumber[index];
     checkedNumber = [false,false,false];
@@ -255,7 +290,17 @@ class Market extends PureComponent {
     if(type ===0){//type=0 is supply,=1 is  borrow
       let supplyInput = supplyBalanceInfo.tokenBalanceLiteral * multiple
       const form = this.formRef.current;
-      form.setFieldsValue({ supplyInput : supplyInput})
+      form.setFieldsValue({ supplyInput : supplyInput});
+      let { address} = this.state;
+      const account = globals.loginAccount
+      const dol = await globals.hades.dol()
+      const allowance = await dol.allowance(account, address).call();
+      let that = this
+      const value = that.literalToReal(supplyInput, supplyBalanceInfo.underlyingDecimals)
+      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      that.setState({
+        showApprove: showApprove
+      })
     }else if(type ===1){
       let borrowInput = borrowLimit * multiple;
       const form = this.formRef.current;
@@ -331,7 +376,7 @@ class Market extends PureComponent {
             onOk={this.handleOk}
             onCancel={this.handleCancel}
             className={theme === 'dark' ? styles.modalDark : ''}
-            footer={selectedMarketItem.underlyingSymbol !=='ETH' ?
+            footer={selectedMarketItem.underlyingSymbol !=='ETH' && this.state.showApprove ?
               [
                 <Button key="approve" type="primary"  onClick={this.handleOk}>
                   Approve
@@ -366,7 +411,7 @@ class Market extends PureComponent {
                   >
                     <FormItem name='supplyInput' rule={[
                       {required: true, message: 'Input supply amount'}
-                    ]}>
+                    ]} onChange={this.handleSupplyChange}>
                       <Input placeholder='Input supply amount' type='number'/>
                     </FormItem>
                   </Form>

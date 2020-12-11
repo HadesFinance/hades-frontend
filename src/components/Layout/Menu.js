@@ -34,9 +34,7 @@ class SiderMenu extends PureComponent {
 
   generateMenus(data,selectedKeys) {
     return data.map(item => {
-      console.log(selectedKeys)
       let isSelected = selectedKeys.filter(selected_item => selected_item === item.id).length >0 ? true :false;
-      console.log("id="+item.id+"&isSelected="+isSelected);
       return (
         <Menu.Item key={item.id}>
           <NavLink to={item.route || '#'}>

@@ -25,7 +25,9 @@ class Account extends PureComponent {
     checkMax: false,
     repayEnable: false,
     repayResults:[],
-    redeemResults:[]
+    redeemResults:[],
+    showApprove: false,
+    address:''
   };
 
   componentDidMount() {
@@ -72,44 +74,53 @@ class Account extends PureComponent {
     });
   }
 
-  showModal = (item,e) => {
-    console.log(item)
+  showModal = async (item,e) => {
+    let account = globals.loginAccount;
+    const network = store.get('network');
+    let hades = (globals.hades = new Hades(network))
+    await hades.setProvider(window.web3.currentProvider);
+    let symbol = item.underlyingSymbol;
+    const address = globals.hTokenMap.get(symbol);
+    if (!symbol || !address) {
+      alert('Please get symbol and hToken first!')
+      throw new Error('Failed to get hToken address')
+    }
     this.setState({
       repayVisible: true,
       selectedPoolItem: item
     });
+    const dol = await globals.hades.dol()
+    const allowance = await dol.allowance(account, address).call();
+    const showApprove = BigInt(allowance.toString()) < BigInt(0);
+    this.setState({
+      showApprove: showApprove
+    })
+    const results = await Promise.all([
+      globals.hades.getHTokenBalances(address, account),
+      globals.hades.hToken(symbol, address),
+      globals.hades.dol(),
+    ]);
+    this.setState({
+      repayResults: results,
+      address: address
+    })
   };
 
   handleOk = async (e) => {
     const account = globals.loginAccount;
-    let { selectedPoolItem } = this.state;
+    let { selectedPoolItem,repayResults,address } = this.state;
+    let results = repayResults;
     const form = this.refs.myForm;
     const values = form.getFieldsValue(['repayInput'])
     let inputAmount = values.repayInput;
     if(account){
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
-      await hades.setProvider(window.web3.currentProvider);
-      let symbol = selectedPoolItem.underlyingSymbol;
-      console.log(symbol);
-      const address = await globals.hTokenMap.get(symbol);
-      console.log(address)
-      if (!symbol || !address) {
-        alert('Please get symbol and hToken first!')
-        throw new Error('Failed to get hToken address')
-      }
-      let that = this;
-      const results = await Promise.all([
-        globals.hades.getHTokenBalances(address, account),
-        globals.hades.hToken(symbol, address),
-        globals.hades.dol(),
-      ]);
       const balanceInfo = results[0]
       const hToken = results[1]
       const dol = results[2]
+      let that = this;
       if(inputAmount !==undefined){
         const realAmount = await that.literalToReal(inputAmount, balanceInfo.underlyingDecimals)
-        if (symbol === 'ETH') {
+        if (selectedPoolItem.underlyingSymbol === 'ETH') {
           await that.launchTransaction(hToken.repayBorrow().send({ from: account, value: realAmount }))
           that.setState({
             repayVisible: false,
@@ -120,11 +131,18 @@ class Account extends PureComponent {
             type: 'account/login'
           });
         } else {
-          await dol.approve(address, realAmount).send({ from: account });
-          that.setState({
-            repayEnable:true,
-            repayResults: results
-          })
+          if(this.state.showApprove){
+            await dol.approve(address, realAmount).send({ from: account });
+            that.setState({
+              repayEnable:true
+            })
+          }else {
+            that.setState({
+              repayEnable:true,
+            },function() {
+              that.handleRepayDol()
+            })
+          }
         }
       }
     }else {
@@ -183,6 +201,23 @@ class Account extends PureComponent {
       repayEnable: false
     });
   };
+
+  handleRepayChange = async (e) => {
+    let inputValue = e.target.value;
+    if(inputValue !==null){
+      let { address, repayResults } = this.state;
+      const balanceInfo = repayResults[0]
+      const account = globals.loginAccount
+      const dol = await globals.hades.dol()
+      const allowance = await dol.allowance(account, address).call();
+      let that = this
+      const value = that.literalToReal(inputValue, balanceInfo.underlyingDecimals)
+      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      that.setState({
+        showApprove: showApprove
+      })
+    }
+  }
 
   showRedeemModal = async (item,e) => {
     const account = globals.loginAccount;
@@ -243,7 +278,7 @@ class Account extends PureComponent {
     });
   };
 
-  checkNumber(type){
+  async checkNumber(type){
     let { selectedPoolItem, checkMax } = this.state;
     checkMax = !checkMax
     this.setState({
@@ -252,7 +287,17 @@ class Account extends PureComponent {
     if(type ===0){//type=0 is repay,=1 is redeem
       let repayInput = selectedPoolItem.borrowBalanceLiteral
       const form = this.refs.myForm;
-      form.setFieldsValue({ repayInput : repayInput})
+      form.setFieldsValue({ repayInput : repayInput});
+      let { address,repayResults} = this.state;
+      const account = globals.loginAccount
+      const dol = await globals.hades.dol()
+      const allowance = await dol.allowance(account, address).call();
+      let that = this
+      const value = that.literalToReal(repayInput, repayResults[0].underlyingDecimals)
+      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      that.setState({
+        showApprove: showApprove
+      })
     }else if(type ===1){
       let redeemInput = selectedPoolItem.hTokenBalanceLiteral
       const form = this.refs.myForm;
@@ -371,7 +416,7 @@ class Account extends PureComponent {
             onOk={this.handleOk}
             onCancel={this.handleCancel}
             className={theme === 'dark' ? styles.modalDark : ''}
-            footer={selectedPoolItem.underlyingSymbol !=='ETH' ?
+            footer={selectedPoolItem.underlyingSymbol !=='ETH' && this.state.showApprove ?
               [
                 <Button key="approve" type="primary"  onClick={this.handleOk}>
                   Approve
@@ -406,7 +451,7 @@ class Account extends PureComponent {
                   >
                     <FormItem name='repayInput' rule={[
                       {required: true, message: 'Input repay amount'}
-                    ]}>
+                    ]} onChange={this.handleRepayChange}>
                       <Input placeholder='Input repay amount' type='number'/>
                     </FormItem>
                   </Form>

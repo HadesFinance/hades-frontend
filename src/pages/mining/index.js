@@ -35,7 +35,8 @@ class Mining extends PureComponent {
     lpToken:'',
     power:'',
     rewards:'',
-    lockEnable:false
+    lockEnable:false,
+    showApprove: false
   };
 
   componentDidMount() {
@@ -94,6 +95,10 @@ class Mining extends PureComponent {
       if (!lpTokenAddr) {
         return alert('failed to get lp token address')
       }
+      this.setState({
+        claimVisible: true,
+        selectedPoolItem: item
+      });
       let that = this;
       const lpToken = await globals.hades.lpToken(lpTokenAddr);
       const results = await Promise.all([
@@ -104,10 +109,8 @@ class Mining extends PureComponent {
       console.log(results);
       const balance = results[0]
       const decimals = results[1]
-      const balanceLiteral = await that.realToLiteral(balance, decimals)
+      const balanceLiteral = await that.realToLiteral(balance, decimals);
       that.setState({
-        claimVisible: true,
-        selectedPoolItem: item,
         increaseLimit: balanceLiteral,
         increaseResult: results,
         lpToken: lpToken
@@ -116,44 +119,6 @@ class Mining extends PureComponent {
       alert('Please connect the wallet')
     }
   };
-
-
-  realToLiteral(real, decimals) {
-    const literal = Number(real) / 10 ** Number(decimals)
-    return literal
-  }
-
-
-  literalToReal(literal, decimals) {
-    const real = Number(literal) * 10 ** Number(decimals)
-    return real.toString()
-  }
-
-  async launchTransaction(transaction) {
-    try {
-      const result = await transaction
-      if (result.transactionHash) {
-        globals.pendingTransactions.push(result.transactionHash)
-      }
-      this.getMining()
-    } catch (e) {
-      console.log('failed to launch transaction:', e);
-      alert('failed to launch transaction:'+e)
-    }
-  }
-
-  handleOk = e => {
-    this.setState({
-      increaseVisible: false,
-    });
-  };
-
-  handleCancel = e => {
-    this.setState({
-      increaseVisible: false,
-    });
-  };
-
 
   handleIncreaseOk = async (e) => {
     let { increaseResult, lpToken, selectedPoolItem,lockEnable } = this.state;
@@ -209,6 +174,44 @@ class Mining extends PureComponent {
       checkMax: false,
     })
   }
+
+
+  realToLiteral(real, decimals) {
+    const literal = Number(real) / 10 ** Number(decimals)
+    return literal
+  }
+
+
+  literalToReal(literal, decimals) {
+    const real = Number(literal) * 10 ** Number(decimals)
+    return real.toString()
+  }
+
+  async launchTransaction(transaction) {
+    try {
+      const result = await transaction
+      if (result.transactionHash) {
+        globals.pendingTransactions.push(result.transactionHash)
+      }
+      this.getMining()
+    } catch (e) {
+      console.log('failed to launch transaction:', e);
+      alert('failed to launch transaction:'+e)
+    }
+  }
+
+  handleOk = e => {
+    this.setState({
+      increaseVisible: false,
+    });
+  };
+
+  handleCancel = e => {
+    this.setState({
+      increaseVisible: false,
+    });
+  };
+
 
   showExitModal = (index) => {
     let account = globals.loginAccount;
@@ -358,14 +361,20 @@ class Mining extends PureComponent {
           onOk={this.handleIncreaseOk}
           onCancel={this.handleIncreaseCancel}
           className={theme === 'dark' ? styles.modalDark : ''}
-          footer={[
+          footer={this.state.showApprove ?
+            [
             <Button key="approve" type="primary"  onClick={this.handleIncreaseApprove}>
               Approve
             </Button>,
             <Button key="submit" type="primary"  onClick={this.handleIncreaseOk}>
               Lock
             </Button>
-          ]}
+          ] :
+            [
+              <Button key="submit" type="primary"  onClick={this.handleIncreaseOk}>
+                Lock
+              </Button>
+            ]}
         >
           <div className={styles.dialogContent}>
             <div className={styles.title}>
