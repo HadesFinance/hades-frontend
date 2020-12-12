@@ -36,7 +36,6 @@ class Market extends PureComponent {
       type: 'market/queryMarket'
     });
     this.refreshId = setInterval(function() {
-      console.log('refresh market')
       that.props.dispatch({
         type: 'market/queryMarket'
       });

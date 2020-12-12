@@ -43,9 +43,9 @@ class Mining extends PureComponent {
     let that = this
     that.getMining();
     that.refreshId = setInterval(function() {
-      console.log('refresh mining')
       that.getMining()
-    },15000)
+    },15000);
+
   }
 
   componentWillUnmount() {
@@ -224,8 +224,10 @@ class Mining extends PureComponent {
   async launchTransaction(transaction) {
     try {
       const result = await transaction
+      console.log('launshResult='+result);
       if (result.transactionHash) {
         globals.pendingTransactions.push(result.transactionHash)
+
       }
       this.getMining()
     } catch (e) {

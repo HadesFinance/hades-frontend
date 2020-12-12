@@ -119,8 +119,8 @@ class Header extends PureComponent {
       priceList
     } = this.props
 
-    let pendingTransactions = store.get('pendingTransactions') ? store.get('pendingTransactions') : [];
-    console.log('pendng='+pendingTransactions)
+    let pendingTransactions = globals.pendingTransactions;
+    console.log(globals.pendingTransactions);
 
     let processedAccount;
     let etherscanLink;
@@ -150,7 +150,7 @@ class Header extends PureComponent {
         </div>
         <div className={styles.transactionsArea}>
           <p className={styles.transactionsDes}>Your unfinished transactions</p>
-          {!pendingTransactions && pendingTransactions.length >0  ?
+          {pendingTransactions && pendingTransactions.length >0  ?
             <div className={styles.transactionsList}>
               {pendingTransactions.map((item,index) =>
                 <div className={styles.transactionsItem} key={index}>

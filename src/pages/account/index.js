@@ -47,7 +47,6 @@ class Account extends PureComponent {
     }
     that.refreshId = setInterval(function() {
       if(loginAccount){
-        console.log('refresh account')
         that.props.dispatch({
           type: 'account/login'
         });
