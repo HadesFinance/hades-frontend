@@ -7,7 +7,7 @@ import styles from './index.less'
 import wallet from '../../../public/wallet.svg'
 import DOL from '../../../public/DOL.svg'
 import ETH from '../../../public/ethereum_L.svg'
-import { globals } from '../../utils/constant';
+import { globals, MAX_UINT256 } from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store';
 const FormItem = Form.Item;
@@ -132,7 +132,7 @@ class Account extends PureComponent {
           });
         } else {
           if(this.state.showApprove){
-            await dol.approve(address, realAmount).send({ from: account });
+            await dol.approve(address, MAX_UINT256).send({ from: account });
             that.setState({
               repayEnable:true
             })

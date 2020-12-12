@@ -12,7 +12,7 @@ import lending from '../../../public/lending.svg'
 import linkBlack from '../../../public/link_black.svg'
 import linkWhite from '../../../public/link_white.svg'
 import { TableInfo } from './components/'
-import { globals } from '../../utils/constant';
+import { globals, MAX_UINT256 } from '../../utils/constant';
 import { HADES_CONFIG } from '../../../config';
 import Hades from '../../utils/hades';
 import store from 'store';
@@ -109,11 +109,16 @@ class Mining extends PureComponent {
       console.log(results);
       const balance = results[0]
       const decimals = results[1]
+      const distributor = results[2]
+      const allowance = await lpToken.allowance(account, distributor._address).call()
+      let showApprove = BigInt(allowance.toString()) < BigInt(0);
+      console.log('showApprove='+showApprove);
       const balanceLiteral = await that.realToLiteral(balance, decimals);
       that.setState({
         increaseLimit: balanceLiteral,
         increaseResult: results,
-        lpToken: lpToken
+        lpToken: lpToken,
+        showApprove: showApprove
       })
     }else if(!account){
       alert('Please connect the wallet')
@@ -121,8 +126,11 @@ class Mining extends PureComponent {
   };
 
   handleIncreaseOk = async (e) => {
-    let { increaseResult, lpToken, selectedPoolItem,lockEnable } = this.state;
-    if(lockEnable){
+    let { increaseResult, lpToken, selectedPoolItem,lockEnable, showApprove } = this.state;
+    if(lockEnable || !showApprove){
+      const network = store.get('network');
+      let hades = (globals.hades = new Hades(network))
+      await hades.setProvider(window.web3.currentProvider);
       let results = increaseResult;
       let account = globals.loginAccount;
       let pid = selectedPoolItem.id;
@@ -149,7 +157,7 @@ class Mining extends PureComponent {
   };
 
   handleIncreaseApprove = async (e) => {
-    let { increaseResult, lpToken, selectedPoolItem } = this.state;
+    let { increaseResult, lpToken, selectedPoolItem,showApprove } = this.state;
     let results = increaseResult;
     let account = globals.loginAccount;
     let pid = selectedPoolItem.id;
@@ -161,10 +169,19 @@ class Mining extends PureComponent {
     if(inputAmount !==undefined){
       const realAmount = await this.literalToReal(inputAmount, decimals)
       const distributor = results[2]
-      await lpToken.approve(distributor._address, realAmount).send({ from: account });
-      this.setState({
-        lockEnable: true
-      })
+      if(showApprove){
+        await lpToken.approve(distributor._address, MAX_UINT256).send({ from: account });
+        this.setState({
+          lockEnable: true
+        })
+      }else {
+        let that = this;
+        that.setState({
+          lockEnable: true
+        },function() {
+          that.handleIncreaseOk()
+        })
+      }
     }
   };
 
@@ -173,6 +190,23 @@ class Mining extends PureComponent {
       claimVisible: false,
       checkMax: false,
     })
+  }
+
+  handleIncreaseChange = async (e) => {
+    let inputValue = e.target.value;
+    if(inputValue !==null){
+      let { lpToken, increaseResult } = this.state;
+      const distributor = increaseResult[2];
+      const account = globals.loginAccount;
+      const allowance = await lpToken.allowance(account, distributor._address).call()
+      console.log('allowance:', allowance.toString())
+      let that = this;
+      const value = that.literalToReal(inputValue, increaseResult[1])
+      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      that.setState({
+        showApprove: showApprove
+      })
+    }
   }
 
 
@@ -239,7 +273,7 @@ class Mining extends PureComponent {
     });
   };
 
-  checkNumber(type){
+  async checkNumber(type){
     let { selectedPoolItem, checkMax,increaseLimit } = this.state;
     checkMax = !checkMax
     this.setState({
@@ -247,7 +281,18 @@ class Mining extends PureComponent {
     });
     if(type ===0){//type=0 is increase,=1 is claim
       const form = this.refs.myForm;
-      form.setFieldsValue({ increaseInput: increaseLimit})
+      form.setFieldsValue({ increaseInput: increaseLimit});
+      let { lpToken, increaseResult } = this.state;
+      const distributor = increaseResult[2];
+      const account = globals.loginAccount;
+      const allowance = await lpToken.allowance(account, distributor._address).call()
+      console.log('allowance:', allowance.toString())
+      let that = this;
+      const value = that.literalToReal(increaseLimit, increaseResult[1])
+      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      that.setState({
+        showApprove: showApprove
+      })
     }else if(type ===1){
       let redeemInput = selectedPoolItem.hTokenBalanceLiteral
       const form = this.refs.myForm;
@@ -399,7 +444,8 @@ class Mining extends PureComponent {
                 >
                   <FormItem name='increaseInput' rule={[
                     {required: true, message: 'Input increase amount'}
-                  ]}>
+                  ]} onChange={this.handleIncreaseChange}
+                  >
                     <Input placeholder='Input increase amount' type='number'/>
                   </FormItem>
                 </Form>
