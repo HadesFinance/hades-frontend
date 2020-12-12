@@ -24,7 +24,7 @@ class Market extends PureComponent {
     selectedMarketItem:{},
     borrowLimit:'',
     borrowResults:[],
-    supplyBalanceInfo:{},
+    supplyBalanceInfo:{tokenBalanceLiteral:0},
     supplyEnable: false,
     showApprove: false,
     address: ''
@@ -67,7 +67,7 @@ class Market extends PureComponent {
       let that = this;
       const dol = await globals.hades.dol()
       const allowance = await dol.allowance(account, address).call();
-      const showApprove = BigInt(allowance.toString()) < BigInt(0);
+      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(0);
       const balanceInfo = await globals.hades.getHTokenBalances(address, globals.loginAccount);
       console.log('showApprove='+showApprove);
       that.setState({
@@ -180,7 +180,7 @@ class Market extends PureComponent {
       const allowance = await dol.allowance(account, address).call();
       let that = this
       const value = that.literalToReal(inputValue, supplyBalanceInfo.underlyingDecimals)
-      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove
       })
@@ -296,7 +296,7 @@ class Market extends PureComponent {
       const allowance = await dol.allowance(account, address).call();
       let that = this
       const value = that.literalToReal(supplyInput, supplyBalanceInfo.underlyingDecimals)
-      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove
       })
@@ -525,7 +525,6 @@ class Market extends PureComponent {
 
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     market: state.market.market,
     liquidity: state.account.accountLiquidity.liquidity

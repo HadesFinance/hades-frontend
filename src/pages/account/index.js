@@ -90,7 +90,7 @@ class Account extends PureComponent {
     });
     const dol = await globals.hades.dol()
     const allowance = await dol.allowance(account, address).call();
-    const showApprove = BigInt(allowance.toString()) < BigInt(0);
+    const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(0);
     this.setState({
       showApprove: showApprove
     })
@@ -293,7 +293,7 @@ class Account extends PureComponent {
       const allowance = await dol.allowance(account, address).call();
       let that = this
       const value = that.literalToReal(repayInput, repayResults[0].underlyingDecimals)
-      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove
       })
@@ -509,7 +509,6 @@ class Account extends PureComponent {
 
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     connected: state.account.connected,
     wrongNetwork: state.account.wrongNetwork,

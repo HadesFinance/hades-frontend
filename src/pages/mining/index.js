@@ -111,7 +111,7 @@ class Mining extends PureComponent {
       const decimals = results[1]
       const distributor = results[2]
       const allowance = await lpToken.allowance(account, distributor._address).call()
-      let showApprove = BigInt(allowance.toString()) < BigInt(0);
+      let showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(0);
       console.log('showApprove='+showApprove);
       const balanceLiteral = await that.realToLiteral(balance, decimals);
       that.setState({
@@ -291,7 +291,7 @@ class Mining extends PureComponent {
       console.log('allowance:', allowance.toString())
       let that = this;
       const value = that.literalToReal(increaseLimit, increaseResult[1])
-      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove
       })
@@ -493,7 +493,6 @@ class Mining extends PureComponent {
 
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     mining: state.mining.mining,
     distributorStats: state.mining.distributorStats

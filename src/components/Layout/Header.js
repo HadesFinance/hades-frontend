@@ -224,7 +224,6 @@ Header.propTypes = {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     connected: state.account.connected,
     wrongNetwork: state.account.wrongNetwork,
