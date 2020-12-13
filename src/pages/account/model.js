@@ -53,20 +53,17 @@ export default modelExtend(model, {
         wrongNetwork = false
       }
       const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress);
-      console.log('Login Account:', loginAccount);
       if(loginAccount){
         yield put({
           type: 'saveState',
           payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: loginAccount ? true : false}
         });
         const result = yield globals.hades.getAccountBalances(loginAccount);
-        console.log(result);
         yield put({
           type: 'saveAccount',
           payload: { account: result }
         });
         const liquidity = yield globals.hades.getAccountLiquidity(loginAccount);
-        console.log(liquidity);
         yield put({
           type: 'saveAccountLiquidity',
           payload: { accountLiquidity: liquidity }
@@ -82,13 +79,11 @@ export default modelExtend(model, {
         });
         if(loginAccount){
           const result = yield globals.hades.getAccountBalances(loginAccount);
-          console.log(result);
           yield put({
             type: 'saveAccount',
             payload: { account: result }
           });
           const liquidity = yield globals.hades.getAccountLiquidity(loginAccount);
-          console.log(liquidity);
           yield put({
             type: 'saveAccountLiquidity',
             payload: { accountLiquidity: liquidity }

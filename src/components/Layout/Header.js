@@ -1,6 +1,6 @@
 import React, { PureComponent,  } from 'react'
 import PropTypes from 'prop-types'
-import { Menu, Layout,  Popover,  Modal } from 'antd';
+import {  Layout,  Popover,  Modal } from 'antd';
 import classnames from 'classnames'
 import styles from './Header.less'
 import bitcoinIcon from '../../../public/bitcoin_L.svg';
@@ -9,7 +9,6 @@ import metaMask from '../../../public/MetaMask.svg'
 import linkGray from '../../../public/link_gray.svg'
 import linkGreen from '../../../public/link_green.svg'
 import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import {HADES_CONFIG} from '../../../config'
 import { globals} from '../../utils/constant';
 import { connect } from 'umi';
 import store from 'store';
@@ -25,7 +24,6 @@ class Header extends PureComponent {
     let that = this;
     if (window.ethereum) {
       window.ethereum.on('accountsChanged', function() {
-        console.log('accountChanged')
         that.props.dispatch({
           type: 'account/login'
         });
@@ -76,7 +74,6 @@ class Header extends PureComponent {
 
 
   async confirmPendingTransactions() {
-    console.log(globals.pendingTransactions);
     for (let i = 0; i < globals.pendingTransactions.length; i++) {
       const txHash = globals.pendingTransactions[i]
       const confirmed = await globals.hades.isTransactionConfirmed(txHash)
@@ -120,7 +117,6 @@ class Header extends PureComponent {
     } = this.props
 
     let pendingTransactions = globals.pendingTransactions;
-    console.log(globals.pendingTransactions);
 
     let processedAccount;
     let etherscanLink;
@@ -130,7 +126,6 @@ class Header extends PureComponent {
         let rightStr = loginAccount.slice(loginAccount.length -6);
         const network = store.get('network');
         etherscan = network.etherscan;
-        console.log('etherscan='+etherscan);
         processedAccount = leftStr + '...'+ rightStr;
         etherscanLink = 'https://'+etherscan+'/address/'+loginAccount
     }

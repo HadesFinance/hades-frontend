@@ -30,54 +30,7 @@ const goDashboard = () => {
 export default {
   namespace: 'app',
   state: {
-    routeList:[
-      {
-        id: '1',
-        icon: '/overview.svg',
-        activeIcon: '/overview_p.svg',
-        name: 'Overview',
-        'pt-br': {
-          name: 'Overview'
-        },
-        route: '/dashboard',
-      },{
-        id: '2',
-        icon: '/market.svg',
-        activeIcon: '/market_p.svg',
-        name: 'Market',
-        'pt-br': {
-          name: 'Market'
-        },
-        route: '/market',
-      },{
-        id: '3',
-        icon: '/mining.svg',
-        activeIcon: '/mining_p.svg',
-        name: 'Mining',
-        'pt-br': {
-          name: 'Mining'
-        },
-        route: '/mining',
-      },{
-        id: '4',
-        icon: '/voting.svg',
-        activeIcon: '/voting_p.svg',
-        name: 'Voting',
-        'pt-br': {
-          name: 'Voting'
-        },
-        route: '/voting',
-      },{
-        id: '5',
-        icon: '/account.svg',
-        activeIcon: '/account_p.svg',
-        name: 'Account',
-        'pt-br': {
-          name: 'Account'
-        },
-        route: '/account',
-      },
-    ],
+    routeList:[],
     locationPathname: '',
     locationQuery: {},
     theme: store.get('theme') || 'light',
@@ -135,18 +88,6 @@ export default {
         },
       ];
       const network = HADES_CONFIG.networks.test;
-  /*    store.set('routeList', routeList);
-      store.set('isInit', true);
-      const network = HADES_CONFIG.networks.test;
-      store.set('network',network);
-
-
-
-      const isInit = store.get('isInit')
-      if (isInit) {
-        goDashboard()
-        return
-      }*/
       yield put({
         type: 'handleConfigChange',
         payload: { routeList: routeList, network: network, isInit: true}

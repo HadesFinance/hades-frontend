@@ -13,7 +13,6 @@ import linkBlack from '../../../public/link_black.svg'
 import linkWhite from '../../../public/link_white.svg'
 import { TableInfo } from './components/'
 import { globals, MAX_UINT256 } from '../../utils/constant';
-import { HADES_CONFIG } from '../../../config';
 import Hades from '../../utils/hades';
 import store from 'store';
 const FormItem = Form.Item;
@@ -57,11 +56,9 @@ class Mining extends PureComponent {
     that.props.dispatch({
       type: 'mining/queryMining'
     }).then(function(rsp) {
-      console.log(rsp)
       let countdownList = rsp.pools.filter(item => item.state ==='0');
       if(countdownList.length >0){
         let countdownValue = countdownList[0].countdown;
-        console.log('countdown='+countdownValue)
         that.intervalId = setInterval(function () {
           countdownValue = countdownValue >0 ? countdownValue -1 : 0
           that.setState({
@@ -81,7 +78,6 @@ class Mining extends PureComponent {
 
   showModal = async (item) => {
     let account = (globals.loginAccount = window.ethereum.selectedAddress);
-    console.log('ptype='+item.ptype);
     if(item.ptype ==='1' && account){
       this.setState({
         increaseVisible: true,
@@ -112,7 +108,6 @@ class Mining extends PureComponent {
       const distributor = results[2]
       const allowance = await lpToken.allowance(account, distributor._address).call()
       let showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(0);
-      console.log('showApprove='+showApprove);
       const balanceLiteral = await that.realToLiteral(balance, decimals);
       that.setState({
         increaseLimit: balanceLiteral,
@@ -137,7 +132,6 @@ class Mining extends PureComponent {
       const form = this.refs.myForm;
       const values = form.getFieldsValue(['increaseInput'])
       let inputAmount = values.increaseInput;
-      const balance = results[0]
       const decimals = results[1]
       if(inputAmount !==undefined){
         const realAmount = await this.literalToReal(inputAmount, decimals)
@@ -160,14 +154,10 @@ class Mining extends PureComponent {
     let { increaseResult, lpToken, selectedPoolItem,showApprove } = this.state;
     let results = increaseResult;
     let account = globals.loginAccount;
-    let pid = selectedPoolItem.id;
     const form = this.refs.myForm;
     const values = form.getFieldsValue(['increaseInput'])
     let inputAmount = values.increaseInput;
-    const balance = results[0]
-    const decimals = results[1]
     if(inputAmount !==undefined){
-      const realAmount = await this.literalToReal(inputAmount, decimals)
       const distributor = results[2]
       if(showApprove){
         await lpToken.approve(distributor._address, MAX_UINT256).send({ from: account });
@@ -199,7 +189,6 @@ class Mining extends PureComponent {
       const distributor = increaseResult[2];
       const account = globals.loginAccount;
       const allowance = await lpToken.allowance(account, distributor._address).call()
-      console.log('allowance:', allowance.toString())
       let that = this;
       const value = that.literalToReal(inputValue, increaseResult[1])
       const showApprove = BigInt(allowance.toString()) < BigInt(value);
@@ -224,7 +213,6 @@ class Mining extends PureComponent {
   async launchTransaction(transaction) {
     try {
       const result = await transaction
-      console.log('launshResult='+result);
       if (result.transactionHash) {
         globals.pendingTransactions.push(result.transactionHash)
 
@@ -288,7 +276,6 @@ class Mining extends PureComponent {
       const distributor = increaseResult[2];
       const account = globals.loginAccount;
       const allowance = await lpToken.allowance(account, distributor._address).call()
-      console.log('allowance:', allowance.toString())
       let that = this;
       const value = that.literalToReal(increaseLimit, increaseResult[1])
       const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);

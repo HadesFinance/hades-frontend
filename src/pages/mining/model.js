@@ -29,7 +29,6 @@ export default modelExtend(model, {
       let loginAcount = globals.loginAccount;
       if(loginAcount){
         const result = yield hades.getPools(loginAcount);
-        console.log(result);
         yield put({
           type: 'saveMining',
           payload: { mining: result }
@@ -37,7 +36,6 @@ export default modelExtend(model, {
         return result
       }else {
         const result = yield hades.getPools();
-        console.log(result);
         for (const pool of result.pools) {
           globals.lpTokenMap.set(pool.id, pool.tokenAddr)
         }

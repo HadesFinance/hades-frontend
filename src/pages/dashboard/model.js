@@ -38,7 +38,6 @@ export default modelExtend(model, {
       let hades = (globals.hades = new Hades(network))
       let that = this;
       const result = yield hades.getOverview();
-      console.log(result)
       yield put({
         type: 'saveOverview',
         payload: { overview: result }

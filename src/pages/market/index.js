@@ -191,7 +191,6 @@ class Market extends PureComponent {
     const account = globals.loginAccount
     let {market} = this.props;
     let selectedMarketItem = market[index];
-    console.log('account='+account)
     if(account){
       this.setState({
         redeemVisible: true,
@@ -221,7 +220,6 @@ class Market extends PureComponent {
       } else {
         borrowLimit = results[2].liquidityLiteral
       }
-      console.log('borrowLimit:'+borrowLimit);
       that.setState({
         borrowLimit: borrowLimit,
         borrowResults: results
@@ -253,7 +251,6 @@ class Market extends PureComponent {
   };
 
   literalToReal(literal, decimals) {
-    console.log('literal='+literal)
     const real = Number(literal) * 10 ** Number(decimals)
     return real.toString()
   }

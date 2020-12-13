@@ -225,9 +225,7 @@ class Account extends PureComponent {
       let hades = (globals.hades = new Hades(network))
       await hades.setProvider(window.web3.currentProvider);
       let symbol = item.underlyingSymbol;
-      console.log(symbol);
       const address = await globals.hTokenMap.get(symbol);
-      console.log(address)
       if (!symbol || !address) {
         alert('Please get symbol and hToken first!')
         throw new Error('Failed to get hToken address')

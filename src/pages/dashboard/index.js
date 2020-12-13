@@ -135,7 +135,6 @@ Dashboard.propTypes = {
   loading: PropTypes.object,
 }
 function mapStateToProps(state) {
-  console.log(state);
   return {
     overview: state.overview.overview
   };
