@@ -7,7 +7,7 @@ import styles from './index.less'
 import wallet from '../../../public/wallet.svg'
 import DOL from '../../../public/DOL.svg'
 import ETH from '../../../public/ethereum_L.svg'
-import { globals, MAX_UINT256 } from '../../utils/constant';
+import { globals, MAX_UINT256, literalToReal, launchTransaction } from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store';
 const FormItem = Form.Item;
@@ -111,9 +111,9 @@ class Account extends PureComponent {
       const dol = results[2]
       let that = this;
       if(inputAmount !==undefined){
-        const realAmount = await that.literalToReal(inputAmount, balanceInfo.underlyingDecimals)
+        const realAmount = await literalToReal(inputAmount, balanceInfo.underlyingDecimals)
         if (selectedPoolItem.underlyingSymbol === 'ETH') {
-          await that.launchTransaction(hToken.repayBorrow().send({ from: account, value: realAmount }))
+          await launchTransaction(hToken.repayBorrow().send({ from: account, value: realAmount }))
           that.setState({
             repayVisible: false,
             checkMax: false,
@@ -153,8 +153,8 @@ class Account extends PureComponent {
       let that = this;
       const balanceInfo = results[0]
       const hToken = results[1]
-      const realAmount = await that.literalToReal(inputAmount, balanceInfo.underlyingDecimals)
-      await that.launchTransaction(hToken.repayBorrow(realAmount).send({ from: account }))
+      const realAmount = await literalToReal(inputAmount, balanceInfo.underlyingDecimals)
+      await launchTransaction(hToken.repayBorrow(realAmount).send({ from: account }))
       that.setState({
         repayVisible: false,
         checkMax: false,
@@ -167,24 +167,6 @@ class Account extends PureComponent {
       alert('please approve first')
     }
   };
-
-
-  literalToReal(literal, decimals) {
-    const real = Number(literal) * 10 ** Number(decimals)
-    return real.toString()
-  }
-
-  async launchTransaction(transaction) {
-    try {
-      const result = await transaction
-      if (result.transactionHash) {
-        globals.pendingTransactions.push(result.transactionHash)
-      }
-    } catch (e) {
-      console.log('failed to launch transaction:', e);
-      alert('failed to launch transaction:'+e)
-    }
-  }
 
   handleCancel = e => {
     this.setState({
@@ -203,7 +185,7 @@ class Account extends PureComponent {
       const dol = await globals.hades.dol()
       const allowance = await dol.allowance(account, address).call();
       let that = this
-      const value = that.literalToReal(inputValue, balanceInfo.underlyingDecimals)
+      const value = literalToReal(inputValue, balanceInfo.underlyingDecimals)
       const showApprove = BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove
@@ -249,8 +231,8 @@ class Account extends PureComponent {
     const hToken = results[1]
     let that = this;
     if(inputAmount !==undefined){
-      const realAmount = await that.literalToReal(inputAmount, 8)
-      await that.launchTransaction(hToken.redeem(realAmount).send({ from: account }))
+      const realAmount = await literalToReal(inputAmount, 8)
+      await launchTransaction(hToken.redeem(realAmount).send({ from: account }))
       that.setState({
         redeemVisible: false,
         checkMax: false
@@ -283,7 +265,7 @@ class Account extends PureComponent {
       const dol = await globals.hades.dol()
       const allowance = await dol.allowance(account, address).call();
       let that = this
-      const value = that.literalToReal(repayInput, repayResults[0].underlyingDecimals)
+      const value = literalToReal(repayInput, repayResults[0].underlyingDecimals)
       const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove

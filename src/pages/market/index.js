@@ -5,7 +5,7 @@ import { Page, } from 'components'
 import styles from './index.less'
 import ethereum from '../../../public/ethereum_L.svg';
 import DOL from '../../../public/DOL.svg'
-import { globals, MAX_UINT256} from '../../utils/constant';
+import { globals, MAX_UINT256, literalToReal, launchTransaction} from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store';
 const FormItem = Form.Item;
@@ -35,7 +35,7 @@ class Market extends PureComponent {
     that.props.dispatch({
       type: 'market/queryMarket'
     });
-    this.refreshId = setInterval(function() {
+    this.refreshMarket = setInterval(function() {
       that.props.dispatch({
         type: 'market/queryMarket'
       });
@@ -43,7 +43,7 @@ class Market extends PureComponent {
   }
 
   componentWillUnmount() {
-    clearInterval(this.refreshId)
+    clearInterval(this.refreshMarket)
   }
 
   showModal = async (index) => {
@@ -69,7 +69,6 @@ class Market extends PureComponent {
       const allowance = await dol.allowance(account, address).call();
       const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(0);
       const balanceInfo = await globals.hades.getHTokenBalances(address, globals.loginAccount);
-      console.log('showApprove='+showApprove);
       that.setState({
         supplyBalanceInfo: balanceInfo,
         showApprove: showApprove,
@@ -91,7 +90,7 @@ class Market extends PureComponent {
     const values = form.getFieldsValue(['supplyInput'])
     let inputAmount = values.supplyInput;
     if(inputAmount !==undefined) {
-      const value = await this.literalToReal(inputAmount, balanceInfo.underlyingDecimals);
+      const value = await literalToReal(inputAmount, balanceInfo.underlyingDecimals);
       console.log('value=' + value)
       let that = this;
       const hToken = await globals.hades.hToken(symbol, address)
@@ -99,7 +98,7 @@ class Market extends PureComponent {
       let tx
       if (symbol === 'ETH') {
         tx = hToken.mint().send({ value, from: globals.loginAccount })
-        await that.launchTransaction(tx);
+        await launchTransaction(tx);
         that.setState({
           repayVisible: false,
           checkedNumber: [false, false, false],
@@ -140,7 +139,7 @@ class Market extends PureComponent {
         const values = form.getFieldsValue(['supplyInput'])
         let inputAmount = values.supplyInput;
         if(inputAmount !==undefined) {
-          const value = await this.literalToReal(inputAmount, balanceInfo.underlyingDecimals);
+          const value = await literalToReal(inputAmount, balanceInfo.underlyingDecimals);
           console.log('value=' + value)
           let that = this;
           const hToken = await globals.hades.hToken(symbol, address)
@@ -148,7 +147,7 @@ class Market extends PureComponent {
           let tx
           tx = hToken.mint(value).send({ from: globals.loginAccount })
 
-          await that.launchTransaction(tx);
+          await launchTransaction(tx);
           that.setState({
             repayVisible: false,
             checkedNumber: [false, false, false],
@@ -179,7 +178,7 @@ class Market extends PureComponent {
       const dol = await globals.hades.dol()
       const allowance = await dol.allowance(account, address).call();
       let that = this
-      const value = that.literalToReal(inputValue, supplyBalanceInfo.underlyingDecimals)
+      const value = literalToReal(inputValue, supplyBalanceInfo.underlyingDecimals)
       const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove
@@ -212,7 +211,6 @@ class Market extends PureComponent {
         globals.hades.getAccountLiquidity(account),
         globals.hades.hToken(symbol, address),
       ]);
-      const balanceInfo = results[0]
       console.log('demoBorrow results[2', results)
       let borrowLimit
       if (symbol !== 'DOL') {
@@ -237,9 +235,9 @@ class Market extends PureComponent {
     const values = form.getFieldsValue(['borrowInput'])
     let inputAmount = values.borrowInput;
     if(inputAmount !==undefined) {
-      const realAmount = await this.literalToReal(inputAmount, balanceInfo.underlyingDecimals)
+      const realAmount = await literalToReal(inputAmount, balanceInfo.underlyingDecimals)
       const hToken = results[3]
-      await this.launchTransaction(hToken.borrow(realAmount).send({ from: account }))
+      await launchTransaction(hToken.borrow(realAmount).send({ from: account }))
       this.setState({
         redeemVisible: false,
         checkedNumber: [false, false, false]
@@ -249,24 +247,6 @@ class Market extends PureComponent {
       });
     }
   };
-
-  literalToReal(literal, decimals) {
-    const real = Number(literal) * 10 ** Number(decimals)
-    return real.toString()
-  }
-
-  async launchTransaction(transaction) {
-    try {
-      const result = await transaction
-      if (result.transactionHash) {
-        globals.pendingTransactions.push(result.transactionHash)
-      }
-    } catch (e) {
-      console.log('failed to launch transaction:', e);
-      alert('failed to launch transaction:'+e)
-    }
-  }
-
 
   handleRedeemCancel = e => {
     this.setState({
@@ -292,7 +272,7 @@ class Market extends PureComponent {
       const dol = await globals.hades.dol()
       const allowance = await dol.allowance(account, address).call();
       let that = this
-      const value = that.literalToReal(supplyInput, supplyBalanceInfo.underlyingDecimals)
+      const value = literalToReal(supplyInput, supplyBalanceInfo.underlyingDecimals)
       const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove

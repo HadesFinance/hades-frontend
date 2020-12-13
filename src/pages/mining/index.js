@@ -12,7 +12,7 @@ import lending from '../../../public/lending.svg'
 import linkBlack from '../../../public/link_black.svg'
 import linkWhite from '../../../public/link_white.svg'
 import { TableInfo } from './components/'
-import { globals, MAX_UINT256 } from '../../utils/constant';
+import { globals, MAX_UINT256, literalToReal, launchTransaction, realToLiteral } from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store';
 const FormItem = Form.Item;
@@ -108,7 +108,7 @@ class Mining extends PureComponent {
       const distributor = results[2]
       const allowance = await lpToken.allowance(account, distributor._address).call()
       let showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(0);
-      const balanceLiteral = await that.realToLiteral(balance, decimals);
+      const balanceLiteral = await realToLiteral(balance, decimals);
       that.setState({
         increaseLimit: balanceLiteral,
         increaseResult: results,
@@ -134,10 +134,10 @@ class Mining extends PureComponent {
       let inputAmount = values.increaseInput;
       const decimals = results[1]
       if(inputAmount !==undefined){
-        const realAmount = await this.literalToReal(inputAmount, decimals)
+        const realAmount = await literalToReal(inputAmount, decimals)
         const distributor = results[2]
 
-        await this.launchTransaction(distributor.mintExchangingPool(pid, realAmount).send({ from: account }))
+        await launchTransaction(distributor.mintExchangingPool(pid, realAmount).send({ from: account }))
         this.setState({
           claimVisible: false,
           checkMax: false,
@@ -190,37 +190,11 @@ class Mining extends PureComponent {
       const account = globals.loginAccount;
       const allowance = await lpToken.allowance(account, distributor._address).call()
       let that = this;
-      const value = that.literalToReal(inputValue, increaseResult[1])
+      const value = literalToReal(inputValue, increaseResult[1])
       const showApprove = BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove
       })
-    }
-  }
-
-
-  realToLiteral(real, decimals) {
-    const literal = Number(real) / 10 ** Number(decimals)
-    return literal
-  }
-
-
-  literalToReal(literal, decimals) {
-    const real = Number(literal) * 10 ** Number(decimals)
-    return real.toString()
-  }
-
-  async launchTransaction(transaction) {
-    try {
-      const result = await transaction
-      if (result.transactionHash) {
-        globals.pendingTransactions.push(result.transactionHash)
-
-      }
-      this.getMining()
-    } catch (e) {
-      console.log('failed to launch transaction:', e);
-      alert('failed to launch transaction:'+e)
     }
   }
 
@@ -277,7 +251,7 @@ class Mining extends PureComponent {
       const account = globals.loginAccount;
       const allowance = await lpToken.allowance(account, distributor._address).call()
       let that = this;
-      const value = that.literalToReal(increaseLimit, increaseResult[1])
+      const value = literalToReal(increaseLimit, increaseResult[1])
       const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
       that.setState({
         showApprove: showApprove
@@ -300,7 +274,7 @@ class Mining extends PureComponent {
       let that = this;
       globals.hades.distributor().then(function(rsp) {
         distributor = rsp;
-        that.launchTransaction(distributor.claim(pid).send({ from: globals.loginAccount }))
+        launchTransaction(distributor.claim(pid).send({ from: globals.loginAccount }))
       })
       that.getMining()
     }else {
