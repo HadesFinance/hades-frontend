@@ -34,7 +34,25 @@ class PrimaryLayout extends PureComponent {
     })
     this.props.dispatch({
       type: 'app/query',
-    })
+    });
+    let that = this;
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', function() {
+        console.log('accountChange')
+        that.props.dispatch({
+          type: 'account/login'
+        });
+        that.props.dispatch({
+          type: 'overview/queryOverview'
+        });
+        that.props.dispatch({
+          type: 'market/queryMarket'
+        });
+        that.props.dispatch({
+          type: 'mining/queryMining'
+        });
+      })
+    }
   }
 
   componentWillUnmount() {

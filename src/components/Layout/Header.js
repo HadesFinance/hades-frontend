@@ -22,13 +22,6 @@ class Header extends PureComponent {
   };
   componentDidMount() {
     let that = this;
-    if (window.ethereum) {
-      window.ethereum.on('accountsChanged', function() {
-        that.props.dispatch({
-          type: 'account/login'
-        });
-      })
-    }
     that.props.dispatch({
       type: 'account/queryPrice'
     });

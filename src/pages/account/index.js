@@ -32,13 +32,6 @@ class Account extends PureComponent {
 
   componentDidMount() {
     let that = this;
-    if (window.ethereum) {
-      window.ethereum.on('accountsChanged', function() {
-        that.props.dispatch({
-          type: 'account/login'
-        });
-      })
-    }
     let loginAccount = globals.loginAccount;
     if(loginAccount){
       that.props.dispatch({
