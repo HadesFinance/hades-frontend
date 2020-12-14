@@ -30,7 +30,8 @@ export default modelExtend(model, {
           totalSupplyAccLiteral:0,
         }
       ]
-    }
+    },
+    pageLoading: true
   },
   effects: {
     *queryOverview({ _ }, { call, put }) {
@@ -42,6 +43,10 @@ export default modelExtend(model, {
         type: 'saveOverview',
         payload: { overview: result }
       });
+      yield put({
+        type: 'saveLoading',
+        payload: { pageLoading: false}
+      })
     },
   },
   reducers: {
@@ -49,6 +54,12 @@ export default modelExtend(model, {
       return {
         ...state,
         overview,
+      }
+    },
+    saveLoading(state, { payload: { pageLoading } }) {
+      return {
+        ...state,
+        pageLoading,
       }
     },
   },

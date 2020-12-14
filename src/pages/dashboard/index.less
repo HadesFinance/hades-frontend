@@ -1,6 +1,7 @@
 .dashboard,.darkPage {
   position: relative;
   width:800px;
+  min-height: 100%;
   :global {
     .ant-card {
       border-radius: 10px;
@@ -61,6 +62,22 @@
       font-weight: bold;
     }
   }
+}
+
+.loading{
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #414357;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  span{font-size: 15px; margin-top: 8px; display: block;}
 }
 
 //dark theme

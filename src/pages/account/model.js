@@ -40,7 +40,8 @@ export default modelExtend(model, {
       shortfall: 0,
       shortfallLiteral: 0,
     },
-    priceList:[]
+    priceList:[],
+    pageLoading: true
   },
   effects: {
     *login({ _ }, { call, put }) {
@@ -92,6 +93,10 @@ export default modelExtend(model, {
         processMarkets()
         processPools()
       }
+      yield put({
+        type: 'saveLoading',
+        payload: { pageLoading: false}
+      })
     },
     *queryPrice({ _ }, { call, put }){
       const network = store.get('network') ? store.get('network') : HADES_CONFIG.networks.test;
@@ -128,6 +133,12 @@ export default modelExtend(model, {
       return {
         ...state,
         priceList,
+      }
+    },
+    saveLoading(state, { payload: { pageLoading } }) {
+      return {
+        ...state,
+        pageLoading,
       }
     },
   },

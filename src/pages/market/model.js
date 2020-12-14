@@ -8,7 +8,8 @@ import store from 'store';
 export default modelExtend(model, {
   namespace: 'market',
   state: {
-    market:[]
+    market:[],
+    pageLoading: true
   },
   effects: {
     *queryMarket({ _ }, { call, put }) {
@@ -23,6 +24,10 @@ export default modelExtend(model, {
         type: 'saveMarket',
         payload: { market: markets }
       });
+      yield put({
+        type: 'saveLoading',
+        payload: { pageLoading: false}
+      })
     },
   },
   reducers: {
@@ -30,6 +35,12 @@ export default modelExtend(model, {
       return {
         ...state,
         market,
+      }
+    },
+    saveLoading(state, { payload: { pageLoading } }) {
+      return {
+        ...state,
+        pageLoading,
       }
     },
   },

@@ -10,6 +10,7 @@ import ETH from '../../../public/ethereum_L.svg'
 import { globals, MAX_UINT256, literalToReal, launchTransaction } from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store';
+import { LoadingOutlined } from '@ant-design/icons';
 const FormItem = Form.Item;
 
 
@@ -27,7 +28,7 @@ class Account extends PureComponent {
     repayResults:[],
     redeemResults:[],
     showApprove: false,
-    address:''
+    address:'',
   };
 
   componentDidMount() {
@@ -36,6 +37,10 @@ class Account extends PureComponent {
     if(loginAccount){
       that.props.dispatch({
         type: 'account/login'
+      }).then(() =>{
+        that.setState({
+          pageLoading: false
+        })
       });
     }
     that.refreshAccount = setInterval(function() {
@@ -347,7 +352,7 @@ class Account extends PureComponent {
 
 
   render() {
-    const { app, connected,account } = this.props
+    const { app, connected,account, pageLoading } = this.props
     const { theme,  } = app
     const { selectedPoolItem } = this.state;
     return (
@@ -357,20 +362,30 @@ class Account extends PureComponent {
       >
         {connected ?
           <div>
-            <Card
-              bordered={false}
-              bodyStyle={{
-                padding: '30px 25px',
-              }}>
-              <NumberCard title='Balance' number={account.hds.balanceLiteral} lg={24} unit='HDS' position='right'  big={true} decimals={4} theme={theme}/>
-            </Card>
-            <Card
-              bordered={false}
-              bodyStyle={{
-                padding: '0 25px',
-              }}>
-              <Table columns={this.columns} dataSource={account.sheets}  rowKey="underlyingSymbol" pagination={false} />
-            </Card>
+            {!pageLoading ?
+              <div>
+                <Card
+                  bordered={false}
+                  bodyStyle={{
+                    padding: '30px 25px',
+                  }}>
+                  <NumberCard title='Balance' number={account.hds.balanceLiteral} lg={24} unit='HDS' position='right'  big={true} decimals={4} theme={theme}/>
+                </Card>
+                <Card
+                  bordered={false}
+                  bodyStyle={{
+                    padding: '0 25px',
+                  }}>
+                  <Table columns={this.columns} dataSource={account.sheets}  rowKey="underlyingSymbol" pagination={false} />
+                </Card>
+              </div> :
+              <div className={styles.loading}>
+                <div>
+                  <LoadingOutlined/>
+                  <span>loading</span>
+                </div>
+              </div>
+            }
           </div>
           :
           <div className={styles.notConnected}>
@@ -486,7 +501,8 @@ function mapStateToProps(state) {
     connected: state.account.connected,
     wrongNetwork: state.account.wrongNetwork,
     loginAccount: state.account.loginAccount,
-    account: state.account.account
+    account: state.account.account,
+    pageLoading: state.account.pageLoading
   };
 }
 

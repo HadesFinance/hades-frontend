@@ -20,7 +20,8 @@ export default modelExtend(model, {
       rewardsPerBlock: "0",
       totalPools: "0",
       rewardsPerBlockLiteral:0
-    }
+    },
+    pageLoading: true
   },
   effects: {
     *queryMining({ _ }, { call, put }) {
@@ -33,6 +34,10 @@ export default modelExtend(model, {
           type: 'saveMining',
           payload: { mining: result }
         });
+        yield put({
+          type: 'saveLoading',
+          payload: { pageLoading: false}
+        })
         return result
       }else {
         const result = yield hades.getPools();
@@ -43,6 +48,10 @@ export default modelExtend(model, {
           type: 'saveMining',
           payload: { mining: result }
         });
+        yield put({
+          type: 'saveLoading',
+          payload: { pageLoading: false}
+        })
         return result
       }
     },
@@ -65,6 +74,12 @@ export default modelExtend(model, {
       return {
         ...state,
         distributorStats,
+      }
+    },
+    saveLoading(state, { payload: { pageLoading } }) {
+      return {
+        ...state,
+        pageLoading,
       }
     },
   },
