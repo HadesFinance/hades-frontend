@@ -375,7 +375,7 @@ class Hades {
         const result = JSON.parse(msg.data)
         if (result.data && result.data.length > 0 && result.data[0].c) {
           self._lastHDSPrice = Number(result.data[0].c)
-          console.log('HDS price updated:', self._lastHDSPrice)
+          //console.log('HDS price updated:', self._lastHDSPrice)
         } else {
           // console.log('unwanted msg:', result)
         }

@@ -37,10 +37,6 @@ class Account extends PureComponent {
     if(loginAccount){
       that.props.dispatch({
         type: 'account/login'
-      }).then(() =>{
-        that.setState({
-          pageLoading: false
-        })
       });
     }
     that.refreshAccount = setInterval(function() {

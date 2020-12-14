@@ -16,7 +16,6 @@ export default modelExtend(model, {
       const network = store.get('network');
       let hades = (globals.hades = new Hades(network))
       const markets = yield hades.getMarkets();
-      console.log(markets);
       for (const market of markets) {
         globals.hTokenMap.set(market.underlyingSymbol, market.hToken)
       }
@@ -27,7 +26,7 @@ export default modelExtend(model, {
       yield put({
         type: 'saveLoading',
         payload: { pageLoading: false}
-      })
+      });
     },
   },
   reducers: {
