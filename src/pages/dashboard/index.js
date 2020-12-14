@@ -28,7 +28,7 @@ class Dashboard extends PureComponent {
     that.props.dispatch({
       type: 'overview/queryOverview'
     })
-    this.refreshId = setInterval(function() {
+    this.refreshOverview = setInterval(function() {
       that.props.dispatch({
         type: 'overview/queryOverview'
       })
@@ -36,7 +36,7 @@ class Dashboard extends PureComponent {
   }
 
   componentWillUnmount() {
-    clearInterval(this.refreshId)
+    clearInterval(this.refreshOverview)
   }
 
   render() {

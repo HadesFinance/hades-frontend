@@ -38,7 +38,7 @@ class Account extends PureComponent {
         type: 'account/login'
       });
     }
-    that.refreshId = setInterval(function() {
+    that.refreshAccount = setInterval(function() {
       if(loginAccount){
         that.props.dispatch({
           type: 'account/login'
@@ -48,7 +48,7 @@ class Account extends PureComponent {
   }
 
   componentWillUnmount() {
-    clearInterval(this.refreshId)
+    clearInterval(this.refreshAccount)
   }
 
   connectWallet(){

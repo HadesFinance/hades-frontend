@@ -41,14 +41,14 @@ class Mining extends PureComponent {
   componentDidMount() {
     let that = this
     that.getMining();
-    that.refreshId = setInterval(function() {
+    that.refreshMining = setInterval(function() {
       that.getMining()
     },15000);
 
   }
 
   componentWillUnmount() {
-    clearInterval(this.refreshId)
+    clearInterval(this.refreshMining)
   }
 
   getMining(){

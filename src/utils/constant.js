@@ -1,3 +1,6 @@
+import Hades from './hades';
+import store from 'store'
+
 export const ROLE_TYPE = {
   ADMIN: 'admin',
   DEFAULT: 'admin',
@@ -36,4 +39,11 @@ export const launchTransaction = async (transaction) => {
 export const  realToLiteral = (real, decimals) => {
   const literal = Number(real) / 10 ** Number(decimals)
   return literal
+}
+
+export const init = async () => {
+  const network = store.get('network');
+  let hades = (globals.hades = new Hades(network))
+  await hades.setProvider(window.web3.currentProvider);
+  console.log('init')
 }
