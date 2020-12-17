@@ -3,11 +3,10 @@ import { connect, withRouter } from 'umi';
 import { Card, Progress, Modal, Input, Button, Form } from 'antd';
 import { Page, } from 'components'
 import styles from './index.less'
+import appStyles from '../app.less'
 import ethereum from '../../../public/ethereum_L.svg';
 import DOL from '../../../public/DOL.svg'
 import { globals, MAX_UINT256, literalToReal, launchTransaction, init} from '../../utils/constant';
-import Hades from '../../utils/hades';
-import store from 'store';
 import { LoadingOutlined } from '@ant-design/icons';
 const FormItem = Form.Item;
 
@@ -346,7 +345,7 @@ class Market extends PureComponent {
                 okText='Supply'
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
-                className={theme === 'dark' ? styles.modalDark : ''}
+                className={theme === 'dark' ? appStyles.modalDark : ''}
                 footer={selectedMarketItem.underlyingSymbol !=='ETH' && this.state.showApprove ?
                   [
                     <Button key="approve" type="primary"  onClick={this.handleOk}>
@@ -363,16 +362,16 @@ class Market extends PureComponent {
                   ]
                 }
               >
-                <div className={styles.dialogContent}>
-                  <div className={styles.title}>
-                    <h3 className={styles.dialogTitle}>Supply {selectedMarketItem.underlyingSymbol}</h3>
+                <div className={appStyles.dialogContent}>
+                  <div className={appStyles.title}>
+                    <h3 className={appStyles.dialogTitle}>Supply {selectedMarketItem.underlyingSymbol}</h3>
                   </div>
-                  <div className={styles.inputArea}>
-                    <div className={styles.inputDes}>
-                      <p className={styles.des}>Total:{Number(this.state.supplyBalanceInfo.tokenBalanceLiteral).toFixed(4)}</p>
-                      <p className={styles.des}>Exchange Rate:{Number(selectedMarketItem.exchangeRateLiteral).toFixed(4)}</p>
+                  <div className={appStyles.inputArea}>
+                    <div className={appStyles.inputDes}>
+                      <p className={appStyles.des}>Total:{Number(this.state.supplyBalanceInfo.tokenBalanceLiteral).toFixed(4)}</p>
+                      <p className={appStyles.des}>Exchange Rate:{Number(selectedMarketItem.exchangeRateLiteral).toFixed(4)}</p>
                     </div>
-                    <div className={styles.inputContent}>
+                    <div className={appStyles.inputContent}>
                       <Form
                         ref={this.formRef}
                         initialvalues={{
@@ -386,7 +385,7 @@ class Market extends PureComponent {
                           <Input placeholder='Input supply amount' type='number'/>
                         </FormItem>
                       </Form>
-                      <Button className={[styles.maxBtn,this.state.checkedNumber[0] ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,1,0)}>MAX</Button>
+                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[0] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,1,0)}>MAX</Button>
                     </div>
                   </div>
                 </div>
@@ -402,22 +401,22 @@ class Market extends PureComponent {
                   Borrow
                 </Button>,
               ]}
-              className={theme === 'dark' ? styles.modalDark : ''}
+              className={theme === 'dark' ? appStyles.modalDark : ''}
             >
-              <div className={styles.dialogContent}>
-                <div className={styles.title}>
-                  <h3 className={styles.dialogTitle}>Borrow {selectedMarketItem.underlyingSymbol}</h3>
+              <div className={appStyles.dialogContent}>
+                <div className={appStyles.title}>
+                  <h3 className={appStyles.dialogTitle}>Borrow {selectedMarketItem.underlyingSymbol}</h3>
                 </div>
-                <div className={styles.inputArea}>
-                  <div className={styles.inputDes}>
-                    <p className={styles.des}>Limit:{Number(this.state.borrowLimit).toFixed(4)}</p>
-                    <div className={styles.numberBtnList}>
-                      <Button className={[styles.maxBtn,this.state.checkedNumber[0] ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,0.5,1)}>50%</Button>
-                      <Button className={[styles.maxBtn,this.state.checkedNumber[1] ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,1,0.75,1)}>75%</Button>
-                      <Button className={[styles.maxBtn,this.state.checkedNumber[2] ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,2,1,1)}>MAX</Button>
+                <div className={appStyles.inputArea}>
+                  <div className={appStyles.inputDes}>
+                    <p className={appStyles.des}>Limit:{Number(this.state.borrowLimit).toFixed(4)}</p>
+                    <div className={appStyles.numberBtnList}>
+                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[0] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,0.5,1)}>50%</Button>
+                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[1] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,1,0.75,1)}>75%</Button>
+                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[2] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,2,1,1)}>MAX</Button>
                     </div>
                   </div>
-                  <div className={styles.inputContent}>
+                  <div className={appStyles.inputContent}>
                     <Form
                       ref={this.formRef}
                       initialvalues={{
@@ -440,51 +439,51 @@ class Market extends PureComponent {
               visible={this.state.detailVisible}
               onCancel={this.handleDetailCancel}
               footer={null}
-              className={theme === 'dark' ? styles.modalDark : ''}
+              className={theme === 'dark' ? appStyles.modalDark : ''}
             >
-              <div className={styles.dialogContent}>
-                <div className={styles.title}>
-                  <h3 className={styles.dialogTitle}>{selectedMarketItem.symbol} Market Detail</h3>
+              <div className={appStyles.dialogContent}>
+                <div className={appStyles.title}>
+                  <h3 className={appStyles.dialogTitle}>{selectedMarketItem.symbol} Market Detail</h3>
                 </div>
-                <div className={styles.detailContent}>
-                  <div className={styles.detailList}>
-                    <div className={styles.detailItem}>
-                      <p className={styles.detailTitle}>Symbol</p>
-                      <p className={styles.detailValue}>{selectedMarketItem.symbol}</p>
+                <div className={appStyles.detailContent}>
+                  <div className={appStyles.detailList}>
+                    <div className={appStyles.detailItem}>
+                      <p className={appStyles.detailTitle}>Symbol</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.symbol}</p>
                     </div>
-                    <div className={styles.detailItem}>
-                      <p className={styles.detailTitle}>Decimal</p>
-                      <p className={styles.detailValue}>{selectedMarketItem.hTokenDecimals}</p>
+                    <div className={appStyles.detailItem}>
+                      <p className={appStyles.detailTitle}>Decimal</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.hTokenDecimals}</p>
                     </div>
-                    <div className={styles.detailItem}>
-                      <p className={styles.detailTitle}>Name</p>
-                      <p className={styles.detailValue}>{selectedMarketItem.name}</p>
+                    <div className={appStyles.detailItem}>
+                      <p className={appStyles.detailTitle}>Name</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.name}</p>
                     </div>
-                    <div className={styles.detailItem}>
-                      <p className={styles.detailTitle}>Underlying Token</p>
-                      <p className={styles.detailValue}>{selectedMarketItem.underlyingSymbol}</p>
+                    <div className={appStyles.detailItem}>
+                      <p className={appStyles.detailTitle}>Underlying Token</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.underlyingSymbol}</p>
                     </div>
-                    <div className={styles.detailItem}>
-                      <p className={styles.detailTitle}>Anchor Currency</p>
-                      <p className={styles.detailValue}>{selectedMarketItem.anchorSymbol}</p>
+                    <div className={appStyles.detailItem}>
+                      <p className={appStyles.detailTitle}>Anchor Currency</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.anchorSymbol}</p>
                     </div>
                   </div>
-                  <div className={styles.detailList}>
-                    <div className={styles.detailItem}>
-                      <p className={styles.detailTitle}>Exchange Rate</p>
-                      <p className={styles.detailValue}>{selectedMarketItem.exchangeRateLiteral}</p>
+                  <div className={appStyles.detailList}>
+                    <div className={appStyles.detailItem}>
+                      <p className={appStyles.detailTitle}>Exchange Rate</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.exchangeRateLiteral}</p>
                     </div>
-                    <div className={styles.detailItem}>
-                      <p className={styles.detailTitle}>Reserve Factor</p>
-                      <p className={styles.detailValue}>{selectedMarketItem.reserveFactorLiteral * 100}%</p>
+                    <div className={appStyles.detailItem}>
+                      <p className={appStyles.detailTitle}>Reserve Factor</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.reserveFactorLiteral * 100}%</p>
                     </div>
-                    <div className={styles.detailItem}>
-                      <p className={styles.detailTitle}>Collateral Factor</p>
-                      <p className={styles.detailValue}>{selectedMarketItem.collateralFactorLiteral * 100}%</p>
+                    <div className={appStyles.detailItem}>
+                      <p className={appStyles.detailTitle}>Collateral Factor</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.collateralFactorLiteral * 100}%</p>
                     </div>
-                    <div className={styles.detailItem}>
-                      <p className={styles.detailTitle}>Liquidation Incentive</p>
-                      <p className={styles.detailValue}>{selectedMarketItem.liquidationIncentiveLiteral *100}%</p>
+                    <div className={appStyles.detailItem}>
+                      <p className={appStyles.detailTitle}>Liquidation Incentive</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.liquidationIncentiveLiteral *100}%</p>
                     </div>
                   </div>
                 </div>
@@ -492,7 +491,7 @@ class Market extends PureComponent {
             </Modal>
           </div>
           :
-          <div className={styles.loading}>
+          <div className={appStyles.loading}>
             <div>
               <LoadingOutlined/>
               <span>loading</span>

@@ -4,12 +4,11 @@ import { Card, Table, Modal, Button, Input, Form } from 'antd';
 import { Page, } from 'components'
 import { NumberCard } from '../dashboard/components';
 import styles from './index.less'
+import appStyles from '../app.less'
 import wallet from '../../../public/wallet.svg'
 import DOL from '../../../public/DOL.svg'
 import ETH from '../../../public/ethereum_L.svg'
 import { globals, MAX_UINT256, literalToReal, launchTransaction, init} from '../../utils/constant';
-import Hades from '../../utils/hades';
-import store from 'store';
 import { LoadingOutlined } from '@ant-design/icons';
 const FormItem = Form.Item;
 
@@ -394,7 +393,7 @@ class Account extends PureComponent {
             okText='Repay'
             onOk={this.handleOk}
             onCancel={this.handleCancel}
-            className={theme === 'dark' ? styles.modalDark : ''}
+            className={theme === 'dark' ? appStyles.modalDark : ''}
             footer={selectedPoolItem.underlyingSymbol !=='ETH' && this.state.showApprove ?
               [
                 <Button key="approve" type="primary"  onClick={this.handleOk}>
@@ -411,16 +410,16 @@ class Account extends PureComponent {
               ]
             }
           >
-            <div className={styles.dialogContent}>
-              <div className={styles.title}>
-                <h3 className={styles.dialogTitle}>Repay {selectedPoolItem.underlyingSymbol}</h3>
-                <p className={styles.titleDes}>Total Debts:{selectedPoolItem.borrowBalanceLiteral.toFixed(4)}</p>
+            <div className={appStyles.dialogContent}>
+              <div className={appStyles.title}>
+                <h3 className={appStyles.dialogTitle}>Repay {selectedPoolItem.underlyingSymbol}</h3>
+                <p className={appStyles.titleDes}>Total Debts:{selectedPoolItem.borrowBalanceLiteral.toFixed(4)}</p>
               </div>
-              <div className={styles.inputArea}>
-                <div className={styles.inputDes}>
-                  <p className={styles.des}>Total Balance：{selectedPoolItem.tokenBalanceLiteral.toFixed(4)}</p>
+              <div className={appStyles.inputArea}>
+                <div className={appStyles.inputDes}>
+                  <p className={appStyles.des}>Total Balance：{selectedPoolItem.tokenBalanceLiteral.toFixed(4)}</p>
                 </div>
-                <div className={styles.inputContent}>
+                <div className={appStyles.inputContent}>
                   <Form
                     ref="myForm"
                     initialvalues={{
@@ -434,7 +433,7 @@ class Account extends PureComponent {
                       <Input placeholder='Input repay amount' type='number'/>
                     </FormItem>
                   </Form>
-                  <Button className={[styles.maxBtn,this.state.checkMax ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0)}>MAX</Button>
+                  <Button className={[appStyles.maxBtn,this.state.checkMax ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0)}>MAX</Button>
                 </div>
               </div>
             </div>
@@ -446,23 +445,23 @@ class Account extends PureComponent {
             okText='Redeem'
             onOk={this.handleRedeemOk}
             onCancel={this.handleRedeemCancel}
-            className={theme === 'dark' ? styles.modalDark : ''}
+            className={theme === 'dark' ? appStyles.modalDark : ''}
             footer={[
               <Button key="submit" type="primary"  onClick={this.handleRedeemOk}>
                 Redeem
               </Button>,
             ]}
           >
-            <div className={styles.dialogContent}>
-              <div className={styles.title}>
-                <h3 className={styles.dialogTitle}>Redeem {selectedPoolItem.underlyingSymbol}</h3>
+            <div className={appStyles.dialogContent}>
+              <div className={appStyles.title}>
+                <h3 className={appStyles.dialogTitle}>Redeem {selectedPoolItem.underlyingSymbol}</h3>
               </div>
-              <div className={styles.inputArea}>
-                <div className={styles.inputDes}>
-                  <p className={styles.des}>Allowed Amount:{this.state.redeemResults[0].hTokenBalanceLiteral.toFixed(4)}</p>
+              <div className={appStyles.inputArea}>
+                <div className={appStyles.inputDes}>
+                  <p className={appStyles.des}>Allowed Amount:{this.state.redeemResults[0].hTokenBalanceLiteral.toFixed(4)}</p>
                   {/*<p className={styles.des}>Exchange Rate:1.1</p>*/}
                 </div>
-                <div className={styles.inputContent}>
+                <div className={appStyles.inputContent}>
                   <Form
                     ref="myForm"
                     initialvalues={{
@@ -476,7 +475,7 @@ class Account extends PureComponent {
                       <Input placeholder='Input redeem amount' type='number'/>
                     </FormItem>
                   </Form>
-                  <Button className={[styles.maxBtn,this.state.checkMax ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,1)}>MAX</Button>
+                  <Button className={[appStyles.maxBtn,this.state.checkMax ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,1)}>MAX</Button>
                 </div>
               </div>
             </div>

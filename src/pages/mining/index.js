@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons';
 import { Page, } from 'components'
 import styles from './index.less'
+import appStyles from '../app.less'
 import { NumberCard } from '../dashboard/components';
 import exchange from '../../../public/exchanging.svg';
 import lending from '../../../public/lending.svg'
@@ -13,8 +14,6 @@ import linkBlack from '../../../public/link_black.svg'
 import linkWhite from '../../../public/link_white.svg'
 import { TableInfo } from './components/'
 import { globals, MAX_UINT256, literalToReal, launchTransaction, realToLiteral,init } from '../../utils/constant';
-import Hades from '../../utils/hades';
-import store from 'store';
 const FormItem = Form.Item;
 
 
@@ -348,13 +347,13 @@ class Mining extends PureComponent {
                   Confirm
                 </Button>,
               ]}
-              className={theme === 'dark' ? styles.modalDark : ''}
+              className={theme === 'dark' ? appStyles.modalDark : ''}
             >
-              <div className={styles.dialogContent}>
-                <div className={styles.title}>
-                  <h3 className={styles.dialogTitle}>IncreasePower in Lending Pool</h3>
+              <div className={appStyles.dialogContent}>
+                <div className={appStyles.title}>
+                  <h3 className={appStyles.dialogTitle}>IncreasePower in Lending Pool</h3>
                 </div>
-                <p className={styles.increaseText}>You can increase your arithmetic power by supplying assets in Hades' market or by borrowing.</p>
+                <p className={appStyles.increaseText}>You can increase your arithmetic power by supplying assets in Hades' market or by borrowing.</p>
               </div>
             </Modal>
             <Modal
@@ -364,7 +363,7 @@ class Mining extends PureComponent {
               okText='Lock'
               onOk={this.handleIncreaseOk}
               onCancel={this.handleIncreaseCancel}
-              className={theme === 'dark' ? styles.modalDark : ''}
+              className={theme === 'dark' ? appStyles.modalDark : ''}
               footer={this.state.showApprove ?
                 [
                   <Button key="approve" type="primary"  onClick={this.handleIncreaseApprove}>
@@ -380,20 +379,20 @@ class Mining extends PureComponent {
                   </Button>
                 ]}
             >
-              <div className={styles.dialogContent}>
-                <div className={styles.title}>
-                  <h3 className={styles.dialogTitle}>Increase Power</h3>
-                  <p className={styles.titleDes}>by provide liquidity in uniswap</p>
+              <div className={appStyles.dialogContent}>
+                <div className={appStyles.title}>
+                  <h3 className={appStyles.dialogTitle}>Increase Power</h3>
+                  <p className={appStyles.titleDes}>by provide liquidity in uniswap</p>
                 </div>
-                <a href={this.state.selectedPoolItem.lpUrl} className={styles.linkArea}>
+                <a href={this.state.selectedPoolItem.lpUrl} className={appStyles.linkArea}>
                   <h3>{this.state.selectedPoolItem.title} Uniswap V2 LP</h3>
                   <img src={theme === 'dark' ? linkWhite : linkBlack}/>
                 </a>
-                <div className={styles.inputArea}>
-                  <div className={styles.inputDes}>
-                    <p className={styles.des}>Total LP Token Balance: {this.state.increaseLimit}</p>
+                <div className={appStyles.inputArea}>
+                  <div className={appStyles.inputDes}>
+                    <p className={appStyles.des}>Total LP Token Balance: {this.state.increaseLimit}</p>
                   </div>
-                  <div className={styles.inputContent}>
+                  <div className={appStyles.inputContent}>
                     <Form
                       ref="myForm"
                       initialvalues={{
@@ -408,7 +407,7 @@ class Mining extends PureComponent {
                         <Input placeholder='Input increase amount' type='number'/>
                       </FormItem>
                     </Form>
-                    <Button className={[styles.maxBtn,this.state.checkMax ? styles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0)}>MAX</Button>
+                    <Button className={[appStyles.maxBtn,this.state.checkMax ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0)}>MAX</Button>
                   </div>
                 </div>
               </div>
@@ -424,27 +423,27 @@ class Mining extends PureComponent {
                   Confirm
                 </Button>,
               ]}
-              className={theme === 'dark' ? styles.modalDark : ''}
+              className={theme === 'dark' ? appStyles.modalDark : ''}
             >
-              <div className={styles.dialogContent}>
-                <div className={styles.title}>
-                  <h3 className={styles.dialogTitle}>Exit LP Pool</h3>
+              <div className={appStyles.dialogContent}>
+                <div className={appStyles.title}>
+                  <h3 className={appStyles.dialogTitle}>Exit LP Pool</h3>
                 </div>
-                <div className={styles.exitInfo}>
-                  <div className={styles.infoItem}>
-                    <p className={styles.infoTitle}>LP Token</p>
-                    <p className={styles.infoValue}>{Number(this.state.power).toFixed(4)}</p>
+                <div className={appStyles.exitInfo}>
+                  <div className={appStyles.infoItem}>
+                    <p className={appStyles.infoTitle}>LP Token</p>
+                    <p className={appStyles.infoValue}>{Number(this.state.power).toFixed(4)}</p>
                   </div>
-                  <div className={styles.infoItem}>
-                    <p className={styles.infoTitle}>Rewards</p>
-                    <p className={styles.infoValue}>{Number(this.state.rewards).toFixed(4)}</p>
+                  <div className={appStyles.infoItem}>
+                    <p className={appStyles.infoTitle}>Rewards</p>
+                    <p className={appStyles.infoValue}>{Number(this.state.rewards).toFixed(4)}</p>
                   </div>
                 </div>
               </div>
             </Modal>
           </div>
           :
-          <div className={styles.loading}>
+          <div className={appStyles.loading}>
             <div>
               <LoadingOutlined/>
               <span>loading</span>
