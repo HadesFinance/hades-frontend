@@ -7,7 +7,7 @@ import styles from './index.less'
 import wallet from '../../../public/wallet.svg'
 import DOL from '../../../public/DOL.svg'
 import ETH from '../../../public/ethereum_L.svg'
-import { globals, MAX_UINT256, literalToReal, launchTransaction } from '../../utils/constant';
+import { globals, MAX_UINT256, literalToReal, launchTransaction, init} from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -69,9 +69,7 @@ class Account extends PureComponent {
 
   showModal = async (item,e) => {
     let account = globals.loginAccount;
-    const network = store.get('network');
-    let hades = (globals.hades = new Hades(network))
-    await hades.setProvider(window.web3.currentProvider);
+    await init();
     let symbol = item.underlyingSymbol;
     const address = globals.hTokenMap.get(symbol);
     if (!symbol || !address) {
@@ -197,9 +195,7 @@ class Account extends PureComponent {
   showRedeemModal = async (item,e) => {
     const account = globals.loginAccount;
     if(account){
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
-      await hades.setProvider(window.web3.currentProvider);
+      await init()
       let symbol = item.underlyingSymbol;
       const address = await globals.hTokenMap.get(symbol);
       if (!symbol || !address) {

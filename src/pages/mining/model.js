@@ -38,6 +38,7 @@ export default modelExtend(model, {
           type: 'saveLoading',
           payload: { pageLoading: false}
         })
+        console.log('refresh mining,unclaimed='+result.my[0].unclaimedLiteral)
         return result
       }else {
         const result = yield hades.getPools();

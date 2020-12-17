@@ -5,7 +5,7 @@ import { Page, } from 'components'
 import styles from './index.less'
 import ethereum from '../../../public/ethereum_L.svg';
 import DOL from '../../../public/DOL.svg'
-import { globals, MAX_UINT256, literalToReal, launchTransaction} from '../../utils/constant';
+import { globals, MAX_UINT256, literalToReal, launchTransaction, init} from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -52,9 +52,7 @@ class Market extends PureComponent {
     let {market} = this.props;
     let selectedMarketItem = market[index];
     if(account){
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
-      await hades.setProvider(window.web3.currentProvider);
+      await init();
       let symbol = market[index].underlyingSymbol;
       const address = globals.hTokenMap.get(symbol);
       if (!symbol || !address) {
@@ -82,9 +80,7 @@ class Market extends PureComponent {
 
   handleOk = async (e) => {
     const form = this.formRef.current;
-    const network = store.get('network');
-    let hades = (globals.hades = new Hades(network))
-    await hades.setProvider(window.web3.currentProvider);
+   await init();
     let balanceInfo = this.state.supplyBalanceInfo;
     let symbol = this.state.selectedMarketItem.underlyingSymbol;
     const address = await globals.hTokenMap.get(symbol);
@@ -131,9 +127,7 @@ class Market extends PureComponent {
       let supplyEnable = this.state.supplyEnable;
       if (supplyEnable){
         const form = this.formRef.current;
-        const network = store.get('network');
-        let hades = (globals.hades = new Hades(network))
-        await hades.setProvider(window.web3.currentProvider);
+        await init();
         let balanceInfo = this.state.supplyBalanceInfo;
         let symbol = this.state.selectedMarketItem.underlyingSymbol;
         const address = await globals.hTokenMap.get(symbol);
@@ -196,9 +190,7 @@ class Market extends PureComponent {
         redeemVisible: true,
         selectedMarketItem: selectedMarketItem
       });
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
-      await hades.setProvider(window.web3.currentProvider);
+      await init()
       let symbol = market[index].underlyingSymbol;
       const address = await globals.hTokenMap.get(symbol);
       if (!symbol || !address) {

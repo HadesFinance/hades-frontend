@@ -12,7 +12,7 @@ import lending from '../../../public/lending.svg'
 import linkBlack from '../../../public/link_black.svg'
 import linkWhite from '../../../public/link_white.svg'
 import { TableInfo } from './components/'
-import { globals, MAX_UINT256, literalToReal, launchTransaction, realToLiteral } from '../../utils/constant';
+import { globals, MAX_UINT256, literalToReal, launchTransaction, realToLiteral,init } from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store';
 const FormItem = Form.Item;
@@ -83,9 +83,7 @@ class Mining extends PureComponent {
         increaseVisible: true,
       });
     }else if(item.ptype ==='2' && account){
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
-      await hades.setProvider(window.web3.currentProvider);
+      await init();
       const pid = item.id;
       const lpTokenAddr = await globals.lpTokenMap.get(pid)
       if (!lpTokenAddr) {
@@ -123,9 +121,7 @@ class Mining extends PureComponent {
   handleIncreaseOk = async (e) => {
     let { increaseResult, lpToken, selectedPoolItem,lockEnable, showApprove } = this.state;
     if(lockEnable || !showApprove){
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
-      await hades.setProvider(window.web3.currentProvider);
+      await init();
       let results = increaseResult;
       let account = globals.loginAccount;
       let pid = selectedPoolItem.id;
@@ -266,9 +262,7 @@ class Mining extends PureComponent {
   async claimFun(item){
     const account = globals.loginAccount
     if(account){
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
-      await hades.setProvider(window.web3.currentProvider);
+      await init();
       const pid = item.id;
       let distributor;
       let that = this;

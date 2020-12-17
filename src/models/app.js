@@ -16,10 +16,17 @@ import voting from '../../public/voting.svg'
 import voting_p from '../../public/voting_p.svg'
 import account from '../../public/account.svg'
 import account_p from '../../public/account_p.svg'
+import { globals } from '../utils/constant';
+import Hades from '../utils/hades'
+
 const { pathToRegexp } = require("path-to-regexp")
 const { queryRouteList, logoutUser } = api
 
 const goDashboard = () => {
+
+  const network = store.get('network') ? store.get('network') : HADES_CONFIG.networks.test;
+  globals.hades = new Hades(network)
+
   if (pathToRegexp(['/', '/login']).exec(window.location.pathname)) {
     history.push({
       pathname: '/dashboard',
