@@ -52,20 +52,14 @@ class Market extends PureComponent {
     let selectedMarketItem = market[index];
     if(account){
       await init();
-      let symbol = market[index].underlyingSymbol;
-      const address = globals.hTokenMap.get(symbol);
-      if (!symbol || !address) {
-        alert('Please get symbol and hToken first!')
-        throw new Error('Failed to get hToken address')
-      }
+      let symbol = selectedMarketItem.underlyingSymbol;
+      const address = await this.props.dispatch({ type: 'market/queryAddress', payload: { symbol: symbol} })
       this.setState({
         repayVisible: true,
         selectedMarketItem: selectedMarketItem,
       })
       let that = this;
-      const dol = await globals.hades.dol()
-      const allowance = await dol.allowance(account, address).call();
-      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(0);
+      const showApprove = await that.props.dispatch({ type: 'market/getShowApprove', payload: { address:address,account: account,value:0}})
       const balanceInfo = await globals.hades.getHTokenBalances(address, globals.loginAccount);
       that.setState({
         supplyBalanceInfo: balanceInfo,
@@ -78,78 +72,76 @@ class Market extends PureComponent {
   };
 
   handleOk = async (e) => {
+    let { supplyBalanceInfo,selectedMarketItem,address,showApprove} = this.state;
+    let symbol = selectedMarketItem.underlyingSymbol;
+    await init();
     const form = this.formRef.current;
-   await init();
-    let balanceInfo = this.state.supplyBalanceInfo;
-    let symbol = this.state.selectedMarketItem.underlyingSymbol;
-    const address = await globals.hTokenMap.get(symbol);
     const values = form.getFieldsValue(['supplyInput'])
     let inputAmount = values.supplyInput;
+    let that = this;
     if(inputAmount !==undefined) {
-      const value = await literalToReal(inputAmount, balanceInfo.underlyingDecimals);
-      console.log('value=' + value)
-      let that = this;
-      const hToken = await globals.hades.hToken(symbol, address)
-
-      let tx
-      if (symbol === 'ETH') {
-        tx = hToken.mint().send({ value, from: globals.loginAccount })
-        await launchTransaction(tx);
-        that.setState({
-          repayVisible: false,
-          checkedNumber: [false, false, false],
-          supplyEnable: false
-        });
-        this.props.dispatch({
-          type: 'market/queryMarket'
-        });
-      } else {
-        if(this.state.showApprove){
-          const dol = await globals.hades.dol();
-          await dol.approve(address, MAX_UINT256).send({ from: globals.loginAccount })
-          this.setState({
-            supplyEnable: true
-          })
-        }else {
-          let that = this;
-          that.setState({
-            supplyEnable: true
-          },function() {
-            that.handleSupplyDol()
-          })
+      that.props.dispatch({
+        type: 'market/submitSupply',
+        payload: {
+          inputAmount: inputAmount,
+          supplyBalanceInfo: supplyBalanceInfo,
+          symbol: symbol,
+          address: address,
+          showApprove: showApprove
         }
-    }
+      }).then(() => {
+        if(symbol === 'ETH'){
+          that.setState({
+            repayVisible: false,
+            checkedNumber: [false, false, false],
+            supplyEnable: false,
+            selectedMarketItem: {},
+            supplyBalanceInfo:{tokenBalanceLiteral:0},
+          });
+        }else {
+          if(showApprove){
+            that.setState({
+              supplyEnable: true
+            })
+          }else {
+            that.setState({
+              supplyEnable: true
+            },function() {
+              that.handleSupplyDol()
+            })
+          }
+        }
+      })
     }
   };
 
   handleSupplyDol = async (e) => {
-      let supplyEnable = this.state.supplyEnable;
+    let { supplyBalanceInfo, selectedMarketItem, address, supplyEnable } = this.state;
       if (supplyEnable){
         const form = this.formRef.current;
         await init();
-        let balanceInfo = this.state.supplyBalanceInfo;
-        let symbol = this.state.selectedMarketItem.underlyingSymbol;
-        const address = await globals.hTokenMap.get(symbol);
+        let symbol = selectedMarketItem.underlyingSymbol;
         const values = form.getFieldsValue(['supplyInput'])
         let inputAmount = values.supplyInput;
+        let that = this;
         if(inputAmount !==undefined) {
-          const value = await literalToReal(inputAmount, balanceInfo.underlyingDecimals);
-          console.log('value=' + value)
-          let that = this;
-          const hToken = await globals.hades.hToken(symbol, address)
-
-          let tx
-          tx = hToken.mint(value).send({ from: globals.loginAccount })
-
-          await launchTransaction(tx);
-          that.setState({
-            repayVisible: false,
-            checkedNumber: [false, false, false],
-            supplyEnable: false
-          });
-          this.props.dispatch({
-            type: 'market/queryMarket'
-          });
+          that.props.dispatch({
+            type: 'market/supplyDol',
+            payload: {
+              supplyBalanceInfo: supplyBalanceInfo,
+              address: address,
+              symbol: symbol,
+              inputAmount: inputAmount
+            }
+          }).then(() => {
+            that.setState({
+              repayVisible: false,
+              checkedNumber: [false, false, false],
+              supplyEnable: false,
+              selectedMarketItem: {},
+              supplyBalanceInfo:{tokenBalanceLiteral:0},
+            });
+          })
         }
       }else {
         alert('please approve first')
@@ -160,7 +152,8 @@ class Market extends PureComponent {
     this.setState({
       repayVisible: false,
       checkedNumber: [false,false,false],
-      supplyBalanceInfo:{}
+      supplyBalanceInfo:{tokenBalanceLiteral:0},
+      selectedMarketItem:{}
     });
   };
 
@@ -168,12 +161,10 @@ class Market extends PureComponent {
     let inputValue = e.target.value;
     if(inputValue !==null){
       let { address, supplyBalanceInfo } = this.state;
+      let that = this;
       const account = globals.loginAccount
-      const dol = await globals.hades.dol()
-      const allowance = await dol.allowance(account, address).call();
-      let that = this
       const value = literalToReal(inputValue, supplyBalanceInfo.underlyingDecimals)
-      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
+      const showApprove = await that.props.dispatch({ type: 'market/getShowApprove', payload: { address:address,account: account,value:value}})
       that.setState({
         showApprove: showApprove
       })
@@ -248,7 +239,7 @@ class Market extends PureComponent {
   };
 
   async checkNumber(index,multiple,type){
-    let { checkedNumber, borrowLimit, supplyBalanceInfo } = this.state;
+    let { checkedNumber, borrowLimit, supplyBalanceInfo,address } = this.state;
     let isChecked = checkedNumber[index];
     checkedNumber = [false,false,false];
     checkedNumber[index] = !isChecked
@@ -259,13 +250,10 @@ class Market extends PureComponent {
       let supplyInput = supplyBalanceInfo.tokenBalanceLiteral * multiple
       const form = this.formRef.current;
       form.setFieldsValue({ supplyInput : supplyInput});
-      let { address} = this.state;
       const account = globals.loginAccount
-      const dol = await globals.hades.dol()
-      const allowance = await dol.allowance(account, address).call();
       let that = this
-      const value = literalToReal(supplyInput, supplyBalanceInfo.underlyingDecimals)
-      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
+      const value = literalToReal(supplyInput, supplyBalanceInfo.underlyingDecimals);
+      const showApprove = await that.props.dispatch({ type: 'market/getShowApprove', payload: { address:address,account: account,value:value}})
       that.setState({
         showApprove: showApprove
       })
