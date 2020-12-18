@@ -193,49 +193,45 @@ class Account extends PureComponent {
 
   showRedeemModal = async (item,e) => {
     const account = globals.loginAccount;
+    let symbol = item.underlyingSymbol;
+    const address = await this.props.dispatch({type:'market/queryAddress', payload: {symbol: symbol}});
     if(account){
       await init()
-      let symbol = item.underlyingSymbol;
-      const address = await globals.hTokenMap.get(symbol);
-      if (!symbol || !address) {
-        alert('Please get symbol and hToken first!')
-        throw new Error('Failed to get hToken address')
-      }
       let that = this;
-      const results = await Promise.all([
-        globals.hades.getHTokenBalances(address, account),
-        globals.hades.hToken(symbol, address),
-      ]);
-      that.setState({
-        redeemVisible: true,
-        selectedPoolItem: item,
-        redeemResults: results
-      });
+      await that.props.dispatch({
+        type: 'account/queryRedeemResults',
+        payload: { address: address, symbol: symbol}
+      }).then((res) =>{
+        that.setState({
+          redeemVisible: true,
+          selectedPoolItem: item,
+          redeemResults: res
+        });
+      })
     }else {
       alert('Please connect the wallet')
     }
   };
 
   handleRedeemOk = async (e) => {
-    const account = globals.loginAccount;
-    let { selectedPoolItem,redeemResults } = this.state;
-    let results = redeemResults;
+    let { redeemResults} = this.state;
     const form = this.refs.myForm;
     const values = form.getFieldsValue(['redeemInput'])
     let inputAmount = values.redeemInput;
-    const balanceInfo = results[0]
-    const hToken = results[1]
     let that = this;
     if(inputAmount !==undefined){
-      const realAmount = await literalToReal(inputAmount, 8)
-      await launchTransaction(hToken.redeem(realAmount).send({ from: account }))
-      that.setState({
-        redeemVisible: false,
-        checkMax: false
+      this.props.dispatch({
+        type: 'account/submitRedeem',
+        payload: { results: redeemResults,inputAmount:inputAmount}
+      }).then(() =>{
+        that.setState({
+          redeemVisible: false,
+          checkMax: false
+        })
+        that.props.dispatch({
+          type: 'account/login'
+        });
       })
-      that.props.dispatch({
-        type: 'account/login'
-      });
     }
   };
 
@@ -370,7 +366,7 @@ class Account extends PureComponent {
                   <Table columns={this.columns} dataSource={account.sheets}  rowKey="underlyingSymbol" pagination={false} />
                 </Card>
               </div> :
-              <div className={styles.loading}>
+              <div className={appStyles.loading}>
                 <div>
                   <LoadingOutlined/>
                   <span>loading</span>

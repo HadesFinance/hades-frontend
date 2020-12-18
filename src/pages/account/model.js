@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { model } from 'utils/model'
-import { globals} from '../../utils/constant';
+import { globals, launchTransaction, literalToReal } from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store'
 import { HADES_CONFIG } from '../../../config';
@@ -106,7 +106,21 @@ export default modelExtend(model, {
         type: 'savePrices',
         payload: { priceList: prices }
       });
-    }
+    },
+    *queryRedeemResults({ payload }, { call, put }) {
+      let {  address, symbol } = payload;
+      const results = yield Promise.all([
+        globals.hades.getHTokenBalances(address, globals.loginAccount),
+        globals.hades.hToken(symbol, address),
+      ]);
+      return results
+    },
+    *submitRedeem({ payload }, { call, put }) {
+      let { inputAmount, results } = payload;
+      const realAmount = yield literalToReal(inputAmount, 8);
+      const hToken = results[1];
+      yield launchTransaction(hToken.redeem(realAmount).send({ from: globals.loginAccount }))
+    },
   },
   reducers: {
     saveState(state, { payload: { loginAccount, wrongNetwork, connected } }) {
