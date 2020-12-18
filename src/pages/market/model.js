@@ -75,7 +75,30 @@ export default modelExtend(model, {
         type: 'queryMarket'
       });
     },
+    *queryBorrowResult({ payload }, { call, put }) {
+      let { symbol,account,address } = payload;
+      const results = yield Promise.all([
+        globals.hades.getHTokenBalances(address, account),
+        globals.hades.getPrice(symbol),
+        globals.hades.getAccountLiquidity(account),
+        globals.hades.hToken(symbol, address),
+      ]);
+      let borrowLimit;
+      if (symbol !== 'DOL') {
+        borrowLimit = results[2].liquidity / Number(results[1].underlyingPrice)
+      } else {
+        borrowLimit = results[2].liquidityLiteral
+      }
+      let res = { results: results, borrowLimit: borrowLimit}
+      return res
     },
+    *submitBorrow({ payload }, { call, put }) {
+      let { results, inputAmount } = payload;
+      const realAmount = yield literalToReal(inputAmount, results[0].underlyingDecimals);
+      const hToken = results[3];
+      yield launchTransaction(hToken.borrow(realAmount).send({ from: globals.loginAccount }));
+    },
+  },
   reducers: {
     saveMarket(state, { payload: { market } }) {
       return {

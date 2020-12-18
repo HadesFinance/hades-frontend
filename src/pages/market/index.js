@@ -181,29 +181,19 @@ class Market extends PureComponent {
         selectedMarketItem: selectedMarketItem
       });
       await init()
-      let symbol = market[index].underlyingSymbol;
-      const address = await globals.hTokenMap.get(symbol);
-      if (!symbol || !address) {
-        alert('Please get symbol and hToken first!')
-        throw new Error('Failed to get hToken address')
-      }
       let that = this;
-      const results = await Promise.all([
-        globals.hades.getHTokenBalances(address, account),
-        globals.hades.getPrice(symbol),
-        globals.hades.getAccountLiquidity(account),
-        globals.hades.hToken(symbol, address),
-      ]);
-      console.log('demoBorrow results[2', results)
-      let borrowLimit
-      if (symbol !== 'DOL') {
-        borrowLimit = results[2].liquidity / Number(results[1].underlyingPrice)
-      } else {
-        borrowLimit = results[2].liquidityLiteral
-      }
-      that.setState({
-        borrowLimit: borrowLimit,
-        borrowResults: results
+      const address = await that.props.dispatch({
+        type: 'market/queryAddress',
+        payload: { symbol: selectedMarketItem.underlyingSymbol}
+      })
+      that.props.dispatch({
+        type: 'market/queryBorrowResult',
+        payload: { symbol: selectedMarketItem.underlyingSymbol, account: account, address: address}
+      }).then((res) =>{
+        that.setState({
+          borrowLimit: res.borrowLimit,
+          borrowResults: res.results
+        })
       })
     }else {
       alert('Please connect the wallet')
@@ -211,23 +201,24 @@ class Market extends PureComponent {
   };
 
   handleRedeemOk = async (e) => {
-    let account = globals.loginAccount
     const form = this.formRef.current;
     let results = this.state.borrowResults;
-    let balanceInfo = results[0]
     const values = form.getFieldsValue(['borrowInput'])
     let inputAmount = values.borrowInput;
     if(inputAmount !==undefined) {
-      const realAmount = await literalToReal(inputAmount, balanceInfo.underlyingDecimals)
-      const hToken = results[3]
-      await launchTransaction(hToken.borrow(realAmount).send({ from: account }))
-      this.setState({
-        redeemVisible: false,
-        checkedNumber: [false, false, false]
-      });
-      this.props.dispatch({
-        type: 'market/queryMarket'
-      });
+      let that = this;
+      that.props.dispatch({
+        type: 'market/submitBorrow',
+        payload: { results: results, inputAmount: inputAmount}
+      }).then(() =>{
+        this.setState({
+          redeemVisible: false,
+          checkedNumber: [false, false, false]
+        });
+        that.props.dispatch({
+          type: 'market/queryMarket'
+        });
+      })
     }
   };
 
