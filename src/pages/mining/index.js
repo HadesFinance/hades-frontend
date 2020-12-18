@@ -83,79 +83,42 @@ class Mining extends PureComponent {
       });
     }else if(item.ptype ==='2' && account){
       await init();
-      const pid = item.id;
-      const lpTokenAddr = await globals.lpTokenMap.get(pid)
-      if (!lpTokenAddr) {
-        return alert('failed to get lp token address')
-      }
       this.setState({
         claimVisible: true,
         selectedPoolItem: item
       });
       let that = this;
-      const lpToken = await globals.hades.lpToken(lpTokenAddr);
-      const results = await Promise.all([
-        lpToken.balanceOf(account).call(),
-        lpToken.decimals().call(),
-        globals.hades.distributor(),
-      ])
-      console.log(results);
-      const balance = results[0]
-      const decimals = results[1]
-      const distributor = results[2]
-      const allowance = await lpToken.allowance(account, distributor._address).call()
-      let showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(0);
-      const balanceLiteral = await realToLiteral(balance, decimals);
-      that.setState({
-        increaseLimit: balanceLiteral,
-        increaseResult: results,
-        lpToken: lpToken,
-        showApprove: showApprove
+      await this.props.dispatch({
+        type: 'mining/queryIncreaseResults',
+        payload: {pid: item.id}
+      }).then((res) =>{
+        let { results, lpToken, balanceLiteral } = res;
+        const distributor = results[2]
+        let showApprove = that.props.dispatch({
+          type: 'mining/getShowApprove',
+          payload: { lpToken: lpToken, distributor: distributor,value: 0}
+        })
+        that.setState({
+          increaseLimit: balanceLiteral,
+          increaseResult: results,
+          lpToken: lpToken,
+          showApprove: showApprove
+        })
       })
     }else if(!account){
       alert('Please connect the wallet')
     }
   };
 
-  handleIncreaseOk = async (e) => {
-    let { increaseResult, lpToken, selectedPoolItem,lockEnable, showApprove } = this.state;
-    if(lockEnable || !showApprove){
-      await init();
-      let results = increaseResult;
-      let account = globals.loginAccount;
-      let pid = selectedPoolItem.id;
-      const form = this.refs.myForm;
-      const values = form.getFieldsValue(['increaseInput'])
-      let inputAmount = values.increaseInput;
-      const decimals = results[1]
-      if(inputAmount !==undefined){
-        const realAmount = await literalToReal(inputAmount, decimals)
-        const distributor = results[2]
-
-        await launchTransaction(distributor.mintExchangingPool(pid, realAmount).send({ from: account }))
-        this.setState({
-          claimVisible: false,
-          checkMax: false,
-          lockEnable: false
-        })
-        this.getMining()
-      }
-    }else {
-      alert('please approve first')
-    }
-  };
-
   handleIncreaseApprove = async (e) => {
-    let { increaseResult, lpToken, selectedPoolItem,showApprove } = this.state;
-    let results = increaseResult;
-    let account = globals.loginAccount;
+    let { increaseResult, lpToken,showApprove } = this.state;
     const form = this.refs.myForm;
     const values = form.getFieldsValue(['increaseInput'])
     let inputAmount = values.increaseInput;
     if(inputAmount !==undefined){
-      const distributor = results[2]
+      const distributor = increaseResult[2]
       if(showApprove){
-        await lpToken.approve(distributor._address, MAX_UINT256).send({ from: account });
+        await lpToken.approve(distributor._address, MAX_UINT256).send({ from: globals.loginAccount });
         this.setState({
           lockEnable: true
         })
@@ -170,6 +133,32 @@ class Mining extends PureComponent {
     }
   };
 
+  handleIncreaseOk = async (e) => {
+    let { increaseResult,  selectedPoolItem,lockEnable, showApprove } = this.state;
+    if(lockEnable || !showApprove){
+      await init();
+      const form = this.refs.myForm;
+      const values = form.getFieldsValue(['increaseInput'])
+      let inputAmount = values.increaseInput;
+      if(inputAmount !==undefined){
+        let that = this;
+        that.props.dispatch({
+          type: 'mining/submitIncrease',
+          payload: { increaseResult: increaseResult,pid: selectedPoolItem.id, inputAmount: inputAmount}
+        }).then(() =>{
+          that.setState({
+            claimVisible: false,
+            checkMax: false,
+            lockEnable: false
+          })
+          that.getMining()
+        })
+      }
+    }else {
+      alert('please approve first')
+    }
+  };
+
   handleIncreaseCancel = (e) => {
     this.setState({
       claimVisible: false,
@@ -181,12 +170,13 @@ class Mining extends PureComponent {
     let inputValue = e.target.value;
     if(inputValue !==null){
       let { lpToken, increaseResult } = this.state;
-      const distributor = increaseResult[2];
-      const account = globals.loginAccount;
-      const allowance = await lpToken.allowance(account, distributor._address).call()
-      let that = this;
       const value = literalToReal(inputValue, increaseResult[1])
-      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      const distributor = increaseResult[2];
+      let that = this;
+      let showApprove = await that.props.dispatch({
+        type: 'mining/getShowApprove',
+        payload: { lpToken: lpToken, distributor: distributor,value: value}
+      })
       that.setState({
         showApprove: showApprove
       })
@@ -243,11 +233,12 @@ class Mining extends PureComponent {
       form.setFieldsValue({ increaseInput: increaseLimit});
       let { lpToken, increaseResult } = this.state;
       const distributor = increaseResult[2];
-      const account = globals.loginAccount;
-      const allowance = await lpToken.allowance(account, distributor._address).call()
       let that = this;
       const value = literalToReal(increaseLimit, increaseResult[1])
-      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
+      let showApprove = await that.props.dispatch({
+        type: 'mining/getShowApprove',
+        payload: { lpToken: lpToken, distributor: distributor,value: value}
+      })
       that.setState({
         showApprove: showApprove
       })
