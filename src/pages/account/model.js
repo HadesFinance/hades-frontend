@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { model } from 'utils/model'
-import { globals, launchTransaction, literalToReal } from '../../utils/constant';
+import { globals, launchTransaction, literalToReal, MAX_UINT256 } from '../../utils/constant';
 import Hades from '../../utils/hades';
 import store from 'store'
 import { HADES_CONFIG } from '../../../config';
@@ -120,6 +120,42 @@ export default modelExtend(model, {
       const realAmount = yield literalToReal(inputAmount, 8);
       const hToken = results[1];
       yield launchTransaction(hToken.redeem(realAmount).send({ from: globals.loginAccount }))
+    },
+    *queryRepayResults({ payload }, { call, put }) {
+      let {  address, symbol } = payload;
+      const results = yield Promise.all([
+        globals.hades.getHTokenBalances(address, globals.loginAccount),
+        globals.hades.hToken(symbol, address),
+        globals.hades.dol(),
+      ]);
+      return results
+    },
+    *submitRepay({ payload }, { call, put }) {
+      let { inputAmount, results, symbol, address, showApprove } = payload;
+      const balanceInfo = results[0]
+      const hToken = results[1]
+      const dol = results[2]
+      const realAmount = yield literalToReal(inputAmount, balanceInfo.underlyingDecimals)
+      if (symbol === 'ETH') {
+        yield launchTransaction(hToken.repayBorrow().send({ from: globals.loginAccount, value: realAmount }))
+        yield put({
+          type: 'login'
+        });
+      } else {
+        if(showApprove){
+          yield dol.approve(address, MAX_UINT256).send({ from: globals.loginAccount });
+        }
+      }
+    },
+    *repayDol({ payload }, { call, put }) {
+      let { inputAmount, results } = payload;
+      const balanceInfo = results[0]
+      const hToken = results[1]
+      const realAmount = yield literalToReal(inputAmount, balanceInfo.underlyingDecimals)
+      yield launchTransaction(hToken.repayBorrow(realAmount).send({ from: globals.loginAccount }))
+      yield put({
+        type: 'login'
+      });
     },
   },
   reducers: {

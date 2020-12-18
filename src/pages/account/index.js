@@ -70,70 +70,58 @@ class Account extends PureComponent {
     let account = globals.loginAccount;
     await init();
     let symbol = item.underlyingSymbol;
-    const address = globals.hTokenMap.get(symbol);
-    if (!symbol || !address) {
-      alert('Please get symbol and hToken first!')
-      throw new Error('Failed to get hToken address')
-    }
+    const address = await this.props.dispatch({type: 'market/queryAddress', payload: {symbol: symbol}});
     this.setState({
       repayVisible: true,
       selectedPoolItem: item
     });
-    const dol = await globals.hades.dol()
-    const allowance = await dol.allowance(account, address).call();
-    const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(0);
-    this.setState({
-      showApprove: showApprove
-    })
-    const results = await Promise.all([
-      globals.hades.getHTokenBalances(address, account),
-      globals.hades.hToken(symbol, address),
-      globals.hades.dol(),
-    ]);
-    this.setState({
-      repayResults: results,
-      address: address
+    const showApprove = await this.props.dispatch({ type: 'market/getShowApprove', payload: { address:address,account: account,value:0}})
+    let that = this;
+    await that.props.dispatch({
+      type:'account/queryRepayResults',
+      payload:{ symbol: symbol,address: address}
+    }).then((res) =>{
+      that.setState({
+        repayResults: res,
+        address: address,
+        showApprove: showApprove
+      })
     })
   };
 
   handleOk = async (e) => {
     const account = globals.loginAccount;
-    let { selectedPoolItem,repayResults,address } = this.state;
-    let results = repayResults;
+    let { selectedPoolItem,repayResults,address, showApprove } = this.state;
     const form = this.refs.myForm;
     const values = form.getFieldsValue(['repayInput'])
     let inputAmount = values.repayInput;
     if(account){
-      const balanceInfo = results[0]
-      const hToken = results[1]
-      const dol = results[2]
       let that = this;
       if(inputAmount !==undefined){
-        const realAmount = await literalToReal(inputAmount, balanceInfo.underlyingDecimals)
-        if (selectedPoolItem.underlyingSymbol === 'ETH') {
-          await launchTransaction(hToken.repayBorrow().send({ from: account, value: realAmount }))
-          that.setState({
-            repayVisible: false,
-            checkMax: false,
-            repayEnable: false
-          })
-          that.props.dispatch({
-            type: 'account/login'
-          });
-        } else {
-          if(this.state.showApprove){
-            await dol.approve(address, MAX_UINT256).send({ from: account });
+        that.props.dispatch({
+          type:'account/submitRepay',
+          payload: { inputAmount: inputAmount,results: repayResults,symbol:selectedPoolItem.underlyingSymbol,address: address,showApprove: showApprove}
+        }).then(() =>{
+          if (selectedPoolItem.underlyingSymbol === 'ETH') {
             that.setState({
-              repayEnable:true
+              repayVisible: false,
+              checkMax: false,
+              repayEnable: false
             })
-          }else {
-            that.setState({
-              repayEnable:true,
-            },function() {
-              that.handleRepayDol()
-            })
+          } else {
+            if(showApprove){
+              that.setState({
+                repayEnable:true
+              })
+            }else {
+              that.setState({
+                repayEnable:true,
+              },function() {
+                that.handleRepayDol()
+              })
+            }
           }
-        }
+        })
       }
     }else {
       alert('Please connect the wallet')
@@ -141,26 +129,22 @@ class Account extends PureComponent {
   };
 
   handleRepayDol = async (e) => {
-    const account = globals.loginAccount;
-    let { selectedPoolItem, repayResults,repayEnable } = this.state;
+    let { repayResults,repayEnable } = this.state;
     if(repayEnable){
-      let results = repayResults;
       const form = this.refs.myForm;
       const values = form.getFieldsValue(['repayInput'])
       let inputAmount = values.repayInput;
       let that = this;
-      const balanceInfo = results[0]
-      const hToken = results[1]
-      const realAmount = await literalToReal(inputAmount, balanceInfo.underlyingDecimals)
-      await launchTransaction(hToken.repayBorrow(realAmount).send({ from: account }))
-      that.setState({
-        repayVisible: false,
-        checkMax: false,
-        repayEnable: false
-      })
       that.props.dispatch({
-        type: 'account/login'
-      });
+        type: 'account/repayDol',
+        payload:{ inputAmount: inputAmount, results: repayResults}
+      }).then(() =>{
+        that.setState({
+          repayVisible: false,
+          checkMax: false,
+          repayEnable: false
+        })
+      })
     }else {
       alert('please approve first')
     }
@@ -179,12 +163,9 @@ class Account extends PureComponent {
     if(inputValue !==null){
       let { address, repayResults } = this.state;
       const balanceInfo = repayResults[0]
-      const account = globals.loginAccount
-      const dol = await globals.hades.dol()
-      const allowance = await dol.allowance(account, address).call();
       let that = this
-      const value = literalToReal(inputValue, balanceInfo.underlyingDecimals)
-      const showApprove = BigInt(allowance.toString()) < BigInt(value);
+      const value = literalToReal(inputValue, balanceInfo.underlyingDecimals);
+      const showApprove = await that.props.dispatch({ type: 'market/getShowApprove', payload: { address:address,account: globals.loginAccount,value:value}})
       that.setState({
         showApprove: showApprove
       })
@@ -253,12 +234,9 @@ class Account extends PureComponent {
       const form = this.refs.myForm;
       form.setFieldsValue({ repayInput : repayInput});
       let { address,repayResults} = this.state;
-      const account = globals.loginAccount
-      const dol = await globals.hades.dol()
-      const allowance = await dol.allowance(account, address).call();
       let that = this
       const value = literalToReal(repayInput, repayResults[0].underlyingDecimals)
-      const showApprove = allowance.toString() ==='0' || BigInt(allowance.toString()) < BigInt(value);
+      const showApprove = await that.props.dispatch({ type: 'market/getShowApprove', payload: { address:address,account: globals.loginAccount,value:value}})
       that.setState({
         showApprove: showApprove
       })
