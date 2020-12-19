@@ -47,11 +47,10 @@ class Market extends PureComponent {
   }
 
   showModal = async (index) => {
-    let account = globals.loginAccount;
+    const account = (globals.loginAccount = window.ethereum.selectedAddress);
     let {market} = this.props;
     let selectedMarketItem = market[index];
     if(account){
-      await init();
       let symbol = selectedMarketItem.underlyingSymbol;
       const address = await this.props.dispatch({ type: 'market/queryAddress', payload: { symbol: symbol} })
       this.setState({
@@ -74,7 +73,6 @@ class Market extends PureComponent {
   handleOk = async (e) => {
     let { supplyBalanceInfo,selectedMarketItem,address,showApprove} = this.state;
     let symbol = selectedMarketItem.underlyingSymbol;
-    await init();
     const form = this.formRef.current;
     const values = form.getFieldsValue(['supplyInput'])
     let inputAmount = values.supplyInput;
@@ -119,7 +117,6 @@ class Market extends PureComponent {
     let { supplyBalanceInfo, selectedMarketItem, address, supplyEnable } = this.state;
       if (supplyEnable){
         const form = this.formRef.current;
-        await init();
         let symbol = selectedMarketItem.underlyingSymbol;
         const values = form.getFieldsValue(['supplyInput'])
         let inputAmount = values.supplyInput;
@@ -180,7 +177,6 @@ class Market extends PureComponent {
         redeemVisible: true,
         selectedMarketItem: selectedMarketItem
       });
-      await init()
       let that = this;
       const address = await that.props.dispatch({
         type: 'market/queryAddress',

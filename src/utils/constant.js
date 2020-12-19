@@ -27,6 +27,7 @@ export const literalToReal = (literal, decimals) => {
 export const launchTransaction = async (transaction) => {
   try {
     const result = await transaction
+    console.log(result);
     if (result.transactionHash) {
       globals.pendingTransactions.push(result.transactionHash)
     }
@@ -41,9 +42,3 @@ export const  realToLiteral = (real, decimals) => {
   return literal
 }
 
-export const init = async () => {
-  const network = store.get('network');
-  let hades = (globals.hades = new Hades(network))
-  await hades.setProvider(window.web3.currentProvider);
-  console.log('init')
-}

@@ -23,10 +23,6 @@ const { pathToRegexp } = require("path-to-regexp")
 const { queryRouteList, logoutUser } = api
 
 const goDashboard = () => {
-
- /* const network = store.get('network') ? store.get('network') : HADES_CONFIG.networks.test;
-  globals.hades = new Hades(network)*/
-
   if (pathToRegexp(['/', '/login']).exec(window.location.pathname)) {
     history.push({
       pathname: '/dashboard',
@@ -95,7 +91,8 @@ export default {
         },
       ];
       const network = HADES_CONFIG.networks.test;
-      globals.hades = new Hades(network);
+      let hades = (globals.hades = new Hades(network));
+      yield hades.setProvider(window.web3.currentProvider);
       yield put({
         type: 'handleConfigChange',
         payload: { routeList: routeList, network: network, isInit: true}

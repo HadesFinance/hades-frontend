@@ -22,15 +22,17 @@ class Header extends PureComponent {
   };
   componentDidMount() {
     let that = this;
-    that.props.dispatch({
-      type: 'account/queryPrice'
-    });
     let loginAccount = (globals.loginAccount = window.ethereum.selectedAddress);
-    if(loginAccount){
+    setTimeout(function() {
       that.props.dispatch({
-        type: 'account/login'
+        type: 'account/queryPrice'
       });
-    }
+      if(loginAccount){
+        that.props.dispatch({
+          type: 'account/login'
+        });
+      }
+    },2000)
     that.intervalId = setInterval(that.confirmPendingTransactions, 10000);
     that.refreshId = setInterval(function() {
       that.props.dispatch({

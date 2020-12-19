@@ -13,8 +13,8 @@ export default modelExtend(model, {
   },
   effects: {
     *queryMarket({ _ }, { call, put }) {
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
+      let hades = globals.hades;
+      if (hades) {
       const markets = yield hades.getMarkets();
       for (const market of markets) {
         globals.hTokenMap.set(market.underlyingSymbol, market.hToken)
@@ -25,8 +25,9 @@ export default modelExtend(model, {
       });
       yield put({
         type: 'saveLoading',
-        payload: { pageLoading: false}
+        payload: { pageLoading: false }
       });
+    }
     },
     *queryAddress({ payload }, { call, put }) {
       let symbol = payload.symbol;
@@ -60,7 +61,7 @@ export default modelExtend(model, {
       } else {
         if(showApprove){
           const dol = yield globals.hades.dol();
-          yield dol.approve(address, MAX_UINT256).send({ from: globals.loginAccount })
+          yield dol.approve(address, MAX_UINT256).send({ from: globals.loginAccount})
         }
       }
     },

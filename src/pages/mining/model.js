@@ -25,35 +25,36 @@ export default modelExtend(model, {
   },
   effects: {
     *queryMining({ _ }, { call, put }) {
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
-      let loginAcount = globals.loginAccount;
-      if(loginAcount){
-        const result = yield hades.getPools(loginAcount);
-        yield put({
-          type: 'saveMining',
-          payload: { mining: result }
-        });
-        yield put({
-          type: 'saveLoading',
-          payload: { pageLoading: false}
-        })
-        console.log('refresh mining,unclaimed='+result.my[0].unclaimedLiteral)
-        return result
-      }else {
-        const result = yield hades.getPools();
-        for (const pool of result.pools) {
-          globals.lpTokenMap.set(pool.id, pool.tokenAddr)
+      let hades = globals.hades;
+      if(hades){
+        let loginAcount = globals.loginAccount;
+        if(loginAcount){
+          const result = yield hades.getPools(loginAcount);
+          yield put({
+            type: 'saveMining',
+            payload: { mining: result }
+          });
+          yield put({
+            type: 'saveLoading',
+            payload: { pageLoading: false}
+          })
+          console.log('refresh mining,unclaimed='+result.my[0].unclaimedLiteral)
+          return result
+        }else {
+          const result = yield hades.getPools();
+          for (const pool of result.pools) {
+            globals.lpTokenMap.set(pool.id, pool.tokenAddr)
+          }
+          yield put({
+            type: 'saveMining',
+            payload: { mining: result }
+          });
+          yield put({
+            type: 'saveLoading',
+            payload: { pageLoading: false}
+          })
+          return result
         }
-        yield put({
-          type: 'saveMining',
-          payload: { mining: result }
-        });
-        yield put({
-          type: 'saveLoading',
-          payload: { pageLoading: false}
-        })
-        return result
       }
     },
     *queryDistributorStats({ _ }, { call, put }) {

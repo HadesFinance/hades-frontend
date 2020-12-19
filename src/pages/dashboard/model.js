@@ -35,18 +35,18 @@ export default modelExtend(model, {
   },
   effects: {
     *queryOverview({ _ }, { call, put }) {
-      const network = store.get('network');
-      let hades = (globals.hades = new Hades(network))
-      let that = this;
-      const result = yield hades.getOverview();
-      yield put({
-        type: 'saveOverview',
-        payload: { overview: result }
-      });
-      yield put({
-        type: 'saveLoading',
-        payload: { pageLoading: false}
-      })
+      let hades = globals.hades;
+      if(hades){
+        const result = yield hades.getOverview();
+        yield put({
+          type: 'saveOverview',
+          payload: { overview: result }
+        });
+        yield put({
+          type: 'saveLoading',
+          payload: { pageLoading: false}
+        })
+      }
     },
   },
   reducers: {

@@ -8,7 +8,7 @@ import appStyles from '../app.less'
 import wallet from '../../../public/wallet.svg'
 import DOL from '../../../public/DOL.svg'
 import ETH from '../../../public/ethereum_L.svg'
-import { globals, MAX_UINT256, literalToReal, launchTransaction, init} from '../../utils/constant';
+import { globals, literalToReal,} from '../../utils/constant';
 import { LoadingOutlined } from '@ant-design/icons';
 const FormItem = Form.Item;
 
@@ -68,7 +68,6 @@ class Account extends PureComponent {
 
   showModal = async (item,e) => {
     let account = globals.loginAccount;
-    await init();
     let symbol = item.underlyingSymbol;
     const address = await this.props.dispatch({type: 'market/queryAddress', payload: {symbol: symbol}});
     this.setState({
@@ -177,7 +176,6 @@ class Account extends PureComponent {
     let symbol = item.underlyingSymbol;
     const address = await this.props.dispatch({type:'market/queryAddress', payload: {symbol: symbol}});
     if(account){
-      await init()
       let that = this;
       await that.props.dispatch({
         type: 'account/queryRedeemResults',

@@ -45,40 +45,20 @@ export default modelExtend(model, {
   },
   effects: {
     *login({ _ }, { call, put }) {
-      const network = store.get('network') ? store.get('network') : HADES_CONFIG.networks.test;
-      let hades = (globals.hades = new Hades(network))
-      let wrongNetwork;
-      if (hades.chainId() <= 42 && hades.chainId() !== Number(window.ethereum.chainId)) {
-        wrongNetwork = true
-      }else {
-        wrongNetwork = false
-      }
-      const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress);
-      if(loginAccount){
-        yield put({
-          type: 'saveState',
-          payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: loginAccount ? true : false}
-        });
-        const result = yield globals.hades.getAccountBalances(loginAccount);
-        yield put({
-          type: 'saveAccount',
-          payload: { account: result }
-        });
-        const liquidity = yield globals.hades.getAccountLiquidity(loginAccount);
-        yield put({
-          type: 'saveAccountLiquidity',
-          payload: { accountLiquidity: liquidity }
-        });
-        processMarkets();
-        processPools();
-      }else {
-        yield hades.setProvider(window.web3.currentProvider);
-        const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress)
-        yield put({
-          type: 'saveState',
-          payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: loginAccount ? true : false}
-        });
+      let hades = globals.hades;
+      if(hades){
+        let wrongNetwork;
+        if (hades.chainId() <= 42 && hades.chainId() !== Number(window.ethereum.chainId)) {
+          wrongNetwork = true
+        }else {
+          wrongNetwork = false
+        }
+        const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress);
         if(loginAccount){
+          yield put({
+            type: 'saveState',
+            payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: loginAccount ? true : false}
+          });
           const result = yield globals.hades.getAccountBalances(loginAccount);
           yield put({
             type: 'saveAccount',
@@ -89,23 +69,45 @@ export default modelExtend(model, {
             type: 'saveAccountLiquidity',
             payload: { accountLiquidity: liquidity }
           });
+          processMarkets();
+          processPools();
+        }else {
+          yield hades.setProvider(window.web3.currentProvider);
+          const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress)
+          yield put({
+            type: 'saveState',
+            payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: loginAccount ? true : false}
+          });
+          if(loginAccount){
+            const result = yield globals.hades.getAccountBalances(loginAccount);
+            yield put({
+              type: 'saveAccount',
+              payload: { account: result }
+            });
+            const liquidity = yield globals.hades.getAccountLiquidity(loginAccount);
+            yield put({
+              type: 'saveAccountLiquidity',
+              payload: { accountLiquidity: liquidity }
+            });
+          }
+          processMarkets()
+          processPools()
         }
-        processMarkets()
-        processPools()
+        yield put({
+          type: 'saveLoading',
+          payload: { pageLoading: false}
+        })
       }
-      yield put({
-        type: 'saveLoading',
-        payload: { pageLoading: false}
-      })
     },
     *queryPrice({ _ }, { call, put }){
-      const network = store.get('network') ? store.get('network') : HADES_CONFIG.networks.test;
-      let hades = (globals.hades = new Hades(network))
-      const prices = yield hades.getPrices();
-      yield put({
-        type: 'savePrices',
-        payload: { priceList: prices }
-      });
+      let hades = globals.hades;
+      if(hades){
+        const prices = yield hades.getPrices();
+        yield put({
+          type: 'savePrices',
+          payload: { priceList: prices }
+        });
+      }
     },
     *queryRedeemResults({ payload }, { call, put }) {
       let {  address, symbol } = payload;

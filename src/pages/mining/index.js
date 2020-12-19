@@ -71,10 +71,6 @@ class Mining extends PureComponent {
     })
   }
 
-  componentWillUnmount() {
-    clearInterval(this.intervalId)
-  }
-
   showModal = async (item) => {
     let account = (globals.loginAccount = window.ethereum.selectedAddress);
     if(item.ptype ==='1' && account){
@@ -82,7 +78,6 @@ class Mining extends PureComponent {
         increaseVisible: true,
       });
     }else if(item.ptype ==='2' && account){
-      await init();
       this.setState({
         claimVisible: true,
         selectedPoolItem: item
@@ -136,7 +131,6 @@ class Mining extends PureComponent {
   handleIncreaseOk = async (e) => {
     let { increaseResult,  selectedPoolItem,lockEnable, showApprove } = this.state;
     if(lockEnable || !showApprove){
-      await init();
       const form = this.refs.myForm;
       const values = form.getFieldsValue(['increaseInput'])
       let inputAmount = values.increaseInput;
@@ -252,7 +246,6 @@ class Mining extends PureComponent {
   async claimFun(item){
     const account = globals.loginAccount
     if(account){
-      await init();
       const pid = item.id;
       let distributor;
       let that = this;
