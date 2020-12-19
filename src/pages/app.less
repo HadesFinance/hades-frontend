@@ -18,7 +18,12 @@
       border-radius: 50%;
       box-shadow: 0 4px 10px rgba(45,49,77,0.1);
       color: #11142D;
+      background-color: #fff;
     }
+  }
+  .ant-modal-body{
+    background-image: linear-gradient(to bottom, rgba(238,241,246,0.4), #fff);
+    border-radius: 10px;
   }
   .ant-modal-footer{
     padding: 10px 16px 30px;
@@ -38,13 +43,21 @@
       font-size: 14px;
       font-weight: bold;
       color: #fff;
-      background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+      //background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+      background-color: #6C5DD3;
     }
     .ant-btn:hover{
-      background-image: linear-gradient(to right,#4f6ac8,#5546c6);
+      //background-image: linear-gradient(to right,#4f6ac8,#5546c6);
+      background-color: #5849BB;
     }
   }
   .ant-modal-footer button + button{margin-left: 25px;}
+  .ant-form-item{margin-bottom: 0;}
+  .ant-input{
+    &::placeholder{
+      color:#C3D1E3
+    }
+  }
 }
 .dialogContent{
   .title{
@@ -54,19 +67,19 @@
   }
   .inputArea{
     .inputDes{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       margin-bottom: 10px;
       .des{
         font-size: 12px;
-        color: #95A9C9;
-        margin: 0;
+        color: #252B57;
+        margin: 0 0 5px 0;
         flex-shrink: 0;
-        width: calc(50% - 10px);
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        span{
+          font-weight: bold;
+        }
       }
     }
     .inputContent{
@@ -79,21 +92,28 @@
         line-height: 52px;
         font-size: 16px;
         color: #11142D;
-        font-weight: bold;
+        //font-weight: bold;
         padding: 0 10px;
+        background: unset;
       }
       .maxBtn{
         position: absolute;
         top: 50%;
-        right: 28px;
+        right: 10px;
         transform: translate(0,-50%);
       }
     }
     .numberBtnList{
       display: flex;
       align-items: center;
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translate(0,-50%);
       .maxBtn{
         margin-left: 8px;
+        position: unset;
+        transform: unset;
       }
     }
     .maxBtn{
@@ -124,14 +144,15 @@
         .detailTitle{
           line-height: 1;
           font-size: 12px;
-          color: #95A9C9;
+          color: #252B57;
           margin-bottom: 0;
         }
         .detailValue{
           line-height: 1;
           margin-bottom: 0;
           font-size: 12px;
-          color: #11142D;
+          color: #252B57;
+          font-weight: bold;
         }
       }
     }
@@ -141,8 +162,8 @@
     }
   }
   .increaseText{
-    font-size: 15px;
-    color: #95A9C9;
+    font-size: 14px;
+    color: #252B57;
     line-height: 1.5;
   }
   .linkArea{
@@ -210,16 +231,23 @@
 
 .modalDark{
   :global{
+    .ant-modal-body{background-image: linear-gradient(to bottom, #151821, transparent);}
     .ant-modal-content{background-color: #242731;}
     .ant-modal-close .ant-modal-close-x{background-color: #1F2128;color: #fff;}
+    .ant-input{
+      &::placeholder{
+        color:#41454F
+      }
+    }
   }
   .dialogContent .title .dialogTitle,.dialogContent .linkArea h3,.dialogContent .exitInfo .infoItem .infoValue,.dialogContent .detailContent .detailList .detailItem .detailValue{
     color: #fff;
   }
   .dialogContent .linkArea{border-color: #fff;}
-  .dialogContent .inputArea .inputDes .des,.dialogContent .title .titleDes,
-  .dialogContent .increaseText,.dialogContent .exitInfo .infoItem .infoTitle,
-  .dialogContent .detailContent .detailList .detailItem .detailTitle{color: #808191;}
+  .dialogContent .inputArea .inputDes .des,
+  .dialogContent .increaseText,
+  .dialogContent .detailContent .detailList .detailItem .detailTitle{color: #fff;}
+  .dialogContent .title .titleDes,.dialogContent .exitInfo .infoItem .infoTitle{color: #808191}
   .dialogContent .inputArea  .inputContent  input{background-color: transparent;color: #fff;border-color: rgba(149,169,201,0.1)}
   .dialogContent .inputArea  .maxBtn{background-color: #2A2D39;color: #808191;}
   .dialogContent .exitInfo{background-color: #2A2D39;}

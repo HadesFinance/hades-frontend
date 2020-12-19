@@ -25,7 +25,7 @@
 }
 :global{
   .ant-layout{
-    background-color: #f8f9fc;
+    background-color: #fff;
   }
 }
 
@@ -37,6 +37,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  position: relative;
+  z-index: 100;
   // overflow-y: scroll;
 }
 
@@ -93,4 +95,9 @@
       }
     }
   }
+}
+
+//hide scrollbar
+::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
 }

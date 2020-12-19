@@ -1,15 +1,16 @@
 @import '~themes/vars.less';
 
 .header,.headerDark {
-  padding: 0 30px 0 0;
+  padding: 20px 30px 0 0;
   position: relative;
   display: flex;
   justify-content: flex-end;
-  height: 80px;
+  height: 30%;
   z-index: 9;
-  align-items: center;
-  background-color: #fff;
-  border-bottom: 1px rgba(149,169,201,0.2) solid;
+  align-items: flex-start;
+  background-color: unset !important;
+  background-image: linear-gradient(to bottom, #EEF1F6, #fff);
+  //border-bottom: 1px rgba(149,169,201,0.2) solid;
 
   &.fixed {
     position: fixed;
@@ -85,7 +86,11 @@
     }
   }
 }
-.headerDark{background-color: #1f2128;
+.headerDark{  background-image: linear-gradient(to bottom, #151821, transparent);
+  .toolBar{
+    border:1px #282B33 solid !important;
+    background-color: unset !important;
+  }
   .toolBarItem span{color: #fff !important;}
 }
 
@@ -153,11 +158,12 @@
 .toolBar{
   padding: 0 16px;
   height: 32px;
-  background-color: rgba(149,169,201,0.1);
+  background-color: #EEF1F6;
   border-radius: 12px;
   display: flex;
   align-items: center;
   margin-right: 25px;
+  border: 1px #D9DCE0 solid;
   .toolBarItem{
     display: flex;
     align-items: center;
@@ -329,7 +335,7 @@
       font-size: 14px;
       font-weight: bold;
       color: #fff;
-      background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+      //background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
     }
   }
   .ant-modal-footer button + button{margin-left: 25px;}

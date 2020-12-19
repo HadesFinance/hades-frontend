@@ -343,8 +343,8 @@ class Market extends PureComponent {
                   </div>
                   <div className={appStyles.inputArea}>
                     <div className={appStyles.inputDes}>
-                      <p className={appStyles.des}>Total:{Number(this.state.supplyBalanceInfo.tokenBalanceLiteral).toFixed(4)}</p>
-                      <p className={appStyles.des}>Exchange Rate:{Number(selectedMarketItem.exchangeRateLiteral).toFixed(4)}</p>
+                      <p className={appStyles.des}>Total<span>{Number(this.state.supplyBalanceInfo.tokenBalanceLiteral).toFixed(4)}</span></p>
+                      <p className={appStyles.des}>Exchange Rate<span>{Number(selectedMarketItem.exchangeRateLiteral).toFixed(4)}</span></p>
                     </div>
                     <div className={appStyles.inputContent}>
                       <Form
@@ -357,7 +357,7 @@ class Market extends PureComponent {
                         <FormItem name='supplyInput' rule={[
                           {required: true, message: 'Input supply amount'}
                         ]} onChange={this.handleSupplyChange}>
-                          <Input placeholder='Input supply amount' type='number'/>
+                          <Input placeholder='Input supply amount' type='text'/>
                         </FormItem>
                       </Form>
                       <Button className={[appStyles.maxBtn,this.state.checkedNumber[0] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,1,0)}>MAX</Button>
@@ -384,12 +384,7 @@ class Market extends PureComponent {
                 </div>
                 <div className={appStyles.inputArea}>
                   <div className={appStyles.inputDes}>
-                    <p className={appStyles.des}>Limit:{Number(this.state.borrowLimit).toFixed(4)}</p>
-                    <div className={appStyles.numberBtnList}>
-                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[0] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,0.5,1)}>50%</Button>
-                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[1] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,1,0.75,1)}>75%</Button>
-                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[2] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,2,1,1)}>MAX</Button>
-                    </div>
+                    <p className={appStyles.des}>Limit<span>{Number(this.state.borrowLimit).toFixed(4)}</span></p>
                   </div>
                   <div className={appStyles.inputContent}>
                     <Form
@@ -402,9 +397,14 @@ class Market extends PureComponent {
                       <FormItem name='borrowInput' rule={[
                         {required: true, message: 'Input borrow amount'}
                       ]}>
-                        <Input placeholder='Input borrow amount' type='number'/>
+                        <Input placeholder='borrow amount' type='text'/>
                       </FormItem>
                     </Form>
+                    <div className={appStyles.numberBtnList}>
+                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[0] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0,0.5,1)}>50%</Button>
+                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[1] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,1,0.75,1)}>75%</Button>
+                      <Button className={[appStyles.maxBtn,this.state.checkedNumber[2] ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,2,1,1)}>MAX</Button>
+                    </div>
                   </div>
                 </div>
               </div>

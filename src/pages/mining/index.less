@@ -1,5 +1,5 @@
 .market,.darkPage{
-  width: 640px;
+  width: 800px;
   position: relative;
   min-height:100%;
   :global {
@@ -38,9 +38,9 @@
       display: flex;
       align-items: center;
       padding: 10px 13px;
-      border-radius: 10px;
-      background-color: #F9FBFD;
-      color: #FFA715;
+      border-radius: 50px;
+      background-color: #FFA000;
+      color: #fff;
       span{
         font-size: 12px;
         margin-left: 8px;
@@ -54,10 +54,10 @@
         color: #95A9C9;
       }
       .active,.closed{
-        width: 12px;
-        height: 12px;
+        width: 8px;
+        height: 8px;
         background-color: #83D420;
-        border-radius: 4px;
+        border-radius: 50%;
         margin-left: 8px;
       }
       .closed{
@@ -71,13 +71,14 @@
     justify-content: flex-end;
     margin-top: 20px;
     .btnItem{
-      width: 112px;
+      width: 140px;
       height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0;
-      background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+      //background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+      background-color: #6C5DD3;
       border-radius: 10px;
       font-size: 14px;
       color: #fff;
@@ -86,12 +87,14 @@
       margin-left: 20px;
     }
     .btnItem:hover{
-      background-image: linear-gradient(to right,#4f6ac8,#5546c6);
+      //background-image: linear-gradient(to right,#4f6ac8,#5546c6);
+      background-color: #5849BB;
     }
   }
   .btnListDisabled .btnItem{opacity: 0.5}
   .btnListDisabled .btnItem:hover{
-    background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+    //background-image: linear-gradient(to right,#5D7AD3,#6C5DD3);
+    background-color: #6C5DD3;
     opacity: 0.5;
   }
 }

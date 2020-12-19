@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>dark</title>
+    <g id="Propose" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.200000003">
+        <g id="Propose-1" transform="translate(-96.000000, -982.000000)">
+            <g id="mode-switch" transform="translate(20.000000, 982.000000)">
+                <g id="dark" transform="translate(76.000000, 0.000000)">
+                    <rect id="矩形" x="0" y="0" width="20" height="20"></rect>
+                    <path d="M8.04120416,5.91015441 C8.04120416,9.25092855 10.7496329,11.9591611 14.0906492,11.9591611 C15.1456219,11.9591611 16.1375213,11.6891316 17.0009918,11.2144233 C16.4019933,14.5053254 13.5211919,17 10.0576858,17 C6.15983357,17 3,13.8403954 3,9.94282553 C3,6.47975957 5.49458281,3.59929243 8.7849513,3.00009817 C8.31123113,3.86351184 8.04120416,4.85530132 8.04120416,5.91015441 Z" id="形状结合" fill="#808191"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

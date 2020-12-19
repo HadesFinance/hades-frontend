@@ -6,6 +6,7 @@ import { NumberCard } from '../dashboard/components';
 import styles from './index.less'
 import appStyles from '../app.less'
 import wallet from '../../../public/wallet.svg'
+import metaMask from '../../../public/MetaMask.svg'
 import DOL from '../../../public/DOL.svg'
 import ETH from '../../../public/ethereum_L.svg'
 import { globals, literalToReal,} from '../../utils/constant';
@@ -354,7 +355,7 @@ class Account extends PureComponent {
           <div className={styles.notConnected}>
             <img src={wallet}/>
             <p className={styles.notConnectedTip}>Please connect to the wallet</p>
-            <p className={styles.connectedBtn} onClick={this.connectWallet.bind(this)}>Connect with Metamask</p>
+            <p className={styles.connectedBtn} onClick={this.connectWallet.bind(this)}><img src={metaMask}/> Connect wallet</p>
           </div>
           }
         {this.state.repayVisible ?
@@ -385,11 +386,11 @@ class Account extends PureComponent {
             <div className={appStyles.dialogContent}>
               <div className={appStyles.title}>
                 <h3 className={appStyles.dialogTitle}>Repay {selectedPoolItem.underlyingSymbol}</h3>
-                <p className={appStyles.titleDes}>Total Debts:{selectedPoolItem.borrowBalanceLiteral.toFixed(4)}</p>
               </div>
               <div className={appStyles.inputArea}>
                 <div className={appStyles.inputDes}>
-                  <p className={appStyles.des}>Total Balance：{selectedPoolItem.tokenBalanceLiteral.toFixed(4)}</p>
+                  <p className={appStyles.des}>Total Debts<span> {selectedPoolItem.borrowBalanceLiteral.toFixed(4)}</span></p>
+                  <p className={appStyles.des}>Total Balance<span>{selectedPoolItem.tokenBalanceLiteral.toFixed(4)}</span></p>
                 </div>
                 <div className={appStyles.inputContent}>
                   <Form
@@ -402,7 +403,7 @@ class Account extends PureComponent {
                     <FormItem name='repayInput' rule={[
                       {required: true, message: 'Input repay amount'}
                     ]} onChange={this.handleRepayChange}>
-                      <Input placeholder='Input repay amount' type='number'/>
+                      <Input placeholder='Input repay amount' type='text'/>
                     </FormItem>
                   </Form>
                   <Button className={[appStyles.maxBtn,this.state.checkMax ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0)}>MAX</Button>
@@ -430,7 +431,7 @@ class Account extends PureComponent {
               </div>
               <div className={appStyles.inputArea}>
                 <div className={appStyles.inputDes}>
-                  <p className={appStyles.des}>Allowed Amount:{this.state.redeemResults[0].hTokenBalanceLiteral.toFixed(4)}</p>
+                  <p className={appStyles.des}>Allowed Amount<span>{this.state.redeemResults[0].hTokenBalanceLiteral.toFixed(4)}</span></p>
                   {/*<p className={styles.des}>Exchange Rate:1.1</p>*/}
                 </div>
                 <div className={appStyles.inputContent}>
@@ -444,7 +445,7 @@ class Account extends PureComponent {
                     <FormItem name='redeemInput' rule={[
                       {required: true, message: 'Input redeem amount'}
                     ]}>
-                      <Input placeholder='Input redeem amount' type='number'/>
+                      <Input placeholder='Input redeem amount' type='text'/>
                     </FormItem>
                   </Form>
                   <Button className={[appStyles.maxBtn,this.state.checkMax ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,1)}>MAX</Button>

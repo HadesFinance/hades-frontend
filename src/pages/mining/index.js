@@ -275,12 +275,12 @@ class Mining extends PureComponent {
             <Card
               bordered={false}
               bodyStyle={{
-                padding: '20px 25px',
+                padding: '20px 0',
               }}>
               <Row lg={24}>
-                <NumberCard title='Rewards Per Block' number={distributorStats.rewardsPerBlockLiteral} lg={8} unit='' theme={theme} effective={true}/>
-                <NumberCard title='Mining Started Block' number={distributorStats.mineStartBlock} lg={8} unit='' theme={theme} effective={true}/>
-                <NumberCard title='Next Halving Block' number={distributorStats.nextHalvingBlock} lg={8} unit='' theme={theme} effective={true}/>
+                <NumberCard title='Rewards Per Block' number={distributorStats.rewardsPerBlockLiteral} lg={8} unit='' theme={theme} effective={true} alignCenter={true} border={true}/>
+                <NumberCard title='Mining Started Block' number={distributorStats.mineStartBlock} lg={8} unit='' theme={theme} effective={true} alignCenter={true} border={true}/>
+                <NumberCard title='Next Halving Block' number={distributorStats.nextHalvingBlock} lg={8} unit='' theme={theme} effective={true} alignCenter={true} border={false}/>
               </Row>
             </Card>
             {mining.pools.map((item,index) =>
@@ -374,7 +374,7 @@ class Mining extends PureComponent {
                 </a>
                 <div className={appStyles.inputArea}>
                   <div className={appStyles.inputDes}>
-                    <p className={appStyles.des}>Total LP Token Balance: {this.state.increaseLimit}</p>
+                    <p className={appStyles.des}>Total LP Token Balance<span>{this.state.increaseLimit}</span></p>
                   </div>
                   <div className={appStyles.inputContent}>
                     <Form
@@ -388,7 +388,7 @@ class Mining extends PureComponent {
                         {required: true, message: 'Input increase amount'}
                       ]} onChange={this.handleIncreaseChange}
                       >
-                        <Input placeholder='Input increase amount' type='number'/>
+                        <Input placeholder='Input increase amount' type='text'/>
                       </FormItem>
                     </Form>
                     <Button className={[appStyles.maxBtn,this.state.checkMax ? appStyles.checkedNumberBtn : '']} onClick={this.checkNumber.bind(this,0)}>MAX</Button>
