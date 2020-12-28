@@ -55,6 +55,7 @@ class Account extends PureComponent {
   connectWallet(){
     if (window.ethereum) {
       window.ethereum.enable()
+      if (globals.hades) globals.hades.setProvider(window.web3.currentProvider)
       this.login()
     } else {
       alert('Please install MetaMask to use this dApp!')

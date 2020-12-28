@@ -23,6 +23,7 @@ class Header extends PureComponent {
   componentDidMount() {
     let that = this;
     let loginAccount = (globals.loginAccount = window.ethereum.selectedAddress);
+    if (globals.hades) globals.hades.setProvider(window.web3.currentProvider)
     setTimeout(function() {
       that.props.dispatch({
         type: 'account/queryPrice'
