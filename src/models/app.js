@@ -16,6 +16,8 @@ import voting from '../../public/voting.svg'
 import voting_p from '../../public/voting_p.svg'
 import account from '../../public/account.svg'
 import account_p from '../../public/account_p.svg'
+import liquidity from '../../public/liquidity.svg'
+import liquidity_p from '../../public/liquidity_p.svg'
 import { globals } from '../utils/constant';
 import Hades from '../utils/hades'
 
@@ -74,13 +76,22 @@ export default {
           id: '4',
           icon: voting,
           activeIcon: voting_p,
-          name: 'Voting',
+          name: 'Council',
           'pt-br': {
-            name: 'Voting'
+            name: 'Council'
           },
-          route: '/voting',
+          route: '/council',
         },{
           id: '5',
+          icon: liquidity,
+          activeIcon: liquidity_p,
+          name: 'Liquidation',
+          'pt-br': {
+            name: 'Liquidation'
+          },
+          route: '/liquidity',
+        },{
+          id: '6',
           icon: account,
           activeIcon: account_p,
           name: 'Account',
@@ -92,7 +103,7 @@ export default {
       ];
       const network = HADES_CONFIG.networks.test;
       let hades = (globals.hades = new Hades(network));
-      // yield hades.setProvider(window.web3.currentProvider);
+       yield hades.setProvider(window.web3.currentProvider);
       yield put({
         type: 'handleConfigChange',
         payload: { routeList: routeList, network: network, isInit: true}

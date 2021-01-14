@@ -32,13 +32,13 @@ export const database =
     route: '/mining',
   },{
     id: '4',
-    icon: '/voting.svg',
+    icon: '/council.svg',
     activeIcon: '/voting_p.svg',
     name: 'Voting',
     'pt-br': {
       name: 'Voting'
     },
-    route: '/voting',
+    route: '/council',
   },{
     id: '5',
     icon: '/account.svg',

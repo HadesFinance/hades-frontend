@@ -1,0 +1,169 @@
+.loading{
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #414357;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  span{font-size: 15px; margin-top: 8px; display: block;}
+}
+.liquidity,.darkPage {
+  position: relative;
+  width:1040px;
+  min-height: 100%;
+  :global {
+    .ant-card {
+      border-radius: 10px;
+      margin-bottom: 18px;
+      box-shadow: 4px 4px 40px #E3E6EC;
+      &:hover {
+        box-shadow: 4px 4px 40px #E3E6EC;
+      }
+    }
+    .ant-card-body {
+      overflow-x: hidden;
+    }
+    .ant-table-thead > tr > th{
+      background-color: unset;
+      font-size: 12px !important;
+      color: #95A9C9 !important;
+      font-weight: normal;
+      width: 16%;
+    }
+    .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td{
+      padding: 12px;
+      border: none;
+      font-size: 14px;
+      color: #11142D;
+      width: 20%;
+    }
+    .ant-table-tbody > tr > td:first-child, .ant-table tfoot > tr > th:first-child, .ant-table tfoot > tr > td:first-child,
+    .ant-table-tbody > tr > td:nth-child(5n), .ant-table tfoot > tr > th:nth-child(5n), .ant-table tfoot > tr > td:nth-child(5n){
+      width: 20%;
+    }
+    .ant-table-tbody > tr:first-child > td{padding-top: 25px;word-break: break-all;}
+    .ant-table-tbody > tr:last-child > td{padding-bottom: 25px;}
+    .ant-table{
+      background-color: transparent;
+      .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+        background: transparent;
+      }
+    }
+    .ant-select{margin-right: 5px;}
+    .ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
+      height: 26px;
+      padding: 0 0 0 10px;
+      border: none;
+      background: #f8f8f8;
+      border-radius: 14px;
+    }
+    .ant-select-single.ant-select-show-arrow .ant-select-selection-item, .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder{
+      margin-right: 10px;
+    }
+    .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
+      border: none;
+      box-shadow: none;
+    }
+  }
+  .listTitle{
+    font-size: 16px;
+    color: #252B57;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .topAreaTitle{
+    font-size: 14px;
+    color: #95A9C9;
+    margin: 0;
+  }
+  .memberAvatar{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 15px;
+    margin-right: 24px;
+    cursor: pointer;
+  }
+  .nameArea{
+    display: flex;
+    align-items: center;
+    .addressLink{
+      margin-left: 10px;
+      img{
+        width: 12px;
+        height: 12px;
+      }
+    }
+    .redPrice{
+      color: #f63c3c;
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+  .btnList{
+    cursor: pointer;
+    img{
+      width: 64px;
+      height: 30px;
+    }
+  }
+}
+.popoverContainer{
+  width: 200px;
+}
+.popoverContent{
+  background-color: #2E3447;
+  padding: 15px;
+  border-radius: 8px;
+  .walletName{
+    .name{
+      font-size: 14px;
+      color: #fff;
+      margin: 0;
+    }
+    .linkArea{
+      display: flex;
+      align-items: center;
+      span{
+        font-size: 12px;
+        color: rgba(255,255,255,0.4);
+      }
+      img{
+        width: 12px;
+        height: 12px;
+        display: block;
+        margin-left: 8px;
+      }
+    }
+  }
+}
+:global{
+  .ant-popover-placement-bottom > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow{
+    border-top-color: #2E3447;
+    border-left-color: #2E3447;
+  }
+  .ant-popover-inner,.ant-popover-inner-content{padding: 0;background: transparent}
+}
+
+.darkPage{
+  :global{
+    .ant-table-thead > tr > th{color: #808191 !important; border-color: rgba(149,169,201,0.1);}
+    .ant-table-tbody > tr > td, .account___TB_Tx .ant-table tfoot > tr > th, .account___TB_Tx .ant-table tfoot > tr > td{
+      color: #fff;
+    }
+    .ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
+      background: #2F3440;
+    }
+    .ant-select{color: #fff;}
+    .ant-select-arrow{color: #95A9C9}
+  }
+  .listTitle{color: #fff;}
+}

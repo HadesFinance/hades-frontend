@@ -25,6 +25,7 @@ export const literalToReal = (literal, decimals) => {
 }
 
 export const launchTransaction = async (transaction) => {
+  console.log(transaction)
   try {
     const result = await transaction
     console.log(result);

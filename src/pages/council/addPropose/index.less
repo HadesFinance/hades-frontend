@@ -1,0 +1,137 @@
+.loading{
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #414357;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  span{font-size: 15px; margin-top: 8px; display: block;}
+}
+
+.liquidity,.darkPage {
+  position: relative;
+  width: 800px;
+  min-height: 100%;
+  .pageTitle{
+    display: flex;
+    align-items: center;
+    padding-bottom: 26px;
+    border-bottom: 1px #EAEEF4 solid;
+    .detailId{
+      font-size: 18px;
+      color: #252B57;
+      margin: 0 10px;
+    }
+  }
+}
+
+.formArea{
+  padding: 25px 0;
+  :global{
+    .ant-form-item{
+      width: 280px;
+      margin: 0 25px 25px 0;
+      display: block;
+      position: relative;
+      .ant-form-item-label{
+        text-align: left;
+        display: block;
+      }
+      .ant-form-item-label > label{
+        position: unset;
+        font-size: 12px;
+        color: #95A9C9;
+      }
+    }
+    .ant-input{
+      height: 44px;
+      line-height: 44px;
+      background-color: unset;
+      border: 1px #E2EBF6 solid;
+      border-radius: 8px;
+    }
+  }
+  .valueInput{position: relative;width: fit-content;}
+  .valueUnit{
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #252B57;
+    position: absolute;
+    right: 39px;
+    bottom: 12px;
+    img{
+      width: 20px;
+      height: 20px;
+      display: block;
+      margin-right: 5px;
+    }
+  }
+  .flexInput{
+    display: flex;
+    align-items: flex-start;
+  }
+  .paramsArea{
+    position: relative;
+    .paramsTitle{
+      font-size: 12px;
+      color: #95A9C9;
+      height: 32px;
+      line-height: 32px;
+      margin: 0;
+    }
+    .addBtn{
+      cursor: pointer;
+      font-size: 18px;
+      color: #83D420;
+      position: absolute;
+      top: 7px;
+      left: 76px;
+      background: #fff;
+      border-radius: 50%;
+    }
+    :global{
+      .ant-form-item{margin: 0 15px 0 0;}
+    }
+  }
+  .submitBtn{
+    cursor: pointer;
+    width: 140px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+    color: #FFFFFF;
+    background-color: #6C5DD3;
+    border-radius: 8px;
+    margin: 40px 0 0 0;
+    border: none;
+  }
+  .submitBtn:hover{
+    background-color: #5849BB;
+  }
+}
+
+.darkPage{
+  .pageTitle .detailId,.formArea .valueUnit{color: #fff;}
+  .pageTitle{border-color: rgba(149,169,201,0.1);}
+  .formArea{
+    :global{
+      .ant-form-item .ant-form-item-label > label{color: #808191;}
+      .ant-input{border-color: rgba(149,169,201,0.1);color: #fff;}
+      .ant-input{
+        &::placeholder{
+          color:#41454F
+        }
+      }
+    }
+  }
+}

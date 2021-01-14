@@ -1,0 +1,190 @@
+.loading{
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #414357;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  span{font-size: 15px; margin-top: 8px; display: block;}
+}
+.liquidity,.darkPage {
+  position: relative;
+  width:1040px;
+  min-height: 100%;
+  :global {
+    .ant-card {
+      border-radius: 10px;
+      margin-bottom: 18px;
+      box-shadow: 4px 4px 40px #E3E6EC;
+      &:hover {
+        box-shadow: 4px 4px 40px #E3E6EC;
+      }
+    }
+    .ant-card-body {
+      overflow-x: hidden;
+    }
+    .ant-table-thead > tr > th{
+      background-color: unset;
+      font-size: 12px !important;
+      color: #95A9C9 !important;
+      font-weight: normal;
+      width: 13%;
+    }
+    .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td{
+      padding: 12px;
+      border: none;
+      font-size: 14px;
+      color: #11142D;
+      width: 13%;
+    }
+    .ant-table-tbody > tr > td:first-child, .ant-table tfoot > tr > th:first-child, .ant-table tfoot > tr > td:first-child{
+      width: 5%;
+    }
+    .ant-table-tbody > tr > td:nth-child(2), .ant-table tfoot > tr > th:nth-child(2), .ant-table tfoot > tr > td:nth-child(2){
+      width: 20%;
+    }
+    .ant-table-tbody > tr:first-child > td{padding-top: 25px;word-break: break-all;}
+    .ant-table-tbody > tr:last-child > td{padding-bottom: 25px;}
+    .ant-table{
+      background-color: transparent;
+      .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+        background: transparent;
+      }
+    }
+  }
+  .topAreaTitle{
+    font-size: 16px;
+    color: #252B57;
+    font-weight: 600;
+    margin: 0;
+  }
+  .memberList{
+    padding-bottom: 30px;
+    border-bottom: 1px #EAEEF4 solid;
+  }
+  .memberAvatar{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 15px;
+    margin-right: 24px;
+    cursor: pointer;
+  }
+  .nameArea{
+    display: flex;
+    align-items: center;
+    .addressLink{
+      margin-left: 10px;
+      img{
+        width: 12px;
+        height: 12px;
+      }
+    }
+    .redPrice{
+      color: #f63c3c;
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+  .btnList{
+    img{
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+.popoverContainer{
+  width: 200px;
+}
+.popoverContent{
+  background-color: #2E3447;
+  padding: 15px;
+  border-radius: 8px;
+  .walletName{
+    .name{
+      font-size: 14px;
+      color: #fff;
+      margin: 0;
+    }
+    .linkArea{
+      display: flex;
+      align-items: center;
+      span{
+        font-size: 12px;
+        color: rgba(255,255,255,0.4);
+      }
+      img{
+        width: 12px;
+        height: 12px;
+        display: block;
+        margin-left: 8px;
+      }
+    }
+  }
+}
+.screen{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .proposeBtn{
+    width: 80px;
+    height: 28px;
+    background-color: #6C5DD3;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+.screenArea{
+  padding: 33px 0 26px;
+  display: flex;
+  align-items: center;
+  .screenNavItemOn,.screenNavItem{
+    height: 28px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+    color: #95A9C9;
+    cursor: pointer;
+  }
+  .screenNavItemOn{
+    color: #fff;
+    background-color: #6C5DD3;
+    border-radius: 8px;
+  }
+}
+:global{
+  .ant-popover-placement-bottom > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow{
+    border-top-color: #2E3447;
+    border-left-color: #2E3447;
+  }
+  .ant-popover-inner,.ant-popover-inner-content{padding: 0;background: transparent}
+}
+
+.darkPage{
+  :global{
+    .ant-table-thead > tr > th{color: #808191 !important; border-color: rgba(149,169,201,0.1);}
+    .ant-table-tbody > tr > td, .account___TB_Tx .ant-table tfoot > tr > th, .account___TB_Tx .ant-table tfoot > tr > td{
+      color: #808191;
+    }
+  }
+  .topAreaTitle{color: #808191;}
+  .memberList{border-bottom: 1px rgba(149,169,201,0.1) solid;}
+  .screenArea .screenNavItem{color: #808191;}
+}

@@ -71,6 +71,7 @@ export default modelExtend(model, {
           });
           processMarkets();
           processPools();
+          hades.loadHTokens()
         }else {
           yield hades.setProvider(window.web3.currentProvider);
           const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress)
@@ -92,6 +93,7 @@ export default modelExtend(model, {
           }
           processMarkets()
           processPools()
+          hades.loadHTokens()
         }
         yield put({
           type: 'saveLoading',

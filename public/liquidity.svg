@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
+  <g id="编组" transform="translate(0.5 0.5)">
+    <rect id="矩形" width="24" height="24" fill="none" stroke="rgba(0,0,0,0)" stroke-width="1"/>
+    <rect id="矩形-2" data-name="矩形" width="17" height="17" rx="4" transform="translate(3.5 3.5)" fill="none" stroke="#808191" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.6"/>
+    <path id="路径_10" data-name="路径 10" d="M0,2H7L5,0" transform="translate(9 8)" fill="none" stroke="#808191" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.6"/>
+    <path id="路径_10-2" data-name="路径 10" d="M0,2H7L5,0" transform="translate(15 16) rotate(-180)" fill="none" stroke="#808191" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.6"/>
+  </g>
+</svg>

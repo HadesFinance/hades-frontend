@@ -229,6 +229,45 @@
   span{font-size: 15px; margin-top: 8px; display: block;}
 }
 
+.pageArea,.pageAreaDark{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  .prev,.next,.disabledBtn{
+    font-size: 26px;
+    color: #6C5DD3;
+    cursor: pointer;
+    position: relative;
+    z-index: 100;
+  }
+  .disabledBtn{
+    color: #EAEEF4;
+  }
+  .page{
+    font-size: 12px;
+    color: #11142D;
+    margin: 0 15px;
+  }
+}
+.pageAreaDark{
+  .disabledBtn{color: #242731;}
+  .prev:after,.next:after,.disabledBtn:after{
+    position: absolute;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    z-index: -1;
+  }
+  .disabledBtn:after{background-color: #808191;}
+  .page{color: #fff;}
+}
+
 .modalDark{
   :global{
     .ant-modal-body{background-image: linear-gradient(to bottom, #151821, transparent);}

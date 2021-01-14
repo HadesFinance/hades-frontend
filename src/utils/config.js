@@ -2,7 +2,7 @@ module.exports = {
   siteName: 'Hades',
   copyright: 'hades Admin  ©2020 Hades',
   logoPath: '/logo.svg',
-  apiPrefix: '/api/v1',
+  apiPrefix: 'http://139.180.193.123:4000',
   fixedHeader: true, // sticky primary layout header
 
   /* Layout configuration, specify which layout to use for route. */
@@ -31,4 +31,4 @@ module.exports = {
     ],
     defaultLanguage: 'en',
   },
-}
+};

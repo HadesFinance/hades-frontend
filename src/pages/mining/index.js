@@ -190,7 +190,7 @@ class Mining extends PureComponent {
   };
 
 
-  showExitModal = (index) => {
+  showExitModal = (index,item) => {
     let account = globals.loginAccount;
     let mining = this.props.mining;
     if(account){
@@ -198,6 +198,7 @@ class Mining extends PureComponent {
         power: mining.my[index].powerNormalizedLiteral,
         rewards: mining.my[index].unclaimedLiteral,
         exitVisible: true,
+        selectedPoolItem: item
       })
     }else {
       alert('Please connect the wallet')
@@ -253,6 +254,24 @@ class Mining extends PureComponent {
         distributor = rsp;
         launchTransaction(distributor.claim(pid).send({ from: globals.loginAccount }))
       })
+      that.getMining()
+    }else {
+      alert('Please connect the wallet')
+    }
+
+  }
+
+  async exitFun(){
+    const account = globals.loginAccount
+    let item = this.state.selectedPoolItem
+    if(account){
+      const pid = item.id;
+      let that = this;
+      const distributor = await globals.hades.distributor()
+      await launchTransaction(distributor.exit(pid).send({ from: globals.loginAccount }))
+      that.setState({
+        exitVisible: false,
+      });
       that.getMining()
     }else {
       alert('Please connect the wallet')
@@ -316,7 +335,7 @@ class Mining extends PureComponent {
                 <div className={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? styles.btnList : styles.btnListDisabled}>
                   <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.showModal.bind(this,item) : null}>IncreasePower</p>
                   <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.claimFun.bind(this,item) : null}>Claim</p>
-                  {item.ptype ==='1' ? '' : <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.showExitModal.bind(this,index) : null}>Exit</p>}
+                  {item.ptype ==='1' ? '' : <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.showExitModal.bind(this,index,item) : null}>Exit</p>}
                 </div>
               </Card>
             )}
@@ -403,7 +422,7 @@ class Mining extends PureComponent {
               onOk={this.handleExitOk}
               onCancel={this.handleExitCancel}
               footer={[
-                <Button key="submit" type="primary"  onClick={this.handleExitOk}>
+                <Button key="submit" type="primary"  onClick={this.exitFun}>
                   Confirm
                 </Button>,
               ]}

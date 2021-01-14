@@ -1,0 +1,229 @@
+.loading{
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #414357;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  span{font-size: 15px; margin-top: 8px; display: block;}
+}
+
+.liquidity,.darkPage {
+  position: relative;
+  width: 800px;
+  min-height: 100%;
+  .pageTitle{
+    display: flex;
+    align-items: center;
+    padding-bottom: 26px;
+    border-bottom: 1px #EAEEF4 solid;
+    .detailId{
+      font-size: 18px;
+      color: #252B57;
+      margin: 0 10px;
+    }
+    .statusArea{
+      line-height: 1;
+      padding: 5px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #75CD0A;
+      .status{
+        font-size: 10px;
+        color: #fff;
+        margin-left: 3px;
+      }
+    }
+  }
+  .detailInfo{
+    .detailTitle{
+      font-size: 12px;
+      color: #95A9C9;
+      margin: 0;
+    }
+    .valueArea{
+      padding: 24px 0;
+      display: flex;
+      align-items: center;
+      .ethImg{
+        width: 32px;
+        height: 32px;
+        display: block;
+        margin-right: 8px;
+      }
+      span{
+        font-size: 16px;
+        color: #252B57;
+      }
+    }
+    .paramsArea{
+      padding: 24px 0;
+      border-bottom: 1px #EAEEF4 solid;
+      .params{
+        .paramItem{
+          position: relative;
+          margin-top: 15px;
+          padding-left: 12px;
+          font-size: 12px;
+          color: #252B57;
+          line-height: 1;
+        }
+        .paramItem:before{
+          position: absolute;
+          content: '';
+          width: 2px;
+          height: 100%;
+          background-color: #6C5DD3;
+          border-radius: 1px;
+          left: 0;
+          top: 0;
+        }
+      }
+    }
+    .proposerArea,.memberArea{
+      display: flex;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px #EAEEF4 solid;
+      .proposer{
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+        .proposerAvatar{
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+        }
+        span{
+          font-size: 14px;
+          color: #252B57;
+          margin: 0 5px;
+          line-height: 1;
+        }
+        .link{
+          width: 12px;
+          height: 12px;
+        }
+      }
+      .memberList{margin-left: 10px;}
+      .memberAvatar{
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 12px;
+        cursor: pointer;
+      }
+    }
+    .btnList{
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 30px;
+      .btnItem{
+        cursor: pointer;
+        width: 140px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 15px;
+        font-weight: bold;
+        font-size: 12px;
+        color: #FFFFFF;
+        background-color: #6C5DD3;
+        border-radius: 8px;
+      }
+      .btnItem:hover{
+        background-color: #5849BB;
+      }
+    }
+  }
+}
+
+.tableInfo{
+  border-bottom: 1px #EAEEF4 solid;
+  .title{
+    font-size: 12px;
+    color: #95A9C9;
+  }
+  .value{
+    font-size: 12px;
+    color: #252B57;
+  }
+  .valueBig{
+    font-size: 14px;
+    color: #252B57;
+    margin-bottom: 25px;
+    margin-top: 5px;
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+    img{
+      width: 12px;
+      height: 12px;
+      margin-left: 8px;
+    }
+  }
+  .rightRow{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 17px;
+  }
+}
+.tableInfoDark{
+  .value,.valueBig{color: #fff;}
+  .title{color: #808191}
+}
+
+.popoverContainer{
+  width: 200px;
+}
+.popoverContent{
+  background-color: #2E3447;
+  padding: 15px;
+  border-radius: 8px;
+  .walletName{
+    .name{
+      font-size: 14px;
+      color: #fff;
+      margin: 0;
+    }
+    .linkArea{
+      display: flex;
+      align-items: center;
+      span{
+        font-size: 12px;
+        color: rgba(255,255,255,0.4);
+      }
+      img{
+        width: 12px;
+        height: 12px;
+        display: block;
+        margin-left: 8px;
+      }
+    }
+  }
+}
+:global{
+  .ant-popover-placement-bottom > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow{
+    border-top-color: #2E3447;
+    border-left-color: #2E3447;
+  }
+  .ant-popover-inner,.ant-popover-inner-content{padding: 0;background: transparent}
+}
+
+.darkPage{
+  .pageTitle .detailId,.detailInfo .valueArea span,.detailInfo .paramsArea .params .paramItem,.detailInfo .proposerArea .proposer span{color: #fff;}
+  .pageTitle,.detailInfo .paramsArea,.tableInfo,.detailInfo .proposerArea,.detailInfo .memberArea{border-color: rgba(149,169,201,0.1);}
+}
