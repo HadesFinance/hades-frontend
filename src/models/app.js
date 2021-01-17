@@ -19,7 +19,7 @@ import account_p from '../../public/account_p.svg'
 import liquidity from '../../public/liquidity.svg'
 import liquidity_p from '../../public/liquidity_p.svg'
 import { globals } from '../utils/constant';
-import Hades from '../utils/hades'
+import RealDAOService from '../services/realdao'
 
 const { pathToRegexp } = require("path-to-regexp")
 const { queryRouteList, logoutUser } = api
@@ -101,9 +101,15 @@ export default {
           route: '/account',
         },
       ];
-      const network = HADES_CONFIG.networks.test;
-      let hades = (globals.hades = new Hades(network));
-       yield hades.setProvider(window.web3.currentProvider);
+      const network = HADES_CONFIG.networks.dev
+      globals.realDAO = new RealDAOService({
+        config: {
+          env: 'dev',
+          provider: window.web3.currentProvider || 'ws://localhost:8545',
+          orchestrator: '0x0716470cA1Dc1E902102E62d61E99b72c6AB5B6C'
+        }
+      });
+      globals.realDAO.loadRTokens()
       yield put({
         type: 'handleConfigChange',
         payload: { routeList: routeList, network: network, isInit: true}

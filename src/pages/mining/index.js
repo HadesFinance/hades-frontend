@@ -238,7 +238,7 @@ class Mining extends PureComponent {
         showApprove: showApprove
       })
     }else if(type ===1){
-      let redeemInput = selectedPoolItem.hTokenBalanceLiteral
+      let redeemInput = selectedPoolItem.rTokenBalanceLiteral
       const form = this.refs.myForm;
       form.setFieldsValue({ redeemInput : redeemInput})
     }
@@ -250,7 +250,7 @@ class Mining extends PureComponent {
       const pid = item.id;
       let distributor;
       let that = this;
-      globals.hades.distributor().then(function(rsp) {
+      globals.realDAO.distributor().then(function(rsp) {
         distributor = rsp;
         launchTransaction(distributor.claim(pid).send({ from: globals.loginAccount }))
       })
@@ -267,7 +267,7 @@ class Mining extends PureComponent {
     if(account){
       const pid = item.id;
       let that = this;
-      const distributor = await globals.hades.distributor()
+      const distributor = await globals.realDAO.distributor()
       await launchTransaction(distributor.exit(pid).send({ from: globals.loginAccount }))
       that.setState({
         exitVisible: false,
@@ -356,7 +356,7 @@ class Mining extends PureComponent {
                 <div className={appStyles.title}>
                   <h3 className={appStyles.dialogTitle}>IncreasePower in Lending Pool</h3>
                 </div>
-                <p className={appStyles.increaseText}>You can increase your arithmetic power by supplying assets in Hades' market or by borrowing.</p>
+                <p className={appStyles.increaseText}>You can increase your arithmetic power by supplying assets in RealDAO' market or by borrowing.</p>
               </div>
             </Modal>
             <Modal

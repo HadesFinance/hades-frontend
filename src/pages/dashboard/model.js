@@ -1,8 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { model } from 'utils/model'
 import { globals} from '../../utils/constant';
-import Hades from '../../utils/hades';
-import store from 'store';
 
 
 export default modelExtend(model, {
@@ -15,7 +13,7 @@ export default modelExtend(model, {
       dol:{
         totalSupply:0
       },
-      hds:{
+      rds:{
         circulating:0,
         mined:0
       },
@@ -35,9 +33,9 @@ export default modelExtend(model, {
   },
   effects: {
     *queryOverview({ _ }, { call, put }) {
-      let hades = globals.hades;
-      if(hades){
-        const result = yield hades.getOverview();
+      let realDAO = globals.realDAO;
+      if(realDAO){
+        const result = yield realDAO.getOverview();
         yield put({
           type: 'saveOverview',
           payload: { overview: result }

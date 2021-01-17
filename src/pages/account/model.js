@@ -1,20 +1,17 @@
 import modelExtend from 'dva-model-extend'
 import { model } from 'utils/model'
 import { globals, launchTransaction, literalToReal, MAX_UINT256 } from '../../utils/constant';
-import Hades from '../../utils/hades';
-import store from 'store'
-import { HADES_CONFIG } from '../../../config';
 
 async function processMarkets() {
-  const markets = await globals.hades.getMarkets()
+  const markets = await globals.realDAO.getMarkets()
   for (const market of markets) {
-    globals.hTokenMap.set(market.underlyingSymbol, market.hToken)
+    globals.rTokenMap.set(market.underlyingSymbol, market.rToken)
   }
   return markets
 }
 
 async function processPools() {
-  const result = await globals.hades.getPools()
+  const result = await globals.realDAO.getPools()
   for (const pool of result.pools) {
     globals.lpTokenMap.set(pool.id, pool.tokenAddr)
   }
@@ -29,7 +26,7 @@ export default modelExtend(model, {
     loginAccount: null,
     wrongNetwork: false,
     account:{
-      hds:{
+      rds:{
         balance:0
       },
       sheets:[]
@@ -45,10 +42,10 @@ export default modelExtend(model, {
   },
   effects: {
     *login({ _ }, { call, put }) {
-      let hades = globals.hades;
-      if(hades){
+      let realDAO = globals.realDAO;
+      if(realDAO){
         let wrongNetwork;
-        if (hades.chainId() <= 42 && hades.chainId() !== Number(window.ethereum.chainId)) {
+        if (realDAO.chainId() !== Number(window.ethereum.chainId)) {
           wrongNetwork = true
         }else {
           wrongNetwork = false
@@ -59,33 +56,32 @@ export default modelExtend(model, {
             type: 'saveState',
             payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: loginAccount ? true : false}
           });
-          const result = yield globals.hades.getAccountBalances(loginAccount);
+          const result = yield globals.realDAO.getAccountBalances(loginAccount);
           yield put({
             type: 'saveAccount',
             payload: { account: result }
           });
-          const liquidity = yield globals.hades.getAccountLiquidity(loginAccount);
+          const liquidity = yield globals.realDAO.getAccountLiquidity(loginAccount);
           yield put({
             type: 'saveAccountLiquidity',
             payload: { accountLiquidity: liquidity }
           });
           processMarkets();
           processPools();
-          hades.loadHTokens()
+          realDAO.loadRTokens()
         }else {
-          yield hades.setProvider(window.web3.currentProvider);
           const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress)
           yield put({
             type: 'saveState',
             payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: loginAccount ? true : false}
           });
           if(loginAccount){
-            const result = yield globals.hades.getAccountBalances(loginAccount);
+            const result = yield globals.realDAO.getAccountBalances(loginAccount);
             yield put({
               type: 'saveAccount',
               payload: { account: result }
             });
-            const liquidity = yield globals.hades.getAccountLiquidity(loginAccount);
+            const liquidity = yield globals.realDAO.getAccountLiquidity(loginAccount);
             yield put({
               type: 'saveAccountLiquidity',
               payload: { accountLiquidity: liquidity }
@@ -93,7 +89,7 @@ export default modelExtend(model, {
           }
           processMarkets()
           processPools()
-          hades.loadHTokens()
+          realDAO.loadRTokens()
         }
         yield put({
           type: 'saveLoading',
@@ -102,9 +98,9 @@ export default modelExtend(model, {
       }
     },
     *queryPrice({ _ }, { call, put }){
-      let hades = globals.hades;
-      if(hades){
-        const prices = yield hades.getPrices();
+      let realDAO = globals.realDAO;
+      if(realDAO){
+        const prices = yield realDAO.getPrices();
         yield put({
           type: 'savePrices',
           payload: { priceList: prices }
@@ -114,34 +110,34 @@ export default modelExtend(model, {
     *queryRedeemResults({ payload }, { call, put }) {
       let {  address, symbol } = payload;
       const results = yield Promise.all([
-        globals.hades.getHTokenBalances(address, globals.loginAccount),
-        globals.hades.hToken(symbol, address),
+        globals.realDAO.getRTokenBalances(address, globals.loginAccount),
+        globals.realDAO.rToken(symbol),
       ]);
       return results
     },
     *submitRedeem({ payload }, { call, put }) {
       let { inputAmount, results } = payload;
       const realAmount = yield literalToReal(inputAmount, 8);
-      const hToken = results[1];
-      yield launchTransaction(hToken.redeem(realAmount).send({ from: globals.loginAccount }))
+      const rToken = results[1];
+      yield launchTransaction(rToken.redeem(realAmount).send({ from: globals.loginAccount }))
     },
     *queryRepayResults({ payload }, { call, put }) {
       let {  address, symbol } = payload;
       const results = yield Promise.all([
-        globals.hades.getHTokenBalances(address, globals.loginAccount),
-        globals.hades.hToken(symbol, address),
-        globals.hades.dol(),
+        globals.realDAO.getRTokenBalances(address, globals.loginAccount),
+        globals.realDAO.rToken(symbol),
+        globals.realDAO.dol(),
       ]);
       return results
     },
     *submitRepay({ payload }, { call, put }) {
       let { inputAmount, results, symbol, address, showApprove } = payload;
       const balanceInfo = results[0]
-      const hToken = results[1]
+      const rToken = results[1]
       const dol = results[2]
       const realAmount = yield literalToReal(inputAmount, balanceInfo.underlyingDecimals)
       if (symbol === 'ETH') {
-        yield launchTransaction(hToken.repayBorrow().send({ from: globals.loginAccount, value: realAmount }))
+        yield launchTransaction(rToken.repayBorrow().send({ from: globals.loginAccount, value: realAmount }))
         yield put({
           type: 'login'
         });
@@ -154,9 +150,9 @@ export default modelExtend(model, {
     *repayDol({ payload }, { call, put }) {
       let { inputAmount, results } = payload;
       const balanceInfo = results[0]
-      const hToken = results[1]
+      const rToken = results[1]
       const realAmount = yield literalToReal(inputAmount, balanceInfo.underlyingDecimals)
-      yield launchTransaction(hToken.repayBorrow(realAmount).send({ from: globals.loginAccount }))
+      yield launchTransaction(rToken.repayBorrow(realAmount).send({ from: globals.loginAccount }))
       yield put({
         type: 'login'
       });

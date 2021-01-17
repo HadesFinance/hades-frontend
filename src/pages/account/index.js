@@ -55,7 +55,8 @@ class Account extends PureComponent {
   connectWallet(){
     if (window.ethereum) {
       window.ethereum.enable()
-      if (globals.hades) globals.hades.setProvider(window.web3.currentProvider)
+      if (globals.realDAO) globals.realDAO.setProvider(window.web3.currentProvider)
+      globals.realDAO.loadRTokens()
       this.login()
     } else {
       alert('Please install MetaMask to use this dApp!')
@@ -241,7 +242,7 @@ class Account extends PureComponent {
         showApprove: showApprove
       })
     }else if(type ===1){
-      let redeemInput = selectedPoolItem.hTokenBalanceLiteral
+      let redeemInput = selectedPoolItem.rTokenBalanceLiteral
       const form = this.refs.myForm;
       form.setFieldsValue({ redeemInput : redeemInput})
     }
@@ -297,13 +298,13 @@ class Account extends PureComponent {
     {
       title: 'Options',
       dataIndex: 'operation',
-      render: (_,{underlyingSymbol,tokenBalanceLiteral,collateralBalanceLiteral,borrowBalanceLiteral,hTokenBalanceLiteral}) => {
+      render: (_,{underlyingSymbol,tokenBalanceLiteral,collateralBalanceLiteral,borrowBalanceLiteral,rTokenBalanceLiteral}) => {
         let item = {
           underlyingSymbol: underlyingSymbol,
           tokenBalanceLiteral:tokenBalanceLiteral,
           collateralBalanceLiteral:collateralBalanceLiteral,
           borrowBalanceLiteral: borrowBalanceLiteral,
-          hTokenBalanceLiteral: hTokenBalanceLiteral
+          rTokenBalanceLiteral: rTokenBalanceLiteral
         }
         return (
           <div className={styles.btnList}>
@@ -334,7 +335,7 @@ class Account extends PureComponent {
                   bodyStyle={{
                     padding: '30px 25px',
                   }}>
-                  <NumberCard title='Balance' number={account.hds.balanceLiteral} lg={24} unit='HDS' position='right'  big={true} decimals={4} theme={theme}/>
+                  <NumberCard title='Balance' number={account.rds.balanceLiteral} lg={24} unit='RDS' position='right'  big={true} decimals={4} theme={theme}/>
                 </Card>
                 <Card
                   bordered={false}
@@ -432,7 +433,7 @@ class Account extends PureComponent {
               </div>
               <div className={appStyles.inputArea}>
                 <div className={appStyles.inputDes}>
-                  <p className={appStyles.des}>Allowed Amount<span>{this.state.redeemResults[0].hTokenBalanceLiteral.toFixed(4)}</span></p>
+                  <p className={appStyles.des}>Allowed Amount<span>{this.state.redeemResults[0].rTokenBalanceLiteral.toFixed(4)}</span></p>
                   {/*<p className={styles.des}>Exchange Rate:1.1</p>*/}
                 </div>
                 <div className={appStyles.inputContent}>

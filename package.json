@@ -49,6 +49,7 @@
     "react-helmet": "^6.0.0",
     "react-highcharts": "^16.1.0",
     "react-perfect-scrollbar": "^1.5.0",
+    "realdao": "^0.1.7",
     "recharts": "^2.0.0-beta.3",
     "store": "^2.0.0",
     "web3": "^1.3.0"

@@ -3,8 +3,6 @@ import modelExtend from 'dva-model-extend'
 import { model } from 'utils/model'
 import api from 'api'
 import { globals, launchTransaction, literalToReal, MAX_UINT256 } from '../../utils/constant';
-import Hades from '../../utils/hades';
-import store from 'store';
 const { queryLiquidatingList } = api;
 
 
@@ -167,11 +165,11 @@ export default modelExtend(model, {
     *getShowApprove({ payload }, { call, put }) {
       let { repaySymbol,liquidateAmount } = payload;
       const liquidator = globals.loginAccount
-      const underlyingAddress = globals.hades._marketInfo[repaySymbol].underlyingAssetAddress
+      const underlyingAddress = globals.realDAO._marketInfo[repaySymbol].underlyingAssetAddress
       console.log('demoLiquidate underlyingAddress', underlyingAddress)
 
-      const erc20Token = yield globals.hades.underlyingToken(underlyingAddress)
-      const repayTokenAddress = globals.hades._marketInfo[repaySymbol].hToken
+      const erc20Token = yield globals.realDAO.erc20Token(underlyingAddress)
+      const repayTokenAddress = globals.realDAO._marketInfo[repaySymbol].rToken
       const allowance = yield erc20Token.allowance(liquidator, repayTokenAddress).call()
       console.log('demoLiquidate allowance:', allowance.toString())
       const showApprove = BigInt(allowance.toString()) < BigInt(liquidateAmount);

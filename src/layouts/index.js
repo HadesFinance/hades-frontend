@@ -12,6 +12,7 @@ const languages = {
 }
 const { defaultLanguage } = i18n
 
+
 @withRouter
 class Layout extends Component {
   state = {
