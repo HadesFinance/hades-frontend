@@ -73,11 +73,11 @@ class Mining extends PureComponent {
 
   showModal = async (item) => {
     let account = (globals.loginAccount = window.ethereum.selectedAddress);
-    if(item.ptype ==='1' && account){
+    if(item.ptype ===1 && account){
       this.setState({
         increaseVisible: true,
       });
-    }else if(item.ptype ==='2' && account){
+    }else if(item.ptype ===2 && account){
       this.setState({
         claimVisible: true,
         selectedPoolItem: item
@@ -311,7 +311,7 @@ class Mining extends PureComponent {
                 }}>
                 <div className={styles.miningTopArea}>
                   <div className={styles.miningName}>
-                    {item.ptype === '1' ? <img src={lending}/> : <img src={exchange}/>}
+                    {item.ptype === 1 ? <img src={lending}/> : <img src={exchange}/>}
                     <span>{item.title}</span>
                   </div>
                   {/*countdown*/}
@@ -335,7 +335,7 @@ class Mining extends PureComponent {
                 <div className={item.state ===1 || (item.state ===0 && item.countdown <=0) ? styles.btnList : styles.btnListDisabled}>
                   <p className={styles.btnItem} onClick={item.state ===1 || (item.state ===0 && item.countdown <=0) ? this.showModal.bind(this,item) : null}>IncreasePower</p>
                   <p className={styles.btnItem} onClick={item.state ===1 || (item.state ===0 && item.countdown <=0) ? this.claimFun.bind(this,item) : null}>Claim</p>
-                  {item.ptype ==='1' ? '' : <p className={styles.btnItem} onClick={item.state ===1 || (item.state ===0 && item.countdown <=0) ? this.showExitModal.bind(this,index,item) : null}>Exit</p>}
+                  {item.ptype ===1 ? '' : <p className={styles.btnItem} onClick={item.state ===1 || (item.state ===0 && item.countdown <=0) ? this.showExitModal.bind(this,index,item) : null}>Exit</p>}
                 </div>
               </Card>
             )}

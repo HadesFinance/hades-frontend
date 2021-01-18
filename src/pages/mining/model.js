@@ -66,7 +66,7 @@ export default modelExtend(model, {
       if (!lpTokenAddr) {
         return alert('failed to get lp token address')
       }
-      const lpToken = yield globals.realDAO.lpToken(lpTokenAddr);
+      const lpToken = yield globals.realDAO.erc20Token(lpTokenAddr);
       const results = yield Promise.all([
         lpToken.balanceOf(globals.loginAccount).call(),
         lpToken.decimals().call(),
