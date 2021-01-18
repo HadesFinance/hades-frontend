@@ -11,7 +11,9 @@ export default modelExtend(model, {
   state: {
     liquidityList:[],
     liquidityCount:0,
-    pageLoading: true
+    pageLoading: true,
+    selectedBalanceList:['rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH'],
+    selectedBorrowList:['rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH'],
   },
   effects: {
     *queryLiquidity({ payload }, { call, put }) {
@@ -20,8 +22,8 @@ export default modelExtend(model, {
         let result = data.result;
         let liquidityList = result.docs;
         for(let i=0; i<liquidityList.length;i++){
-          liquidityList[i].selectedBalanceSymbol = 'hETH';
-          liquidityList[i].selectedBorrowSymbol = 'hETH'
+          liquidityList[i].selectedBalanceSymbol = 'rETH';
+          liquidityList[i].selectedBorrowSymbol = 'rETH'
         }
         yield put({
           type: 'saveLiquidity',
@@ -33,35 +35,6 @@ export default modelExtend(model, {
         })
         return liquidityList
       }
-    },
-    *handleChangeBalance({ payload }, { call, put, select }) {
-      let { index, value } = payload;
-      let liquidityList = yield select(state => state.liquidity.liquidityList);
-      let liquidityCount = yield select(state => state.liquidity.liquidityCount);
-      let subList = [];
-      for(let i=0; i<liquidityList.length;i++){
-        subList[i] = liquidityList[i]
-      }
-      console.log(liquidityList[index].selectedBalanceSymbol)
-      console.log(subList)
-      subList[index].selectedBalanceSymbol = value;
-      yield put({
-        type: 'saveLiquidity',
-        payload: { liquidityList: subList, liquidityCount: liquidityCount}
-      })
-    },
-    *handleChangeBorrow({ payload }, { call, put, select }) {
-      let { index, value } = payload;
-      let liquidityList = yield select(state => state.liquidity.liquidityList);
-      let liquidityCount = yield select(state => state.liquidity.liquidityCount);
-      let subList = [...liquidityList];
-      console.log(liquidityList[index].selectedBorrowSymbol)
-      console.log(subList)
-      subList[index].selectedBorrowSymbol = value;
-      yield put({
-        type: 'saveLiquidity',
-        payload: { liquidityList: subList, liquidityCount: liquidityCount}
-      })
     },
     *getShowApprove({ payload }, { call, put }) {
       let { repaySymbol,liquidateAmount } = payload;
@@ -75,7 +48,21 @@ export default modelExtend(model, {
       console.log('demoLiquidate allowance:', allowance.toString())
       const showApprove = BigInt(allowance.toString()) < BigInt(liquidateAmount);
       return showApprove
-    }
+    },
+    *updateBalance({ payload }, { call, put }) {
+      let { selectedBalanceList } = payload;
+      yield put({
+        type: 'saveBalance',
+        payload: { selectedBalanceList: selectedBalanceList}
+      })
+    },
+    *updateBorrow({ payload }, { call, put }) {
+      let { selectedBorrowList } = payload;
+      yield put({
+        type: 'saveBorrow',
+        payload: { selectedBorrowList: selectedBorrowList}
+      })
+    },
   },
   reducers: {
     saveLiquidity(state, { payload: { liquidityList, liquidityCount } }) {
@@ -89,6 +76,18 @@ export default modelExtend(model, {
       return {
         ...state,
         pageLoading,
+      }
+    },
+    saveBalance(state, { payload: { selectedBalanceList } }) {
+      return {
+        ...state,
+        selectedBalanceList
+      }
+    },
+    saveBorrow(state, { payload: { selectedBorrowList } }) {
+      return {
+        ...state,
+        selectedBorrowList
       }
     },
   },

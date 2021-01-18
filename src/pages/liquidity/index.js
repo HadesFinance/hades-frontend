@@ -31,8 +31,8 @@ class Liquidity extends PureComponent {
     selectedIndex: '',
     maxRepay:0,
     seizeTokens:0,
-    selectedBalanceList:['hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH'],
-    selectedBorrowList:['hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH'],
+    selectedBalanceList:['rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH'],
+    selectedBorrowList:['rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH'],
   };
 
   componentDidMount() {
@@ -79,18 +79,18 @@ class Liquidity extends PureComponent {
       title: 'Balances',
       dataIndex: 'balance',
       render: (_, { collaterals,selectedBalanceSymbol,account},index) => {
-        selectedBalanceSymbol = selectedBalanceSymbol ? selectedBalanceSymbol : 'hETH';
-        let selectedBalanceList = this.state.selectedBalanceList
+        selectedBalanceSymbol = selectedBalanceSymbol ? selectedBalanceSymbol : 'rETH';
+        let selectedBalanceList = this.props.selectedBalanceList
         return (
           <div className={styles.nameArea}>
             <Select
-              defaultValue="hETH"
+              defaultValue="rETH"
               onChange={this.handleChange.bind(this,index)}
             >
-              <Option value="hETH">ETH</Option>
-              <Option value="hDOL">DOL</Option>
-              <Option value="hBTC">BTC</Option>
-              <Option value="hTRX">TRX</Option>
+              <Option value="rETH">ETH</Option>
+              <Option value="rDOL">DOL</Option>
+              <Option value="rBTC">BTC</Option>
+              <Option value="rTRX">TRX</Option>
             </Select>
             <span>{collaterals[selectedBalanceList[index]] ? collaterals[selectedBalanceList[index]].toFixed(4) : '0.0000'}</span>
           </div>
@@ -100,18 +100,18 @@ class Liquidity extends PureComponent {
       title: 'Borrows',
       dataIndex: 'borrows',
       render: (_, { borrows,selectedBorrowSymbol,account},index) => {
-        let selectedBorrowList  = this.state.selectedBorrowList
-        selectedBorrowSymbol = selectedBorrowSymbol ? selectedBorrowSymbol : 'hETH';
+        let selectedBorrowList  = this.props.selectedBorrowList
+        selectedBorrowSymbol = selectedBorrowSymbol ? selectedBorrowSymbol : 'rETH';
         return (
           <div className={styles.nameArea}>
             <Select
-              defaultValue="hETH"
+              defaultValue="rETH"
               onChange={this.handleChangeBorrow.bind(this,index)}
             >
-              <Option value="hETH">ETH</Option>
-              <Option value="hDOL">DOL</Option>
-              <Option value="hBTC">BTC</Option>
-              <Option value="hTRX">TRX</Option>
+              <Option value="rETH">ETH</Option>
+              <Option value="rDOL">DOL</Option>
+              <Option value="rBTC">BTC</Option>
+              <Option value="rTRX">TRX</Option>
             </Select>
             <span>{borrows[selectedBorrowList[index]] ? borrows[selectedBorrowList[index]].toFixed(4) : '0.0000'}</span>
           </div>
@@ -156,28 +156,23 @@ class Liquidity extends PureComponent {
   ];
 
   handleChange(index,value){
-    let { selectedBalanceList } = this.state;
-    selectedBalanceList[index] = value
-    this.setState({
-      selectedBalanceList: selectedBalanceList
+    let { selectedBalanceList } = this.props;
+    let newList = [...selectedBalanceList];
+    newList[index] = value
+    this.props.dispatch({
+      type: 'liquidity/updateBalance',
+      payload:{ selectedBalanceList: newList}
     })
-    /*this.props.dispatch({
-      type: 'liquidity/handleChangeBalance',
-      payload: { index: index, value: value }
-    })*/
   }
 
   handleChangeBorrow(index,value){
-    let { selectedBorrowList } = this.state;
-    selectedBorrowList[index] = value
-    this.setState({
-      selectedBorrowList: selectedBorrowList
+    let { selectedBorrowList } = this.props;
+    let newList = [...selectedBorrowList];
+    newList[index] = value
+    this.props.dispatch({
+      type: 'liquidity/updateBorrow',
+      payload:{ selectedBorrowList: newList}
     })
-
-    /*this.props.dispatch({
-      type: 'liquidity/saveLiquidity',
-      payload: { liquidityList: liquidityList, liquidityCount: liquidityCount }
-    })*/
   }
 
   async showModal(index){
@@ -324,8 +319,8 @@ class Liquidity extends PureComponent {
     })
     this.setState({
       current: current -1,
-      selectedBalanceList:['hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH'],
-      selectedBorrowList:['hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH'],
+      selectedBalanceList:['rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH'],
+      selectedBorrowList:['rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH'],
     })
   }
 
@@ -337,15 +332,15 @@ class Liquidity extends PureComponent {
     })
     this.setState({
       current: current +1,
-      selectedBalanceList:['hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH'],
-      selectedBorrowList:['hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH','hETH'],
+      selectedBalanceList:['rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH'],
+      selectedBorrowList:['rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH','rETH'],
     })
   }
 
 
   render() {
-    const {  current,selectedIndex,maxRepay,seizeTokens,selectedBorrowList,selectedBalanceList } = this.state;
-    const { app,liquidityList, pageLoading,liquidityCount  } = this.props
+    const {  current,selectedIndex,maxRepay,seizeTokens,selectedBorrowList, } = this.state;
+    const { app,liquidityList, pageLoading,liquidityCount,selectedBalanceList  } = this.props
     const { theme, } = app
     return (
       <Page
@@ -439,7 +434,9 @@ function mapStateToProps(state) {
   return {
     liquidityCount: state.liquidity.liquidityCount,
     liquidityList: state.liquidity.liquidityList,
-    pageLoading: state.liquidity.pageLoading
+    pageLoading: state.liquidity.pageLoading,
+    selectedBalanceList: state.liquidity.selectedBalanceList,
+    selectedBorrowList: state.liquidity.selectedBorrowList
   };
 }
 
