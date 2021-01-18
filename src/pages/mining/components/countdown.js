@@ -11,12 +11,16 @@ class Countdown extends PureComponent {
   componentDidMount() {
     let that = this;
     let countdownValue = that.props.countdown;
-    let intervalId = setInterval(function () {
+    that.intervalId = setInterval(function () {
       countdownValue = countdownValue >0 ? countdownValue -1 : 0
       that.setState({
         countdown: countdownValue
       })
     }.bind(this), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId)
   }
 
 
