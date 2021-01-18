@@ -12,7 +12,7 @@ import exchange from '../../../public/exchanging.svg';
 import lending from '../../../public/lending.svg'
 import linkBlack from '../../../public/link_black.svg'
 import linkWhite from '../../../public/link_white.svg'
-import { TableInfo } from './components/'
+import { TableInfo, Countdown } from './components/'
 import { globals, MAX_UINT256, literalToReal, launchTransaction, realToLiteral,init } from '../../utils/constant';
 const FormItem = Form.Item;
 
@@ -54,17 +54,6 @@ class Mining extends PureComponent {
     let that = this;
     that.props.dispatch({
       type: 'mining/queryMining'
-    }).then(function(rsp) {
-      let countdownList = rsp.pools.filter(item => item.state ===0);
-      if(countdownList.length >0){
-        let countdownValue = countdownList[0].countdown;
-        that.intervalId = setInterval(function () {
-          countdownValue = countdownValue >0 ? countdownValue -1 : 0
-          that.setState({
-            countdown: countdownValue
-          })
-        }.bind(this), 1000);
-      }
     });
     that.props.dispatch({
       type: 'mining/queryDistributorStats'
@@ -323,7 +312,8 @@ class Mining extends PureComponent {
                   {item.state ===0 ?
                     <div className={styles.countdownArea}>
                       <ClockCircleOutlined />
-                      <span>Countdown: {countdown}</span>
+                      {/*<span>Countdown: {countdown}</span>*/}
+                      <Countdown countdown={item.countdown}/>
                     </div> : ''}
                   {item.state ===2 ?
                     <div className={styles.statusArea}>
