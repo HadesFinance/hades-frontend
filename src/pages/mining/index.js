@@ -363,12 +363,12 @@ class Mining extends PureComponent {
                     Approve
                   </Button>,
                   <Button key="submit" type="primary"  onClick={this.handleIncreaseOk}>
-                    Lock
+                    Stake
                   </Button>
                 ] :
                 [
                   <Button key="submit" type="primary"  onClick={this.handleIncreaseOk}>
-                    Lock
+                    Stake
                   </Button>
                 ]}
             >
