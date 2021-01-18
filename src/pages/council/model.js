@@ -54,14 +54,14 @@ export default modelExtend(model, {
       const t = council
         .propose(target, value, signature, paramsData, delay, votingPeriod, desc)
         .send({ from: globals.loginAccount });
-      yield launchTransaction(t);
-      return { success: true }
+      const result = yield launchTransaction(t);
+      return result
     },
     *queryProposalDetail({ payload }, { call, put }) {
-      const detail_info = yield call(queryCouncilDetail, payload);
+      const result = yield call(queryCouncilDetail, payload);
       yield put({
         type: 'saveCouncilDetail',
-        payload: { detail_info: detail_info}
+        payload: { detail_info: result.result}
       });
       yield put({
         type: 'saveDetailLoading',

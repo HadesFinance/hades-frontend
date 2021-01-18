@@ -30,11 +30,13 @@ export const launchTransaction = async (transaction) => {
     const result = await transaction
     console.log(result);
     if (result.transactionHash) {
-      globals.pendingTransactions.push(result.transactionHash)
+      globals.pendingTransactions.push(result.transactionHash);
+      return {success: true}
     }
   } catch (e) {
     console.log('failed to launch transaction:', e);
     alert('failed to launch transaction:'+e)
+    return {success: false}
   }
 }
 

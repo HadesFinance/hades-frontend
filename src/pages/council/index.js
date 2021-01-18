@@ -294,6 +294,8 @@ class Council extends PureComponent {
 function mapStateToProps(state) {
   return {
     boardMembers: state.council.boardMembers,
+    councilList: state.council.councilList,
+    councilCount: state.council.councilCount,
     pageLoading: state.council.pageLoading
   };
 }

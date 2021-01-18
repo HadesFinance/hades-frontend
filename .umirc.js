@@ -85,36 +85,6 @@ export default {
               priority: 20,
               test: /[\\/]node_modules[\\/](antd|@ant-design\/icons)[\\/]/,
             },
-            'echarts-gl': {
-              name: 'echarts-gl',
-              priority: 30,
-              test: /[\\/]node_modules[\\/]echarts-gl[\\/]/,
-            },
-            zrender: {
-              name: 'zrender',
-              priority: 30,
-              test: /[\\/]node_modules[\\/]zrender[\\/]/,
-            },
-            echarts: {
-              name: 'echarts',
-              priority: 20,
-              test: /[\\/]node_modules[\\/](echarts|echarts-for-react|echarts-liquidfill)[\\/]/,
-            },
-            highcharts: {
-              name: 'highcharts',
-              priority: 20,
-              test: /[\\/]node_modules[\\/]highcharts[\\/]/,
-            },
-            recharts: {
-              name: 'recharts',
-              priority: 20,
-              test: /[\\/]node_modules[\\/]recharts[\\/]/,
-            },
-            draftjs: {
-              name: 'draftjs',
-              priority: 30,
-              test: /[\\/]node_modules[\\/](draft-js|react-draft-wysiwyg|draftjs-to-html|draftjs-to-markdown)[\\/]/,
-            },
             async: {
               chunks: 'async',
               minChunks: 2,
@@ -123,6 +93,13 @@ export default {
               minSize: 0,
               priority: 5,
               reuseExistingChunk: true,
+            },
+            commons: {
+                // 其余同步加载包
+                chunks: 'all',
+                minChunks: 2,
+                name: 'commons',
+                priority: 8,
             },
           },
         },

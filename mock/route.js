@@ -1,6 +1,3 @@
-import { Constant } from './_utils'
-const { ApiPrefix } = Constant
-
 export const database =
   [
   {
