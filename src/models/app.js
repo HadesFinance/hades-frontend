@@ -105,8 +105,8 @@ export default {
       globals.realDAO = new RealDAOService({
         config: {
           env: 'dev',
-          provider: window.web3.currentProvider || 'ws://localhost:8545',
-          orchestrator: '0x0716470cA1Dc1E902102E62d61E99b72c6AB5B6C'
+          provider: window.web3.currentProvider || 'ws://158.247.223.174:8545',
+          orchestrator: '0x8598E72d1B8955141207B6325a427A17910195F6'
         }
       });
       globals.realDAO.loadRTokens()
