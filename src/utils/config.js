@@ -1,6 +1,6 @@
 module.exports = {
-  siteName: 'Hades',
-  copyright: 'hades Admin  ©2020 Hades',
+  siteName: 'RealDAO',
+  copyright: 'RealDAO Finance  ©2020',
   logoPath: '/logo.svg',
   apiPrefix: 'http://139.180.193.123:4000',
   fixedHeader: true, // sticky primary layout header

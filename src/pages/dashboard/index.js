@@ -74,10 +74,10 @@ class Dashboard extends PureComponent {
                     padding: '0',
                   }}>
                   <div className={styles.topRight}>
-                    <p className={styles.cardTitle}>HDS</p>
+                    <p className={styles.cardTitle}>RDS</p>
                     <Row lg={24}>
-                      <NumberCard title='Circulating' number={overview.hds.circulating} lg={12} unit='' theme={theme} decimals={0}/>
-                      <NumberCard title='Mined' number={overview.hds.mined} lg={12} unit='' theme={theme} decimals={0}/>
+                      <NumberCard title='Circulating' number={overview.rds.circulating} lg={12} unit='' theme={theme} decimals={0}/>
+                      <NumberCard title='Mined' number={overview.rds.mined} lg={12} unit='' theme={theme} decimals={0}/>
                     </Row>
                   </div>
                 </Card>

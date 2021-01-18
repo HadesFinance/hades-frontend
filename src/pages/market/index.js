@@ -59,7 +59,7 @@ class Market extends PureComponent {
       })
       let that = this;
       const showApprove = await that.props.dispatch({ type: 'market/getShowApprove', payload: { address:address,account: account,value:0}})
-      const balanceInfo = await globals.hades.getHTokenBalances(address, globals.loginAccount);
+      const balanceInfo = await globals.realDAO.getRTokenBalances(address, globals.loginAccount);
       that.setState({
         supplyBalanceInfo: balanceInfo,
         showApprove: showApprove,
@@ -428,7 +428,7 @@ class Market extends PureComponent {
                     </div>
                     <div className={appStyles.detailItem}>
                       <p className={appStyles.detailTitle}>Decimal</p>
-                      <p className={appStyles.detailValue}>{selectedMarketItem.hTokenDecimals}</p>
+                      <p className={appStyles.detailValue}>{selectedMarketItem.rTokenDecimals}</p>
                     </div>
                     <div className={appStyles.detailItem}>
                       <p className={appStyles.detailTitle}>Name</p>

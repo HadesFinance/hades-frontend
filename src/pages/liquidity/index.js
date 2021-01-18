@@ -291,7 +291,7 @@ class Liquidity extends PureComponent {
       let repaySymbol = selectedBorrowList[index].substr(1);
       let borrowerAddress = selectedLiquidateItem.account;
       console.log('repaySymbol='+repaySymbol+'&borrowAddress='+borrowerAddress)
-      const maxRepay = await globals.hades.getMaxRepay(repaySymbol, borrowerAddress)
+      const maxRepay = await globals.realDAO.getMaxRepay(repaySymbol, borrowerAddress)
       this.setState({
         maxRepay: maxRepay
       })
@@ -308,9 +308,9 @@ class Liquidity extends PureComponent {
       const repaySymbol = selectedBorrowList[selectedIndex].substr(1);
       const collateralSymbol = selectedBalanceList[selectedIndex].substr(1);
       const liquidateAmountLiteral = inputValue;
-      const decimals = globals.hades._marketInfo[repaySymbol].underlyingDecimals
+      const decimals = globals.realDAO._marketInfo[repaySymbol].underlyingDecimals
       const liquidateAmount = literalToReal(liquidateAmountLiteral, decimals);
-      const seizeTokens = await globals.hades.calculateSeizeTokens(repaySymbol, collateralSymbol, liquidateAmount)
+      const seizeTokens = await globals.realDAO.calculateSeizeTokens(repaySymbol, collateralSymbol, liquidateAmount)
       const showApprove = await this.props.dispatch({ type: 'liquidity/getShowApprove', payload: { repaySymbol: repaySymbol, liquidateAmount: liquidateAmount}})
       this.setState({
         seizeTokens: seizeTokens,
@@ -331,14 +331,14 @@ class Liquidity extends PureComponent {
     const liquidateAmountLiteral = values.repayInput;
     if(liquidator){
       if(liquidateAmountLiteral !==undefined){
-        const decimals = globals.hades._marketInfo[repaySymbol].underlyingDecimals
+        const decimals = globals.realDAO._marketInfo[repaySymbol].underlyingDecimals
         const liquidateAmount = literalToReal(liquidateAmountLiteral, decimals)
 
-        const collateralAddress = globals.hades._marketInfo[collateralSymbol].hToken
-        const hToken = globals.hades.hToken(repaySymbol)
+        const collateralAddress = globals.realDAO._marketInfo[collateralSymbol].rToken
+        const rToken = globals.realDAO.rToken(repaySymbol)
         let transaction
         if (repaySymbol === 'ETH') {
-          transaction = hToken
+          transaction = rToken
             .liquidateBorrow(borrowerAddress, collateralAddress)
             .send({ from: liquidator, value: liquidateAmount })
           await launchTransaction(transaction);
@@ -349,11 +349,11 @@ class Liquidity extends PureComponent {
           })
         }else {
           if(showApprove){
-            const underlyingAddress = globals.hades._marketInfo[repaySymbol].underlyingAssetAddress
+            const underlyingAddress = globals.realDAO._marketInfo[repaySymbol].underlyingAssetAddress
             console.log('demoLiquidate underlyingAddress', underlyingAddress)
 
-            const erc20Token = await globals.hades.underlyingToken(underlyingAddress)
-            const repayTokenAddress = globals.hades._marketInfo[repaySymbol].hToken
+            const erc20Token = await globals.realDAO.erc20Token(underlyingAddress)
+            const repayTokenAddress = globals.realDAO._marketInfo[repaySymbol].rToken
             await erc20Token.approve(repayTokenAddress, MAX_UINT256).send({ from: liquidator })
             this.setState({
               repayEnable:true
@@ -363,7 +363,7 @@ class Liquidity extends PureComponent {
             that.setState({
               repayEnable:true,
             },function() {
-              that.handleRepayDol(hToken, borrowerAddress, liquidateAmount, collateralAddress,liquidator)
+              that.handleRepayDol(rToken, borrowerAddress, liquidateAmount, collateralAddress,liquidator)
             })
           }
         }
@@ -373,10 +373,10 @@ class Liquidity extends PureComponent {
     }
   }
 
-  handleRepayDol = async (hToken, borrowerAddress, liquidateAmount, collateralAddress,liquidator,e) => {
+  handleRepayDol = async (rToken, borrowerAddress, liquidateAmount, collateralAddress,liquidator,e) => {
     let { repayEnable } = this.state;
     if(repayEnable){
-      let transaction = hToken.liquidateBorrow(borrowerAddress, liquidateAmount, collateralAddress).send({ from: liquidator })
+      let transaction = rToken.liquidateBorrow(borrowerAddress, liquidateAmount, collateralAddress).send({ from: liquidator })
       await launchTransaction(transaction);
       this.setState({
         repayVisible: false,
@@ -399,7 +399,7 @@ class Liquidity extends PureComponent {
       const form = this.refs.myForm;
       form.setFieldsValue({ repayInput : maxRepay});
       const repaySymbol = selectedBorrowList[selectedIndex].substr(1);
-      const decimals = globals.hades._marketInfo[repaySymbol].underlyingDecimals
+      const decimals = globals.realDAO._marketInfo[repaySymbol].underlyingDecimals
       const liquidateAmount = literalToReal(maxRepay, decimals)
       const showApprove = await this.props.dispatch({ type: 'liquidity/getShowApprove', payload: { repaySymbol: repaySymbol, liquidateAmount: liquidateAmount}})
       this.setState({

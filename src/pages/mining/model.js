@@ -1,10 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { model } from 'utils/model'
-import {HADES_CONFIG} from '../../../config'
 import { globals, launchTransaction, literalToReal, realToLiteral } from '../../utils/constant';
-import Hades from '../../utils/hades';
-import store from 'store';
-
 
 export default modelExtend(model, {
   namespace: 'mining',
@@ -25,11 +21,11 @@ export default modelExtend(model, {
   },
   effects: {
     *queryMining({ _ }, { call, put }) {
-      let hades = globals.hades;
-      if(hades){
+      let realDAO = globals.realDAO;
+      if(realDAO){
         let loginAcount = globals.loginAccount;
         if(loginAcount){
-          const result = yield hades.getPools(loginAcount);
+          const result = yield realDAO.getPools(loginAcount);
           yield put({
             type: 'saveMining',
             payload: { mining: result }
@@ -41,7 +37,7 @@ export default modelExtend(model, {
           console.log('refresh mining,unclaimed='+result.my[0].unclaimedLiteral)
           return result
         }else {
-          const result = yield hades.getPools();
+          const result = yield realDAO.getPools();
           for (const pool of result.pools) {
             globals.lpTokenMap.set(pool.id, pool.tokenAddr)
           }
@@ -58,7 +54,7 @@ export default modelExtend(model, {
       }
     },
     *queryDistributorStats({ _ }, { call, put }) {
-      const result = yield globals.hades.getDistributorStats();
+      const result = yield globals.realDAO.getDistributorStats();
       yield put({
         type: 'saveDistributorStats',
         payload: { distributorStats: result }
@@ -70,11 +66,11 @@ export default modelExtend(model, {
       if (!lpTokenAddr) {
         return alert('failed to get lp token address')
       }
-      const lpToken = yield globals.hades.lpToken(lpTokenAddr);
+      const lpToken = yield globals.realDAO.lpToken(lpTokenAddr);
       const results = yield Promise.all([
         lpToken.balanceOf(globals.loginAccount).call(),
         lpToken.decimals().call(),
-        globals.hades.distributor(),
+        globals.realDAO.distributor(),
       ]);
       const balanceLiteral = yield realToLiteral(results[0], results[1]);
 

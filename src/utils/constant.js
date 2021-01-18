@@ -1,6 +1,3 @@
-import Hades from './hades';
-import store from 'store'
-
 export const ROLE_TYPE = {
   ADMIN: 'admin',
   DEFAULT: 'admin',
@@ -10,8 +7,8 @@ export const ROLE_TYPE = {
 export const CANCEL_REQUEST_MESSAGE = 'cancel request'
 
 export const globals = {
-  hades: null,
-  hTokenMap: new Map(),
+  realDAO: null,
+  rTokenMap: new Map(),
   lpTokenMap: new Map(),
   loginAccount: null,
   pendingTransactions: [],

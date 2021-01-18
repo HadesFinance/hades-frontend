@@ -23,7 +23,10 @@ class Header extends PureComponent {
   componentDidMount() {
     let that = this;
     let loginAccount = (globals.loginAccount = window.ethereum.selectedAddress);
-    if (globals.hades) globals.hades.setProvider(window.web3.currentProvider)
+    if (globals.realDAO && loginAccount) {
+      globals.realDAO.setProvider(window.web3.currentProvider)
+      globals.realDAO.loadRTokens()
+    }
     setTimeout(function() {
       that.props.dispatch({
         type: 'account/queryPrice'
@@ -72,7 +75,7 @@ class Header extends PureComponent {
   async confirmPendingTransactions() {
     for (let i = 0; i < globals.pendingTransactions.length; i++) {
       const txHash = globals.pendingTransactions[i]
-      const confirmed = await globals.hades.isTransactionConfirmed(txHash)
+      const confirmed = await globals.realDAO.isTransactionConfirmed(txHash)
       if (confirmed) {
         console.log('Transaction confirmed:', txHash)
         globals.pendingTransactions.splice(i, 1)

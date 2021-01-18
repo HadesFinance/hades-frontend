@@ -3,8 +3,6 @@ import modelExtend from 'dva-model-extend'
 import { model } from 'utils/model'
 import api from 'api'
 import { globals, launchTransaction, literalToReal, MAX_UINT256 } from '../../utils/constant';
-import Hades from '../../utils/hades';
-import store from 'store';
 const { queryCouncilList, queryCouncilDetail } = api;
 
 
@@ -21,7 +19,8 @@ export default modelExtend(model, {
   effects: {
     *queryMembers({ _ }, { call, put }) {
       console.log('queryMember')
-      const council = yield globals.hades.council()
+      yield globals.realDAO.loadCouncil()
+      const council = globals.realDAO.council()
       const members = yield council.getMembers().call()
       console.log('member:', members);
       yield put({
@@ -37,7 +36,7 @@ export default modelExtend(model, {
         let councilList = result.docs;
         yield put({
           type: 'saveCouncil',
-          payload: { councilList: councilList, councilCount: result.count}
+          payload: { councilList: councilList, councilCount: result.count || 0}
         })
         yield put({
           type: 'saveLoading',
@@ -48,9 +47,10 @@ export default modelExtend(model, {
     *addPropose({ payload }, { call, put }) {
       let { target, value, signature, delay, votingPeriod, desc, paramValues } = payload;
       console.log(paramValues);
-      const paramsData = globals.hades.encodeParameters(signature, [])
+      const paramsData = globals.realDAO.encodeParameters(signature, [])
       console.log('paramsData:', paramsData)
-      const council = yield globals.hades.council()
+      yield globals.realDAO.loadCouncil()
+      const council = globals.realDAO.council()
       const t = council
         .propose(target, value, signature, paramsData, delay, votingPeriod, desc)
         .send({ from: globals.loginAccount });
@@ -71,13 +71,15 @@ export default modelExtend(model, {
     *voteProposal({ payload }, { call, put }) {
       let { pid } = payload;
       console.log('demoVoteProposal proposalId', pid)
-      const council = yield globals.hades.council()
+      yield globals.realDAO.loadCouncil()
+      const council = globals.realDAO.council()
       yield launchTransaction(council.vote(pid).send({ from: globals.loginAccount }))
     },
     *executeProposal({ payload }, { call, put }) {
       let { pid } = payload;
       console.log('demoVoteProposal proposalId', pid)
-      const council = yield globals.hades.council()
+      yield globals.realDAO.loadCouncil()
+      const council = globals.realDAO.council()
       yield launchTransaction(council.execute(pid).send({ from: globals.loginAccount }))
     },
   },

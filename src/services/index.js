@@ -1,7 +1,10 @@
 import request from 'utils/request'
-import { apiPrefix } from 'utils/config'
-
 import api from './api'
+import store from 'store'
+const network = store.get('network');
+const apiPrefix = network.indexServer;
+//import { apiPrefix } from 'utils/config'
+
 
 const gen = params => {
   let url = apiPrefix + params
