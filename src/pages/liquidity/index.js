@@ -21,106 +21,7 @@ const FormItem = Form.Item;
 class Liquidity extends PureComponent {
   state = {
     pageLoading: false,
-    liquidityList:[
-      {
-      "account":"0x7ace39E63B5f234cFB6D3239Ea326738B88677Cb",
-      "collaterals":{
-        "hETH":2,
-        "hDOL":0,
-      },
-      "borrows":{
-        "hETH":0,
-        "hDOL":400.00039639,
-      },
-      "liquidity":200.07896303,
-      "updatedAt":1609736333351,
-      "_id":"RK8mnRwF2yd6yZbc",
-      "selectedBalanceSymbol":'hETH',
-      "selectedBorrowSymbol": 'hETH'
-    },{
-      "account":"0x2F81c61bc7daBc612757cF60D8a546637fc59359",
-      "collaterals":{
-        "hETH":0.5,
-        "hDOL":450,
-      },
-      "borrows":{
-        "hETH":0.5001657513264255,
-        "hDOL":0,
-      },
-      "liquidity":287.45353946,
-      "updatedAt":1609736333852,
-      "_id":"odB3RulRV5Gu0dHn",
-      "selectedBalanceSymbol":'hETH',
-      "selectedBorrowSymbol": 'hETH'
-    },{
-      "account":"0xf959579eDf47f166f316Bc03887540D5d80AA302",
-      "collaterals":{
-        "hETH":1.99999987,
-      },
-      "borrows":{
-        "hETH":0,
-      },
-      "liquidity":-600.07932041,
-      "updatedAt":1609736330745,
-      "_id":"NnH2t0jwgM3vxnoD",
-      "selectedBalanceSymbol":'hETH',
-      "selectedBorrowSymbol": 'hETH'
-    },{
-      "account":"0x48D6c33eE6BD128751e71Ce1B32D2bEF27AbD709",
-      "collaterals":{
-        "hETH":9,
-        "hDOL":0,
-      },
-      "borrows":{
-        "hETH":0,
-        "hDOL":2000.00198195,
-      },
-      "liquidity":700.35513544,
-      "updatedAt":1609736332750,
-      "_id":"rcCQdHu8wQsbT22p",
-      "selectedBalanceSymbol":'hETH',
-      "selectedBorrowSymbol": 'hETH'
-    },{
-      "account":"0xc068577fA749F8B17ab87901151A7C0ff9651a2A",
-      "collaterals":{
-        "hETH":12.99999907,
-        "hDOL":0,
-      },
-      "borrows":{
-        "hETH":3.126027476097089,
-        "hDOL":1.00000068,
-      },
-      "liquidity":2649.10456609,
-      "updatedAt":1609736335757,
-      "_id":"VpdJtEgeOG8Ub0ri",
-      "selectedBalanceSymbol":'hETH',
-      "selectedBorrowSymbol": 'hETH'
-    },{
-      "account":"0x5661cdBc2Ff8ffC5eC8f0fb1F551443CE3068ed4",
-      "collaterals":{
-        "hETH":9.99999985,
-        "hDOL":309.99999995,
-      },
-      "borrows":{
-        "hETH":0,
-        "hDOL":500.00049546,
-      },
-      "liquidity":2732.89625669,
-      "updatedAt":1609736334555,
-      "_id":"UZ8J6i6gtSjzNIlb",
-      "selectedBalanceSymbol":'hETH',
-      "selectedBorrowSymbol": 'hETH'
-    }, {
-      "account": "0x484ca440aDFa0b7A148169342B9d8E4623Ab2D53",
-      "collaterals": { "hETH": 9.99867751, "hDOL": 999.99999958 },
-      "borrows": { "hETH": 0, "hDOL": 1000.00000017 },
-      "liquidity": 2749.99999745,
-      "updatedAt": 1609736337461,
-      "_id": "9I54LzgT17NdvMRr",
-      "selectedBalanceSymbol": 'hETH',
-      "selectedBorrowSymbol": 'hETH'
-    }
-    ],
+    liquidityList:[],
     repayVisible: false,
     repayEnable: false,
     showApprove: true,
@@ -419,7 +320,7 @@ class Liquidity extends PureComponent {
     let { current } = this.state;
     this.props.dispatch({
       type: 'liquidity/queryLiquidity',
-      payload: { offset:(current -1) *10, limit: 10 }
+      payload: { offset:(current -2) *10, limit: 10 }
     })
     this.setState({
       current: current -1,
@@ -463,9 +364,9 @@ class Liquidity extends PureComponent {
             </Card>
             <div className={theme === 'dark' ? appStyles.pageAreaDark : appStyles.pageArea}>
               <LeftCircleFilled className={current ===1 ? appStyles.disabledBtn : appStyles.prev} onClick={current ===1 ? null : this.prevPage.bind(this)} />
-              <p className={appStyles.page}>Page {current} of {Math.ceil(liquidityCount / 10)}</p>
-              <RightCircleFilled className={current === Math.ceil(liquidityCount / 10) ? appStyles.disabledBtn : appStyles.next}
-                onClick={current === Math.ceil(liquidityCount / 10) ? null : this.nextPage.bind(this)}
+              <p className={appStyles.page}>Page {current} of {liquidityCount > 0 ? Math.ceil(liquidityCount / 10) : '1'}</p>
+              <RightCircleFilled className={(current === Math.ceil(liquidityCount / 10)) || liquidityCount ===0 ? appStyles.disabledBtn : appStyles.next}
+                onClick={(current === Math.ceil(liquidityCount / 10)) || liquidityCount ===0 ? null : this.nextPage.bind(this)}
               />
             </div>
           </div> :

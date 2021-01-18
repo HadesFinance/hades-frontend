@@ -55,7 +55,7 @@ class Mining extends PureComponent {
     that.props.dispatch({
       type: 'mining/queryMining'
     }).then(function(rsp) {
-      let countdownList = rsp.pools.filter(item => item.state ==='0');
+      let countdownList = rsp.pools.filter(item => item.state ===0);
       if(countdownList.length >0){
         let countdownValue = countdownList[0].countdown;
         that.intervalId = setInterval(function () {
@@ -315,27 +315,27 @@ class Mining extends PureComponent {
                     <span>{item.title}</span>
                   </div>
                   {/*countdown*/}
-                  {item.state ==='1' ?
+                  {item.state ===1 ?
                     <div className={styles.statusArea}>
                       <span>Active</span>
                       <div className={styles.active}></div>
                     </div> : ''}
-                  {item.state ==='0' ?
+                  {item.state ===0 ?
                     <div className={styles.countdownArea}>
                       <ClockCircleOutlined />
                       <span>Countdown: {countdown}</span>
                     </div> : ''}
-                  {item.state ==='2' ?
+                  {item.state ===2 ?
                     <div className={styles.statusArea}>
                       <span>Closed</span>
                       <div className={styles.closed}></div>
                     </div> : ''}
                 </div>
                 <TableInfo total_power={item.totalPowerNormalizedLiteral.toFixed(4)} my_power={mining.my[index] ? mining.my[index].powerNormalizedLiteral.toFixed(4)+'('+(mining.my[index].powerRatio * 100).toFixed(2)+'%)' : '-'} start_block={item.startBlock} apy={(item.apy *100).toFixed(2)} claimed={mining.my[index] ? mining.my[index].claimedLiteral.toFixed(4) : '-'} unclaimed={mining.my[index] ? mining.my[index].unclaimedLiteral.toFixed(4) : '-'} theme={theme} />
-                <div className={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? styles.btnList : styles.btnListDisabled}>
-                  <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.showModal.bind(this,item) : null}>IncreasePower</p>
-                  <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.claimFun.bind(this,item) : null}>Claim</p>
-                  {item.ptype ==='1' ? '' : <p className={styles.btnItem} onClick={item.state ==='1' || (item.state ==='0' && item.countdown <=0) ? this.showExitModal.bind(this,index,item) : null}>Exit</p>}
+                <div className={item.state ===1 || (item.state ===0 && item.countdown <=0) ? styles.btnList : styles.btnListDisabled}>
+                  <p className={styles.btnItem} onClick={item.state ===1 || (item.state ===0 && item.countdown <=0) ? this.showModal.bind(this,item) : null}>IncreasePower</p>
+                  <p className={styles.btnItem} onClick={item.state ===1 || (item.state ===0 && item.countdown <=0) ? this.claimFun.bind(this,item) : null}>Claim</p>
+                  {item.ptype ==='1' ? '' : <p className={styles.btnItem} onClick={item.state ===1 || (item.state ===0 && item.countdown <=0) ? this.showExitModal.bind(this,index,item) : null}>Exit</p>}
                 </div>
               </Card>
             )}

@@ -204,7 +204,7 @@ class Council extends PureComponent {
     let { current, selectedNavIndex, selectedNavList } = this.state;
     this.props.dispatch({
       type: 'council/queryCouncil',
-      payload: { state: selectedNavList[selectedNavIndex].text, offset:(current -1) *10, limit: 10 }
+      payload: { state: selectedNavList[selectedNavIndex].text, offset:(current -2) *10, limit: 10 }
     })
     this.setState({
       current: current -1
@@ -273,9 +273,9 @@ class Council extends PureComponent {
             </Card>
             <div className={theme === 'dark' ? appStyles.pageAreaDark : appStyles.pageArea}>
               <LeftCircleFilled className={current ===1 ? appStyles.disabledBtn : appStyles.prev} onClick={current ===1 ? null : this.prevPage.bind(this)} />
-              <p className={appStyles.page}>Page {current} of {Math.ceil(councilCount / 10)}</p>
-              <RightCircleFilled className={current === Math.ceil(councilCount / 10) ? appStyles.disabledBtn : appStyles.next}
-                                 onClick={current === Math.ceil(councilCount / 10) ? null : this.nextPage.bind(this)}
+              <p className={appStyles.page}>Page {current} of {councilCount >0 ? Math.ceil(councilCount / 10) : '1'}</p>
+              <RightCircleFilled className={(current === Math.ceil(councilCount / 10)) || councilCount ===0 ? appStyles.disabledBtn : appStyles.next}
+                                 onClick={(current === Math.ceil(councilCount / 10)) || councilCount ===0 ? null : this.nextPage.bind(this)}
               />
             </div>
           </div> :
