@@ -11,6 +11,7 @@ import { config, getLocale } from 'utils'
 import Error from '../pages/404'
 import styles from './PrimaryLayout.less'
 import store from 'store'
+import { globals } from '../utils/constant';
 const { pathToRegexp } = require("path-to-regexp")
 
 const { Content } = Layout
@@ -51,6 +52,12 @@ class PrimaryLayout extends PureComponent {
         that.props.dispatch({
           type: 'mining/queryMining'
         });
+      });
+      window.ethereum.on('chainChanged', (chainId) => {
+        console.log('chainChanged:', chainId);
+        that.props.dispatch({
+          type: 'account/login'
+        });
       })
     }
   }
@@ -65,6 +72,7 @@ class PrimaryLayout extends PureComponent {
       payload: collapsed,
     })
   }
+
 
   render() {
     const { app, location, dispatch, children } = this.props

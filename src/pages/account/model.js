@@ -43,18 +43,48 @@ export default modelExtend(model, {
   effects: {
     *login({ _ }, { call, put }) {
       let realDAO = globals.realDAO;
+      let wallet = globals.wallet;
       if(realDAO){
+        let connected;
         let wrongNetwork;
-        if (realDAO.chainId() !== Number(window.ethereum.chainId)) {
+        let loginAccount;
+        if (!wallet.isInstalled()) {
+          return
+        }
+        if (!wallet.isConnected()) {
+          connected = false
+        }else {
+          connected = true
+        }
+        if (wallet.getChainId() !== globals.realDAO.chainId()) {
           wrongNetwork = true
         }else {
           wrongNetwork = false
         }
-        const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress);
+        yield wallet
+          .getDefaultAccount()
+          .then((account) => {
+            console.log('selectAccount:', account)
+            if (account) {
+              globals.loginAccount = account;
+              loginAccount = account
+
+              const provider = wallet.currentProvider()
+              globals.realDAO.setProvider(provider);
+
+            } else {
+              connected = false
+            }
+          })
+          .catch((err) => {
+            // logger.debug('failed to get account:', err)
+            alert('Failed to get account')
+          });
+        console.log('connected='+connected+'&network='+wrongNetwork+'&account='+loginAccount)
         if(loginAccount){
           yield put({
             type: 'saveState',
-            payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: loginAccount ? true : false}
+            payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: connected}
           });
           const result = yield globals.realDAO.getAccountBalances(loginAccount);
           yield put({
@@ -70,25 +100,12 @@ export default modelExtend(model, {
           processPools();
           realDAO.loadRTokens()
         }else {
-          const loginAccount = (globals.loginAccount = window.ethereum.selectedAddress)
           yield put({
             type: 'saveState',
-            payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: loginAccount ? true : false}
+            payload: { loginAccount: loginAccount, wrongNetwork: wrongNetwork, connected: connected}
           });
-          if(loginAccount){
-            const result = yield globals.realDAO.getAccountBalances(loginAccount);
-            yield put({
-              type: 'saveAccount',
-              payload: { account: result }
-            });
-            const liquidity = yield globals.realDAO.getAccountLiquidity(loginAccount);
-            yield put({
-              type: 'saveAccountLiquidity',
-              payload: { accountLiquidity: liquidity }
-            });
-          }
-          processMarkets()
-          processPools()
+          processMarkets();
+          processPools();
           realDAO.loadRTokens()
         }
         yield put({

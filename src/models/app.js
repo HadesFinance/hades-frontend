@@ -20,6 +20,7 @@ import liquidity from '../../public/liquidity.svg'
 import liquidity_p from '../../public/liquidity_p.svg'
 import { globals } from '../utils/constant';
 import RealDAOService from '../services/realdao'
+import WalletService from '../services/wallet'
 
 const { pathToRegexp } = require("path-to-regexp")
 const { queryRouteList, logoutUser } = api
@@ -31,6 +32,8 @@ const goDashboard = () => {
     })
   }
 }
+
+
 
 export default {
   namespace: 'app',
@@ -106,10 +109,11 @@ export default {
         config: {
           env: 'dev',
           provider: window.web3.currentProvider || 'ws://158.247.223.174:8545',
-          orchestrator: '0x8598E72d1B8955141207B6325a427A17910195F6'
+          orchestrator: '0x0c55c34555C65d963E9C6363A5ed77AFDac32a34'
         }
       });
       globals.realDAO.loadRTokens()
+      globals.wallet = new WalletService()
       yield put({
         type: 'handleConfigChange',
         payload: { routeList: routeList, network: network, isInit: true}

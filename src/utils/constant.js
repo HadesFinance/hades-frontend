@@ -12,6 +12,7 @@ export const globals = {
   lpTokenMap: new Map(),
   loginAccount: null,
   pendingTransactions: [],
+  wallet:null
 }
 
 export const MAX_UINT256 = '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
