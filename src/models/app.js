@@ -109,7 +109,7 @@ export default {
         config: {
           env: 'dev',
           provider: window.web3.currentProvider || 'ws://158.247.223.174:8545',
-          orchestrator: '0x7069651DfFd688971004A24D83f2D855Dfc4d356'
+          orchestrator: '0x9bE3c853886Ab548be2b4aFcC139399c7996eb2b'
         }
       });
       globals.realDAO.loadRTokens()
