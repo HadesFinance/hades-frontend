@@ -12,6 +12,10 @@ import exchange from '../../../public/exchanging.svg';
 import lending from '../../../public/lending.svg'
 import linkBlack from '../../../public/link_black.svg'
 import linkWhite from '../../../public/link_white.svg'
+import s0 from '../../../public/s0.svg'
+import s1 from '../../../public/s1.svg'
+import s2 from '../../../public/s2.svg'
+import s3 from '../../../public/s3.svg'
 import { TableInfo, Countdown } from './components/'
 import { globals, MAX_UINT256, literalToReal, launchTransaction, realToLiteral,init } from '../../utils/constant';
 const FormItem = Form.Item;
@@ -35,6 +39,7 @@ class Mining extends PureComponent {
     rewards:'',
     lockEnable:false,
     showApprove: false,
+    iconList:[s0,s1,s2,s3]
   };
 
   componentDidMount() {
@@ -271,7 +276,7 @@ class Mining extends PureComponent {
   render() {
     const { app, mining, distributorStats, pageLoading } = this.props;
     const { theme,  } = app;
-    let { countdown } = this.state;
+    let { countdown,iconList } = this.state;
 
     return (
       <Page
@@ -300,7 +305,8 @@ class Mining extends PureComponent {
                 }}>
                 <div className={styles.miningTopArea}>
                   <div className={styles.miningName}>
-                    {item.ptype === 1 ? <img src={lending}/> : <img src={exchange}/>}
+                    {/*{item.ptype === 1 ? <img src={lending}/> : <img src={exchange}/>}*/}
+                    <img src={iconList[index]}/>
                     <span>{item.title}</span>
                   </div>
                   {/*countdown*/}

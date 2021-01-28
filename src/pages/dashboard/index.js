@@ -4,8 +4,8 @@ import { connect, withRouter } from 'umi';
 import { Row, Col, Card } from 'antd'
 import { Page, } from 'components'
 import styles from './index.less'
-import dol from '../../../public/DOL.svg';
-import ethereum from '../../../public/ethereum_L.svg';
+import dol from '../../../public/dol.svg';
+import ethereum from '../../../public/ETH.svg';
 import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import {
   NumberCard,

@@ -7,8 +7,12 @@ import styles from './index.less'
 import appStyles from '../app.less'
 import wallet from '../../../public/wallet.svg'
 import metaMask from '../../../public/MetaMask.svg'
-import DOL from '../../../public/DOL.svg'
-import ETH from '../../../public/ethereum_L.svg'
+import DOL from '../../../public/dol.svg'
+import ETH from '../../../public/ETH.svg'
+import dol from '../../../public/dol.svg'
+import hbtc from '../../../public/hbtc.svg';
+import heth from '../../../public/heth.svg'
+import wht from '../../../public/wht.svg'
 import { globals, literalToReal,} from '../../utils/constant';
 import { LoadingOutlined } from '@ant-design/icons';
 const FormItem = Form.Item;
@@ -29,6 +33,7 @@ class Account extends PureComponent {
     redeemResults:[],
     showApprove: false,
     address:'',
+    iconList:[dol,hbtc,heth,wht]
   };
 
   componentDidMount() {
@@ -253,11 +258,12 @@ class Account extends PureComponent {
     {
       title: 'Name',
       dataIndex: 'name',
-      render: (_, { underlyingSymbol}) => {
+      render: (_, { underlyingSymbol},index) => {
         let icon = underlyingSymbol ==='ETH' ? ETH : DOL;
+        let iconList = this.state.iconList;
         return (
           <div className={styles.nameArea}>
-            <img src={icon}/>
+            <img src={iconList[index]}/>
             <span>{underlyingSymbol}</span>
           </div>
         );
@@ -320,7 +326,7 @@ class Account extends PureComponent {
   render() {
     const { app, connected,account, pageLoading } = this.props
     const { theme,  } = app
-    const { selectedPoolItem } = this.state;
+    const { selectedPoolItem,iconList } = this.state;
     return (
       <Page
         // loading={loading.models.dashboard && sales.length === 0}

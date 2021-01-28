@@ -4,8 +4,12 @@ import {  Layout,  Popover,  Modal } from 'antd';
 import classnames from 'classnames'
 import styles from './Header.less'
 import bitcoinIcon from '../../../public/bitcoin_L.svg';
-import ethereum from '../../../public/ethereum_L.svg';
+import ethereum from '../../../public/ETH.svg';
 import metaMask from '../../../public/MetaMask.svg'
+import dol from '../../../public/dol.svg'
+import hbtc from '../../../public/hbtc.svg';
+import heth from '../../../public/heth.svg'
+import wht from '../../../public/wht.svg'
 import linkGray from '../../../public/link_gray.svg'
 import linkGreen from '../../../public/link_green.svg'
 import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons'
@@ -18,7 +22,8 @@ class Header extends PureComponent {
     walletVisible: true,
     priceStatus: true,
     networkState: true,
-    repayVisible: false
+    repayVisible: false,
+    iconList:[dol,hbtc,heth,wht]
   };
   componentDidMount() {
     let that = this;
@@ -114,6 +119,7 @@ class Header extends PureComponent {
       accountLiquidity,
       priceList
     } = this.props
+    const { iconList} = this.state
 
     let pendingTransactions = globals.pendingTransactions;
 
@@ -170,7 +176,10 @@ class Header extends PureComponent {
       >
         <div className={styles.toolBar}>
           {priceList.map((item,index) =>
-            <p className={styles.toolBarItem} key={index}><img src={item.anchorSymbol === 'ETH' ? ethereum : bitcoinIcon}/><span>1 {item.anchorSymbol} = ${item.underlyingPriceLiteral.toFixed(2)}</span> </p>
+            <p className={styles.toolBarItem} key={index}>
+              {/*<img src={item.anchorSymbol === 'ETH' ? ethereum : bitcoinIcon}/>*/}
+              <img src={iconList[index]}/>
+              <span>1 {item.anchorSymbol} = ${item.underlyingPriceLiteral.toFixed(2)}</span> </p>
           )}
         </div>
         {wrongNetwork ?

@@ -8,7 +8,7 @@ import { history } from 'umi'
 import { LoadingOutlined, LeftOutlined, ClockCircleFilled } from '@ant-design/icons'
 import linkGray from '../../../../public/link_gray.svg';
 import linkGreen from '../../../../public/link_green.svg';
-import eth from '../../../../public/ethereum_L.svg';
+import eth from '../../../../public/ETH.svg';
 import member_avatar1 from '../../../../public/member_avatar1.svg'
 import member_avatar2 from '../../../../public/member_avatar2.svg'
 import member_avatar3 from '../../../../public/member_avatar3.svg'

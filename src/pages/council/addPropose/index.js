@@ -6,7 +6,7 @@ import { Page, } from 'components'
 import styles from './index.less'
 import { history } from 'umi'
 import { LoadingOutlined, LeftOutlined, MinusCircleOutlined, PlusOutlined, PlusCircleFilled } from '@ant-design/icons'
-import eth from '../../../../public/ethereum_L.svg'
+import eth from '../../../../public/ETH.svg'
 import delete_icon from '../../../../public/delete.svg'
 import store from 'store';
 

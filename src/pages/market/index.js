@@ -4,8 +4,10 @@ import { Card, Progress, Modal, Input, Button, Form } from 'antd';
 import { Page, } from 'components'
 import styles from './index.less'
 import appStyles from '../app.less'
-import ethereum from '../../../public/ethereum_L.svg';
-import DOL from '../../../public/DOL.svg'
+import dol from '../../../public/dol.svg'
+import hbtc from '../../../public/hbtc.svg';
+import heth from '../../../public/heth.svg'
+import wht from '../../../public/wht.svg'
 import { globals, MAX_UINT256, literalToReal, launchTransaction, init} from '../../utils/constant';
 import { LoadingOutlined } from '@ant-design/icons';
 const FormItem = Form.Item;
@@ -27,7 +29,8 @@ class Market extends PureComponent {
     supplyBalanceInfo:{tokenBalanceLiteral:0},
     supplyEnable: false,
     showApprove: false,
-    address: ''
+    address: '',
+    iconList:[dol,hbtc,heth,wht]
   };
 
   componentDidMount() {
@@ -269,7 +272,7 @@ class Market extends PureComponent {
   render() {
     const { app, market, pageLoading  } = this.props
     const { theme,  } = app
-    const { selectedMarketItem } = this.state;
+    const { selectedMarketItem,iconList } = this.state;
     return (
       <Page
         // loading={loading.models.dashboard && sales.length === 0}
@@ -286,8 +289,8 @@ class Market extends PureComponent {
                 }}>
                 <div className={styles.topArea}>
                   <div className={styles.topLeftArea}>
-                    {item.underlyingSymbol ==='ETH' ? <img src={ethereum}/> : ''}
-                    {item.underlyingSymbol ==='DOL' ? <img src={DOL}/> : ''}
+                    {/*<img src={require('../../../public/'+item.underlyingSymbol !== 'ETH' ? item.underlyingSymbol.toLowerCase() : 'heth'+'.svg')}/>*/}
+                    <img src={iconList[index]}/>
                     <span>{item.underlyingSymbol}</span>
                   </div>
                   <p className={styles.detailBtn} onClick={this.showDetailModal.bind(this,index)}>Detail</p>
