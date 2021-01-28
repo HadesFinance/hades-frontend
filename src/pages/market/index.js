@@ -289,8 +289,8 @@ class Market extends PureComponent {
                 }}>
                 <div className={styles.topArea}>
                   <div className={styles.topLeftArea}>
-                    {/*<img src={require('../../../public/'+item.underlyingSymbol !== 'ETH' ? item.underlyingSymbol.toLowerCase() : 'heth'+'.svg')}/>*/}
-                    <img src={iconList[index]}/>
+                    <img src={require('../../../public/'+item.iconUrl+'.svg')}/>
+                    {/*<img src={iconList[index]}/>*/}
                     <span>{item.underlyingSymbol}</span>
                   </div>
                   <p className={styles.detailBtn} onClick={this.showDetailModal.bind(this,index)}>Detail</p>
@@ -483,6 +483,7 @@ class Market extends PureComponent {
 
 
 function mapStateToProps(state) {
+  console.log(state)
   return {
     market: state.market.market,
     liquidity: state.account.accountLiquidity.liquidity,

@@ -118,6 +118,16 @@ export default modelExtend(model, {
       let realDAO = globals.realDAO;
       if(realDAO){
         const prices = yield realDAO.getPrices();
+        for(let i=0;i<prices.length;i++){
+          let symbol = prices[i].anchorSymbol.toLowerCase();
+          if(symbol[0] ==='r'){
+            prices[i].iconUrl = symbol.substr(1)
+          }else if(symbol === 'eth'){
+            prices[i].iconUrl = 'heth'
+          }else {
+            prices[i].iconUrl = symbol
+          }
+        }
         yield put({
           type: 'savePrices',
           payload: { priceList: prices }

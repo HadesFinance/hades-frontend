@@ -260,10 +260,19 @@ class Account extends PureComponent {
       dataIndex: 'name',
       render: (_, { underlyingSymbol},index) => {
         let icon = underlyingSymbol ==='ETH' ? ETH : DOL;
+        let iconUrl
         let iconList = this.state.iconList;
+        let symbol = underlyingSymbol.toLowerCase();
+        if(symbol[0] ==='r'){
+          iconUrl = symbol.substr(1)
+        }else if(symbol === 'eth'){
+          iconUrl = 'heth'
+        }else {
+          iconUrl = symbol
+        }
         return (
           <div className={styles.nameArea}>
-            <img src={iconList[index]}/>
+            <img src={require('../../../public/'+iconUrl+'.svg')}/>
             <span>{underlyingSymbol}</span>
           </div>
         );

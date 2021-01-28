@@ -17,6 +17,16 @@ export default modelExtend(model, {
       for (const market of markets) {
         globals.rTokenMap.set(market.underlyingSymbol, market.rToken)
       }
+      for(let i=0;i<markets.length;i++){
+        let symbol = markets[i].underlyingSymbol.toLowerCase();
+        if(symbol[0] ==='r'){
+          markets[i].iconUrl = symbol.substr(1)
+        }else if(symbol === 'eth'){
+          markets[i].iconUrl = 'heth'
+        }else {
+          markets[i].iconUrl = symbol
+        }
+      }
       yield put({
         type: 'saveMarket',
         payload: { market: markets }

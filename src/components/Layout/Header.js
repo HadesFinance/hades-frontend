@@ -178,7 +178,7 @@ class Header extends PureComponent {
           {priceList.map((item,index) =>
             <p className={styles.toolBarItem} key={index}>
               {/*<img src={item.anchorSymbol === 'ETH' ? ethereum : bitcoinIcon}/>*/}
-              <img src={iconList[index]}/>
+              <img src={require('../../../public/'+item.iconUrl+'.svg')}/>
               <span>1 {item.anchorSymbol} = ${item.underlyingPriceLiteral.toFixed(2)}</span> </p>
           )}
         </div>
